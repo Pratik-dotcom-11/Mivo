@@ -185,10 +185,23 @@ export const HeroShowcase: React.FC<HeroShowcaseProps> = ({
             </div>
           </div>
 
-          {/* Right Column: Floating Frosted Cards Composition (Authentic Reference Match) */}
-          <div className="lg:col-span-6 relative flex flex-col sm:flex-row lg:flex-col items-center justify-center gap-4 sm:gap-6 lg:h-[460px]">
+          {/* Right Column: AI Robot + Floating Frosted Cards Composition (Authentic Reference Match) */}
+          <div className="lg:col-span-6 relative flex flex-col sm:flex-row lg:flex-col items-center justify-center gap-4 sm:gap-6 min-h-[460px] lg:h-[500px]">
+            {/* AI Cybernetic Robot Focal Artwork */}
+            <div className="absolute inset-0 flex items-center justify-center lg:justify-start lg:-left-20 pointer-events-none select-none z-0 overflow-hidden lg:overflow-visible">
+              <div className="relative w-[340px] sm:w-[420px] lg:w-[480px] aspect-[16/10] sm:aspect-square flex items-center justify-center">
+                <img
+                  src="/ai-robot-hero.jpg"
+                  alt="Mivo AI Voice Model"
+                  className="w-full h-full object-cover rounded-3xl lg:rounded-full [mask-image:radial-gradient(ellipse_at_center,black_55%,transparent_90%)] opacity-95 drop-shadow-[0_20px_50px_rgba(0,0,0,0.7)] transition-all duration-700"
+                />
+                {/* Subtle cybernetic pulse aura */}
+                <div className="absolute inset-4 rounded-full border border-glowOrange-400/25 animate-pulse pointer-events-none hidden lg:block" />
+              </div>
+            </div>
+
             {/* CARD 1: Central Audio Waveform & Player Card */}
-            <div className="w-full max-w-sm sm:max-w-xs md:max-w-sm rounded-3xl bg-white text-charcoal-900 p-5 shadow-2xl border border-white/60 animate-float-slow z-20">
+            <div className="w-full max-w-sm sm:max-w-xs md:max-w-sm rounded-3xl bg-white/95 backdrop-blur-md text-charcoal-900 p-5 shadow-2xl border border-white/70 animate-float-slow z-20 lg:ml-auto lg:mr-2">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-black tracking-tight text-charcoal-900">
                   Intelligent Thought Capture
@@ -253,7 +266,7 @@ export const HeroShowcase: React.FC<HeroShowcaseProps> = ({
             </div>
 
             {/* CARD 2 (Top Right Offset): Video/Audio Caption & Drop Card */}
-            <div className="w-full max-w-sm sm:max-w-xs md:max-w-[280px] rounded-2xl bg-white text-charcoal-900 p-4 shadow-2xl border border-white/60 lg:absolute lg:-top-4 lg:-right-4 animate-float-delay z-10 hidden sm:block">
+            <div className="w-full max-w-sm sm:max-w-xs md:max-w-[270px] rounded-2xl bg-white/95 backdrop-blur-md text-charcoal-900 p-4 shadow-2xl border border-white/70 lg:absolute lg:-top-6 lg:right-0 animate-float-delay z-10 hidden sm:block">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs font-black text-charcoal-900">Voice Note</span>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-900 border border-amber-300">
@@ -278,7 +291,7 @@ export const HeroShowcase: React.FC<HeroShowcaseProps> = ({
             </div>
 
             {/* CARD 3 (Bottom Right Offset): Consistency Check / Structured Summary Card */}
-            <div className="w-full max-w-sm sm:max-w-xs md:max-w-[290px] rounded-2xl bg-white text-charcoal-900 p-4 shadow-2xl border border-white/60 lg:absolute lg:-bottom-6 lg:-right-2 z-30">
+            <div className="w-full max-w-sm sm:max-w-xs md:max-w-[280px] rounded-2xl bg-white/95 backdrop-blur-md text-charcoal-900 p-4 shadow-2xl border border-white/70 lg:absolute lg:-bottom-6 lg:right-2 z-30">
               <div className="flex items-center justify-between mb-2 pb-1 border-b border-charcoal-100">
                 <span className="text-xs font-black text-charcoal-900">
                   Structured Summary
