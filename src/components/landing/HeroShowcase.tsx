@@ -187,8 +187,8 @@ export const HeroShowcase: React.FC<HeroShowcaseProps> = ({
 
           {/* Right Column: AI Robot + Floating Frosted Cards Composition (Authentic Reference Match) */}
           <div className="lg:col-span-6 relative flex flex-col sm:flex-row lg:flex-col items-center justify-center gap-4 sm:gap-6 min-h-[460px] lg:h-[500px]">
-            {/* AI Cybernetic Robot Focal Artwork */}
-            <div className="absolute inset-0 flex items-center justify-center lg:justify-start lg:-left-20 pointer-events-none select-none z-0 overflow-hidden lg:overflow-visible">
+            {/* DESKTOP ONLY: AI Cybernetic Robot Focal Artwork (100% unchanged for desktop) */}
+            <div className="hidden lg:flex absolute inset-0 items-center justify-start lg:-left-20 pointer-events-none select-none z-0 overflow-visible">
               <div className="relative w-[340px] sm:w-[420px] lg:w-[480px] aspect-[16/10] sm:aspect-square flex items-center justify-center">
                 <img
                   src="/ai-robot-hero.jpg"
@@ -196,7 +196,25 @@ export const HeroShowcase: React.FC<HeroShowcaseProps> = ({
                   className="w-full h-full object-cover rounded-3xl lg:rounded-full [mask-image:radial-gradient(ellipse_at_center,black_55%,transparent_90%)] opacity-95 drop-shadow-[0_20px_50px_rgba(0,0,0,0.7)] transition-all duration-700"
                 />
                 {/* Subtle cybernetic pulse aura */}
-                <div className="absolute inset-4 rounded-full border border-glowOrange-400/25 animate-pulse pointer-events-none hidden lg:block" />
+                <div className="absolute inset-4 rounded-full border border-glowOrange-400/25 animate-pulse pointer-events-none" />
+              </div>
+            </div>
+
+            {/* MOBILE ONLY: Dedicated Cybernetic Robot Showcase (Clean & Unobstructed) */}
+            <div className="lg:hidden w-full max-w-sm mx-auto relative flex flex-col items-center justify-center my-2 select-none pointer-events-none">
+              <div className="relative w-[280px] sm:w-[340px] aspect-[16/10] flex items-center justify-center">
+                <img
+                  src="/ai-robot-hero.jpg"
+                  alt="Mivo AI Voice Model"
+                  className="w-full h-full object-cover rounded-3xl shadow-2xl border border-white/25 [mask-image:radial-gradient(ellipse_at_center,black_75%,transparent_100%)] drop-shadow-[0_15px_35px_rgba(0,0,0,0.6)]"
+                />
+                {/* Subtle cybernetic pulse aura */}
+                <div className="absolute inset-2 rounded-3xl border border-glowOrange-400/30 animate-pulse pointer-events-none" />
+                {/* Badge pill */}
+                <div className="absolute bottom-2.5 px-3 py-1 rounded-full text-[11px] font-bold text-white bg-black/50 backdrop-blur-md border border-white/25 shadow-soft-sm flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>Mivo AI Voice Engine</span>
+                </div>
               </div>
             </div>
 
