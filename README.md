@@ -9,6 +9,13 @@
 </p>
 
 <p align="center">
+  <a href="https://mivo-voice.vercel.app/" target="_blank">
+    <img src="https://img.shields.io/badge/Live%20Demo-mivo--voice.vercel.app-C85A32?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo" />
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://mivo-voice.vercel.app/" target="_blank"><strong>🌐 Live App</strong></a> •
   <a href="#features">Features</a> •
   <a href="#system-architecture">Architecture</a> •
   <a href="#tech-stack">Tech Stack</a> •
@@ -330,8 +337,8 @@ CREATE POLICY "Users can delete their own recordings"
    - Toggle **Enable Google provider** to `ON`.
    - Paste your Google **Client ID** and **Client Secret**.
    - Go to **URL Configuration**:
-     - **Site URL:** `http://localhost:5173` (or production URL on Vercel)
-     - **Redirect URLs:** Add `http://localhost:5173/**` and `https://your-mivo-app.vercel.app/**`.
+     - **Site URL:** `https://mivo-voice.vercel.app` (or `http://localhost:5173` for local dev)
+     - **Redirect URLs:** Add `https://mivo-voice.vercel.app/**` and `http://localhost:5173/**`.
 
 ---
 
@@ -374,11 +381,11 @@ In the Vercel deployment modal, add:
 
 ### 4. Deploy & Update Supabase Auth Redirects
 1. Click **Deploy**.
-2. Once the build finishes and your custom domain is assigned (e.g. `https://mivo.vercel.app`):
+2. Live Production URL: **[https://mivo-voice.vercel.app](https://mivo-voice.vercel.app/)**
    - Return to **Supabase Dashboard &rarr; Authentication &rarr; URL Configuration**.
-   - Set **Site URL** to `https://mivo.vercel.app`.
-   - Add `https://mivo.vercel.app/**` to **Redirect URLs**.
-   - In **Google Cloud Console**, add `https://mivo.vercel.app` to Authorized Origins.
+   - Set **Site URL** to `https://mivo-voice.vercel.app`.
+   - Add `https://mivo-voice.vercel.app/**` to **Redirect URLs**.
+   - In **Google Cloud Console**, add `https://mivo-voice.vercel.app` to Authorized Origins.
 
 ---
 
