@@ -130,31 +130,48 @@ export const HeroShowcase: React.FC<HeroShowcaseProps> = ({
         {/* Main Hero Body Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center my-auto">
           {/* Left Column: Headlines & Pillars */}
-          <div className="lg:col-span-6 space-y-6 lg:space-y-8">
+          <div className="lg:col-span-6 space-y-6 lg:space-y-8 relative">
+            {/* MOBILE ONLY: Ambient Cybernetic Robot Artwork Blended Seamlessly Behind Text Elements */}
+            <div
+              className="lg:hidden absolute top-2 sm:top-6 -right-6 sm:-right-8 w-72 sm:w-88 aspect-square pointer-events-none select-none z-0 overflow-visible opacity-60 mix-blend-lighten"
+              aria-hidden="true"
+            >
+              <div className="relative w-full h-full flex items-center justify-center">
+                <img
+                  src="/ai-robot-hero.jpg"
+                  alt=""
+                  className="w-full h-full object-cover object-center rounded-full [mask-image:radial-gradient(circle_at_center,black_45%,transparent_80%)] filter contrast-115 saturate-125"
+                />
+                {/* Subtle cybernetic pulse aura */}
+                <div className="absolute inset-4 rounded-full border border-glowOrange-400/25 animate-pulse pointer-events-none" />
+                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-glowOrange-600/15 via-transparent to-teal-400/10 blur-xl pointer-events-none" />
+              </div>
+            </div>
+
             {/* Eyebrow caption */}
-            <div className="inline-flex items-center gap-2">
+            <div className="relative z-10 inline-flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-glowOrange-400 animate-pulse" />
               <p className="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-white/90">
                 The AI Voice Notes Platform
               </p>
             </div>
 
-            <p className="text-xs sm:text-sm font-semibold tracking-wide text-white/90 uppercase leading-relaxed max-w-md">
+            <p className="relative z-10 text-xs sm:text-sm font-semibold tracking-wide text-white/90 uppercase leading-relaxed max-w-md drop-shadow-sm">
               Powering accurate transcriptions, instant summaries, and organized thoughts so you never lose an idea.
             </p>
 
             {/* Main Headline (Pure White, Strong Visual Hierarchy) */}
-            <div className="space-y-3">
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-[1.12] drop-shadow-sm">
+            <div className="relative z-10 space-y-3">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-[1.12] drop-shadow-md">
                 Your thoughts deserve to be remembered.
               </h1>
-              <p className="text-sm sm:text-base text-white/85 font-medium leading-relaxed max-w-lg">
+              <p className="text-sm sm:text-base text-white/90 font-medium leading-relaxed max-w-lg drop-shadow-sm">
                 Capture your thoughts with your voice. Mivo turns your recordings into organized, searchable notes with zero friction.
               </p>
             </div>
 
             {/* CTAs */}
-            <div className="flex flex-wrap items-center gap-3 pt-2">
+            <div className="relative z-10 flex flex-wrap items-center gap-3 pt-2">
               <button
                 onClick={onGetStarted}
                 className="inline-flex items-center gap-2 bg-white text-charcoal-900 hover:bg-warm-100 active:scale-95 transition-all duration-150 px-6 py-3.5 rounded-full font-extrabold text-sm shadow-soft-xl shadow-black/40"
@@ -172,7 +189,7 @@ export const HeroShowcase: React.FC<HeroShowcaseProps> = ({
             </div>
 
             {/* Frosted Pill Badges (recreating reference image bottom-left tags) */}
-            <div className="flex flex-wrap items-center gap-2.5 pt-2">
+            <div className="relative z-10 flex flex-wrap items-center gap-2.5 pt-2">
               <span className="px-4 py-1.5 rounded-full text-xs font-semibold bg-white/15 backdrop-blur-md border border-white/25 text-white shadow-soft-sm">
                 Voice Notes
               </span>
@@ -197,24 +214,6 @@ export const HeroShowcase: React.FC<HeroShowcaseProps> = ({
                 />
                 {/* Subtle cybernetic pulse aura */}
                 <div className="absolute inset-4 rounded-full border border-glowOrange-400/25 animate-pulse pointer-events-none" />
-              </div>
-            </div>
-
-            {/* MOBILE ONLY: Dedicated Cybernetic Robot Showcase (Clean & Unobstructed) */}
-            <div className="lg:hidden w-full max-w-sm mx-auto relative flex flex-col items-center justify-center my-2 select-none pointer-events-none">
-              <div className="relative w-[280px] sm:w-[340px] aspect-[16/10] flex items-center justify-center">
-                <img
-                  src="/ai-robot-hero.jpg"
-                  alt="Mivo AI Voice Model"
-                  className="w-full h-full object-cover rounded-3xl shadow-2xl border border-white/25 [mask-image:radial-gradient(ellipse_at_center,black_75%,transparent_100%)] drop-shadow-[0_15px_35px_rgba(0,0,0,0.6)]"
-                />
-                {/* Subtle cybernetic pulse aura */}
-                <div className="absolute inset-2 rounded-3xl border border-glowOrange-400/30 animate-pulse pointer-events-none" />
-                {/* Badge pill */}
-                <div className="absolute bottom-2.5 px-3 py-1 rounded-full text-[11px] font-bold text-white bg-black/50 backdrop-blur-md border border-white/25 shadow-soft-sm flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <span>Mivo AI Voice Engine</span>
-                </div>
               </div>
             </div>
 
