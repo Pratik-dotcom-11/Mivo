@@ -15,7 +15,7 @@
 </p>
 
 <p align="center">
-  <a href="https://mivo-voice.vercel.app/" target="_blank"><strong>🌐 Live App</strong></a> •
+  <a href="https://mivo-voice.vercel.app/" target="_blank"><strong>🌐 Live App</strong></a> 
 </p>
 
 <p align="center">
