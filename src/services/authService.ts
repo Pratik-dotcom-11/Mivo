@@ -21,10 +21,12 @@ export const authService = {
       const targetRedirect =
         redirectTo || (typeof window !== 'undefined' ? `${window.location.origin}/` : undefined);
 
-      const { error } = await supabase.auth.signInWithOAuth({
+      // Use skipBrowserRedirect so we can safely verify if Google provider is enabled in Supabase
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           redirectTo: targetRedirect,
+          skipBrowserRedirect: true,
           queryParams: {
             access_type: 'offline',
             prompt: 'select_account',
@@ -38,11 +40,39 @@ export const authService = {
           msg.toLowerCase().includes('unsupported provider') ||
           msg.toLowerCase().includes('not enabled')
         ) {
-          msg =
-            'Google Sign-In is not enabled yet in your Supabase project. Go to Supabase Dashboard > Authentication > Providers > Google, enable it, and add your Google Client ID & Secret.';
+          return { error: new Error('GOOGLE_PROVIDER_DISABLED') };
         }
         return { error: new Error(msg) };
       }
+
+      if (!data?.url) {
+        throw new Error('Supabase did not return an OAuth authorization URL');
+      }
+
+      // Preflight check: prevent sending the user to a raw JSON error page if Google provider is disabled
+      try {
+        const probe = await fetch(data.url, {
+          method: 'GET',
+          headers: { Accept: 'application/json' },
+        });
+
+        if (!probe.ok) {
+          const body = await probe.json().catch(() => ({}));
+          if (
+            body?.msg?.includes('provider is not enabled') ||
+            body?.error_code === 'validation_failed' ||
+            probe.status === 400
+          ) {
+            return { error: new Error('GOOGLE_PROVIDER_DISABLED') };
+          }
+        }
+      } catch (probeErr) {
+        // If fetch was blocked by CORS redirect, that's expected for live Google redirects
+        console.info('[Mivo Auth] Preflight check passed/redirected:', probeErr);
+      }
+
+      // If enabled, smoothly navigate the browser to Google OAuth
+      window.location.href = data.url;
       return { error: null };
     } catch (err: unknown) {
       const formattedError =
@@ -116,7 +146,7 @@ export const authService = {
   },
 
   /**
-   * Parses potential OAuth error descriptions passed back in redirect URL query/hash
+   * Parses OAuth callback errors from browser location
    */
   parseOAuthErrorFromUrl(): string | null {
     if (typeof window === 'undefined') return null;

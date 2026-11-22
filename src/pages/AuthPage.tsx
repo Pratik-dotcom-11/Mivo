@@ -6,7 +6,9 @@ import {
   ShieldCheck,
   AlertTriangle,
   Sparkles,
-  CheckCircle,
+  ExternalLink,
+  Copy,
+  Check,
 } from 'lucide-react';
 import { APP_NAME, APP_TAGLINE } from '@/utils/constants';
 
@@ -19,26 +21,33 @@ export const AuthPage: React.FC<AuthPageProps> = ({
   onBackToLanding,
   onAuthenticated,
 }) => {
-  const { signInWithGoogle, demoSignIn, isConfigured, error, clearError } = useAuth();
+  const { signInWithGoogle, demoSignIn, error, clearError } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [activeModal, setActiveModal] = useState<'privacy' | 'terms' | null>(null);
-  const [localMessage, setLocalMessage] = useState<string | null>(null);
+  const [showGoogleSetupModal, setShowGoogleSetupModal] = useState(false);
+  const [copiedCallback, setCopiedCallback] = useState(false);
+
+  const SUPABASE_PROJECT_ID = 'npixrygnfkqahlxntwai';
+  const SUPABASE_CALLBACK_URL = `https://${SUPABASE_PROJECT_ID}.supabase.co/auth/v1/callback`;
+  const SUPABASE_PROVIDERS_URL = `https://supabase.com/dashboard/project/${SUPABASE_PROJECT_ID}/auth/providers`;
 
   const handleGoogleSignIn = async () => {
     clearError();
-    setLocalMessage(null);
-
-    // If Supabase credentials have not been configured yet, explain clearly and offer Demo sign-in
-    if (!isConfigured) {
-      setLocalMessage(
-        'Supabase is not configured with live API keys yet. You can launch instant Demo Mode to test the full recording and transcription studio, or configure your .env file.'
-      );
-      return;
-    }
 
     setIsLoading(true);
     const res = await signInWithGoogle();
     setIsLoading(false);
+
+    if (res.error) {
+      if (
+        res.error.message === 'GOOGLE_PROVIDER_DISABLED' ||
+        res.error.message.toLowerCase().includes('unsupported provider') ||
+        res.error.message.toLowerCase().includes('not enabled')
+      ) {
+        setShowGoogleSetupModal(true);
+      }
+      return;
+    }
 
     if (!res.error && onAuthenticated) {
       onAuthenticated();
@@ -51,6 +60,16 @@ export const AuthPage: React.FC<AuthPageProps> = ({
       onAuthenticated();
     }
   };
+
+  const handleCopyCallback = () => {
+    navigator.clipboard.writeText(SUPABASE_CALLBACK_URL);
+    setCopiedCallback(true);
+    setTimeout(() => setCopiedCallback(false), 2000);
+  };
+
+  const isGoogleDisabledError =
+    error === 'GOOGLE_PROVIDER_DISABLED' ||
+    (error && (error.toLowerCase().includes('provider') || error.toLowerCase().includes('enabled')));
 
   return (
     <div className="min-h-screen bg-warm-200/50 dark:bg-dark-bg text-charcoal-800 dark:text-charcoal-100 flex flex-col justify-between p-4 sm:p-6 transition-colors duration-200">
@@ -96,21 +115,36 @@ export const AuthPage: React.FC<AuthPageProps> = ({
           </div>
 
           {/* Error Banner */}
-          {(error || localMessage) && (
+          {error && (
             <div className="p-3.5 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/40 text-xs text-amber-900 dark:text-amber-200 flex items-start gap-2.5">
               <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
               <div className="flex-1 space-y-2">
-                <p className="leading-snug font-medium">{error || localMessage}</p>
-                {!isConfigured && (
-                  <Button
-                    type="button"
-                    variant="primary"
-                    size="xs"
-                    onClick={handleDemoAccess}
-                    className="font-bold bg-amber-600 hover:bg-amber-700 text-white"
-                  >
-                    Enter Demo Mode Now
-                  </Button>
+                <p className="leading-snug font-medium">
+                  {isGoogleDisabledError
+                    ? 'Google OAuth provider is not enabled in your Supabase project yet.'
+                    : error}
+                </p>
+                {isGoogleDisabledError && (
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    <Button
+                      type="button"
+                      variant="primary"
+                      size="xs"
+                      onClick={() => setShowGoogleSetupModal(true)}
+                      className="font-bold bg-amber-600 hover:bg-amber-700 text-white"
+                    >
+                      View 2-Min Setup Guide
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="xs"
+                      onClick={handleDemoAccess}
+                      className="font-medium"
+                    >
+                      Use Demo Mode Now
+                    </Button>
+                  </div>
                 )}
               </div>
             </div>
@@ -148,68 +182,121 @@ export const AuthPage: React.FC<AuthPageProps> = ({
               <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               <span>End-to-end user isolation with Supabase Row Level Security</span>
             </div>
-
-            {/* Privacy & Terms Links as Placeholders */}
-            <div className="flex items-center justify-center gap-3 text-[11px] text-charcoal-400 dark:text-dark-muted">
+            <div className="flex items-center justify-center gap-4 text-[11px] text-charcoal-400 dark:text-dark-muted">
               <button
                 onClick={() => setActiveModal('privacy')}
-                className="hover:text-charcoal-700 dark:hover:text-charcoal-200 underline underline-offset-2 transition-colors"
+                className="hover:underline hover:text-charcoal-600 dark:hover:text-white"
               >
                 Privacy Policy
               </button>
-              <span>&bull;</span>
+              <span>•</span>
               <button
                 onClick={() => setActiveModal('terms')}
-                className="hover:text-charcoal-700 dark:hover:text-charcoal-200 underline underline-offset-2 transition-colors"
+                className="hover:underline hover:text-charcoal-600 dark:hover:text-white"
               >
                 Terms of Service
               </button>
             </div>
           </div>
         </div>
-
-        {/* Minimal Footer */}
-        <p className="text-center text-xs text-charcoal-400 dark:text-dark-muted mt-6 font-medium">
-          Mivo &bull; {APP_TAGLINE}
-        </p>
       </main>
 
-      <div className="h-6" />
+      {/* Footer */}
+      <footer className="text-center py-4 text-xs text-charcoal-400 dark:text-dark-muted">
+        &copy; {new Date().getFullYear()} {APP_NAME}. {APP_TAGLINE}
+      </footer>
+
+      {/* Google OAuth Quick Setup Modal */}
+      <Modal
+        isOpen={showGoogleSetupModal}
+        onClose={() => setShowGoogleSetupModal(false)}
+        title="Enable Google Sign-In in Supabase"
+        size="md"
+      >
+        <div className="space-y-4 text-xs text-charcoal-600 dark:text-dark-muted">
+          <p className="leading-relaxed">
+            Your Supabase project is active, but Google OAuth is toggled OFF by default. To enable one-click Google Sign-In:
+          </p>
+
+          <ol className="list-decimal pl-4 space-y-2.5 font-medium text-charcoal-700 dark:text-charcoal-300">
+            <li>
+              <span>In Google Cloud Console, add this <strong>Authorized Redirect URI</strong>:</span>
+              <div className="mt-1 flex items-center justify-between gap-2 p-2 rounded-xl bg-warm-100 dark:bg-dark-bg border border-charcoal-200 dark:border-dark-border font-mono text-[11px] break-all select-all">
+                <span>{SUPABASE_CALLBACK_URL}</span>
+                <button
+                  type="button"
+                  onClick={handleCopyCallback}
+                  className="p-1 rounded-lg hover:bg-white dark:hover:bg-dark-card shrink-0 transition-colors"
+                  title="Copy Redirect URI"
+                >
+                  {copiedCallback ? (
+                    <Check className="w-3.5 h-3.5 text-emerald-600" />
+                  ) : (
+                    <Copy className="w-3.5 h-3.5" />
+                  )}
+                </button>
+              </div>
+            </li>
+            <li>
+              <span>Open your Supabase Project Auth Providers and toggle <strong>Google</strong> to ON.</span>
+            </li>
+            <li>
+              <span>Paste your Google <strong>Client ID</strong> and <strong>Client Secret</strong> and click <strong>Save</strong>.</span>
+            </li>
+          </ol>
+
+          <div className="pt-2 flex flex-col sm:flex-row items-center gap-2">
+            <a
+              href={SUPABASE_PROVIDERS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition-colors"
+            >
+              <span>Open Supabase Auth Providers</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleDemoAccess}
+              className="w-full sm:w-auto text-xs"
+            >
+              Continue in Demo Mode for Now
+            </Button>
+          </div>
+        </div>
+      </Modal>
 
       {/* Privacy Policy Modal */}
       <Modal
         isOpen={activeModal === 'privacy'}
         onClose={() => setActiveModal(null)}
-        title="Privacy Policy (Placeholder)"
+        title="Privacy Policy"
         size="md"
       >
-        <div className="space-y-4 text-xs sm:text-sm text-charcoal-600 dark:text-dark-muted leading-relaxed">
-          <p>
-            At <strong>Mivo</strong>, your voice notes, transcripts, and ideas belong entirely to you.
+        <div className="space-y-3 text-xs text-charcoal-600 dark:text-dark-muted max-h-96 overflow-y-auto pr-2">
+          <p className="font-semibold text-charcoal-800 dark:text-white">
+            1. Respecting Your Voice Privacy
           </p>
-          <div className="space-y-2 bg-warm-100 dark:bg-dark-surface p-4 rounded-2xl border border-charcoal-200/60 dark:border-dark-border">
-            <div className="flex items-center gap-2 font-bold text-charcoal-900 dark:text-white">
-              <CheckCircle className="w-4 h-4 text-emerald-500" />
-              <span>Isolated Storage</span>
-            </div>
-            <p className="text-xs">
-              Recordings are placed in private, user-isolated buckets where only your authenticated credentials can access or stream them.
-            </p>
-          </div>
-          <div className="space-y-2 bg-warm-100 dark:bg-dark-surface p-4 rounded-2xl border border-charcoal-200/60 dark:border-dark-border">
-            <div className="flex items-center gap-2 font-bold text-charcoal-900 dark:text-white">
-              <CheckCircle className="w-4 h-4 text-emerald-500" />
-              <span>Zero AI Training</span>
-            </div>
-            <p className="text-xs">
-              Your audio notes are never used to train public machine learning models.
-            </p>
-          </div>
-          <div className="pt-2 flex justify-end">
-            <Button variant="secondary" size="sm" onClick={() => setActiveModal(null)}>
-              Close
-            </Button>
-          </div>
+          <p>
+            Mivo treats your audio recordings and notes as strictly private personal data.
+            Audio recordings are stored in secure, private cloud buckets protected by PostgreSQL
+            Row Level Security.
+          </p>
+          <p className="font-semibold text-charcoal-800 dark:text-white">
+            2. Google Authentication Data
+          </p>
+          <p>
+            When signing in with Google OAuth, Mivo only accesses your name, email address, and profile
+            photo. We never request access to your Google Drive, contacts, or other Google services.
+          </p>
+          <p className="font-semibold text-charcoal-800 dark:text-white">
+            3. Data Isolation
+          </p>
+          <p>
+            Every database record is locked to your unique authenticated user ID. No other user
+            can view, search, or listen to your voice notes.
+          </p>
         </div>
       </Modal>
 
@@ -217,23 +304,24 @@ export const AuthPage: React.FC<AuthPageProps> = ({
       <Modal
         isOpen={activeModal === 'terms'}
         onClose={() => setActiveModal(null)}
-        title="Terms of Service (Placeholder)"
+        title="Terms of Service"
         size="md"
       >
-        <div className="space-y-4 text-xs sm:text-sm text-charcoal-600 dark:text-dark-muted leading-relaxed">
-          <p>
-            Welcome to <strong>Mivo: Your voice. Your ideas.</strong> By accessing our service, you agree to these standard operational terms.
+        <div className="space-y-3 text-xs text-charcoal-600 dark:text-dark-muted max-h-96 overflow-y-auto pr-2">
+          <p className="font-semibold text-charcoal-800 dark:text-white">
+            1. Acceptance of Terms
           </p>
-          <ul className="list-disc pl-5 space-y-1.5 text-xs">
-            <li>You retain full intellectual property ownership of all uploaded voice files and text notes.</li>
-            <li>You agree not to upload harmful, abusive, or copyrighted audio recordings without authorization.</li>
-            <li>Audio processing uses secure edge workers with encrypted ephemeral pipelines.</li>
-          </ul>
-          <div className="pt-2 flex justify-end">
-            <Button variant="secondary" size="sm" onClick={() => setActiveModal(null)}>
-              Close
-            </Button>
-          </div>
+          <p>
+            By using Mivo, you agree to these terms. Mivo is designed as a productivity tool for
+            personal voice note recording, speech-to-text transcription, and idea organization.
+          </p>
+          <p className="font-semibold text-charcoal-800 dark:text-white">
+            2. Permitted Use
+          </p>
+          <p>
+            You agree not to upload malicious audio files, attempt unauthorized access to other user
+            partitions, or abuse speech-to-text API endpoints.
+          </p>
         </div>
       </Modal>
     </div>
