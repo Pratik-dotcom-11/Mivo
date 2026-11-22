@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 120" width="440" height="120">
+  <defs>
+    <linearGradient id="bannerBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C85A32" />
+      <stop offset="50%" stop-color="#DE6B42" />
+      <stop offset="100%" stop-color="#F4A261" />
+    </linearGradient>
+
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#FFF5EE" />
+    </linearGradient>
+
+    <filter id="iconShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#C85A32" flood-opacity="0.32" />
+    </filter>
+  </defs>
+
+  <!-- Icon Badge (Left) -->
+  <g transform="translate(10, 10)">
+    <rect x="0" y="0" width="100" height="100" rx="26" ry="26" fill="url(#bannerBgGrad)" filter="url(#iconShadow)" />
+    <rect x="0.75" y="0.75" width="98.5" height="98.5" rx="25.25" ry="25.25" fill="none" stroke="#FFFFFF" stroke-opacity="0.25" stroke-width="1.5" />
+    
+    <!-- Soundwave M Mark -->
+    <g fill="#FFFFFF">
+      <rect x="23" y="38" width="7" height="26" rx="3.5" />
+      <rect x="34" y="46" width="7" height="18" rx="3.5" />
+      <rect x="45" y="29" width="7" height="44" rx="3.5" />
+      <rect x="56" y="46" width="7" height="18" rx="3.5" />
+      <rect x="67" y="38" width="7" height="26" rx="3.5" />
+      <circle cx="15" cy="51" r="2.5" />
+      <circle cx="81" cy="51" r="2.5" />
+      
+      <!-- AI Star Sparkle -->
+      <path d="M 78 18 Q 78 23 73 23 Q 78 23 78 28 Q 78 23 83 23 Q 78 23 78 18 Z" opacity="0.9" />
+    </g>
+  </g>
+
+  <!-- Typography (Right) -->
+  <g transform="translate(130, 25)">
+    <!-- Brand Name "mivo" -->
+    <text x="0" y="48" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="52" font-weight="900" letter-spacing="-1.5px" fill="url(#textGrad)">
+      mivo<tspan fill="#F4A261" font-size="44">.ai</tspan>
+    </text>
+
+    <!-- Tagline -->
+    <text x="2" y="74" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="4px" fill="#E07A5F">
+      YOUR VOICE. YOUR IDEAS.
+    </text>
+  </g>
+</svg>

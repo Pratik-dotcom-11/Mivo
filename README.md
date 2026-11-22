@@ -1,7 +1,7 @@
 # Mivo — Your voice. Your ideas.
 
 <p align="center">
-  <img src="public/mivo-icon.svg" alt="Mivo Logo" width="80" height="80" style="border-radius: 20px;" onerror="this.style.display='none'" />
+  <img src="public/mivo-icon.svg" alt="Mivo Logo" width="96" height="96" />
 </p>
 
 <p align="center">
@@ -80,25 +80,25 @@ flowchart TD
     
     subgraph Frontend["Mivo Frontend (React + Vite + Tailwind)"]
         Landing["Landing Page (Hero & Showcase)"]
-        AuthView["Google OAuth Sign-In Modal"]
+        AuthView["Gmail & Email Sign-In Modal"]
         NotesView["Notes Dashboard & Search"]
         Recorder["Voice Recorder Modal & Visualizer"]
     end
     
     subgraph SupabasePlatform["Supabase Cloud Platform"]
-        Auth["Supabase Auth (Google OAuth 2.0)"]
-        Postgres[("PostgreSQL Database\nTable: public.voice_notes\nRLS Enabled (auth.uid() = user_id)")]
-        Storage[("Supabase Storage\nBucket: voice-recordings\nPrivate / Signed URLs")]
-        EdgeFn["Edge Function: transcribe-audio\n(Deno Runtime)"]
+        Auth["Supabase Auth (Gmail & Email Sessions)"]
+        Postgres[("PostgreSQL Database<br/>Table: public.voice_notes<br/>RLS: auth.uid = user_id")]
+        Storage[("Supabase Storage<br/>Bucket: voice-recordings<br/>Private / Signed URLs")]
+        EdgeFn["Edge Function: transcribe-audio<br/>(Deno Runtime)"]
     end
     
     subgraph AIProvider["OpenAI Cloud API"]
-        Whisper["OpenAI Whisper API\n(model: whisper-1)"]
+        Whisper["OpenAI Whisper API<br/>Model: whisper-1"]
     end
 
     User -->|Visits| Landing
     User -->|Authenticates| AuthView
-    AuthView -->|OAuth Redirect| Auth
+    AuthView -->|Email Authentication| Auth
     Auth -->|Returns Session JWT| Frontend
     
     User -->|Records Voice Note| Recorder
@@ -106,7 +106,7 @@ flowchart TD
     Recorder -->|Invokes with Audio Path| EdgeFn
     EdgeFn -->|Validates JWT| Auth
     EdgeFn -->|Reads Audio from Storage| Storage
-    EdgeFn -->|Transcribes Audio (Server Secret)| Whisper
+    EdgeFn -->|"Transcribes Audio via Server Secret"| Whisper
     Whisper -->|Returns Transcript| EdgeFn
     EdgeFn -->|Saves Note & Returns Text| Postgres
     NotesView -->|Queries / Filters / Edits| Postgres
