@@ -270,42 +270,42 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         {/* =========================================================================
             SECTION 5: FOOTER
             ========================================================================= */}
-        <footer className="pt-8 border-t border-charcoal-300/80 dark:border-dark-border space-y-8">
+        <footer className="rounded-3xl bg-white/80 backdrop-blur-xl p-6 sm:p-8 border border-white/90 shadow-soft-lg space-y-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div className="space-y-1 text-center sm:text-left">
+            <div className="space-y-1 text-center sm:text-left px-4 py-2.5 rounded-2xl bg-white/90 backdrop-blur-md border border-white/80 shadow-soft-sm">
               <Logo size="md" showTagline />
             </div>
 
-            {/* Navigation Links */}
-            <div className="flex flex-wrap items-center justify-center gap-6 text-xs font-bold text-charcoal-700 dark:text-dark-muted">
+            {/* Navigation Links with Luminous White Pill Highlight */}
+            <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-3 p-1.5 rounded-full bg-white/90 backdrop-blur-md border border-white/80 shadow-soft-sm text-xs font-bold text-charcoal-800">
               <button
                 onClick={() => scrollToSection('hero')}
-                className="hover:text-charcoal-900 dark:hover:text-white transition-colors"
+                className="px-3 py-1.5 rounded-full hover:bg-warm-100 hover:text-charcoal-950 transition-all"
               >
                 Home
               </button>
               <button
                 onClick={() => scrollToSection('features')}
-                className="hover:text-charcoal-900 dark:hover:text-white transition-colors"
+                className="px-3 py-1.5 rounded-full hover:bg-warm-100 hover:text-charcoal-950 transition-all"
               >
                 Features
               </button>
               <button
                 onClick={() => scrollToSection('how-it-works')}
-                className="hover:text-charcoal-900 dark:hover:text-white transition-colors"
+                className="px-3 py-1.5 rounded-full hover:bg-warm-100 hover:text-charcoal-950 transition-all"
               >
                 How It Works
               </button>
               <button
                 onClick={onNavigateToApp}
-                className="hover:text-charcoal-900 dark:hover:text-white transition-colors text-glowOrange-600 dark:text-glowOrange-400"
+                className="px-3.5 py-1.5 rounded-full bg-glowOrange-50 hover:bg-glowOrange-100 text-glowOrange-700 font-extrabold border border-glowOrange-200/80 transition-all"
               >
                 {user ? 'My Dashboard' : 'Demo Dashboard'}
               </button>
               {!user && (
                 <button
                   onClick={onNavigateToAuth}
-                  className="hover:text-charcoal-900 dark:hover:text-white transition-colors"
+                  className="px-3 py-1.5 rounded-full hover:bg-warm-100 hover:text-charcoal-950 transition-all"
                 >
                   Sign In
                 </button>
@@ -313,33 +313,33 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-charcoal-200 dark:border-dark-border text-xs text-charcoal-500 dark:text-dark-muted">
-            <p className="font-medium">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-5 border-t border-charcoal-200/70 text-xs text-charcoal-700">
+            <div className="px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-white/80 shadow-soft-sm font-semibold text-charcoal-800">
               &copy; {new Date().getFullYear()} {APP_NAME}. All rights reserved. {APP_TAGLINE}
-            </p>
+            </div>
 
-            <div className="flex items-center gap-4 text-[11px] font-semibold">
-              <span className="flex items-center gap-1 text-charcoal-600 dark:text-dark-muted">
-                <ShieldCheck className="w-3.5 h-3.5 text-mivoGreen-600" />
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-white/80 shadow-soft-sm text-[11px] font-bold text-charcoal-700">
+              <span className="flex items-center gap-1.5 text-charcoal-800">
+                <ShieldCheck className="w-4 h-4 text-mivoGreen-600" />
                 End-to-End Encrypted Storage
               </span>
-              <span>•</span>
+              <span className="text-charcoal-300">•</span>
               <button
                 onClick={() =>
                   alert(
                     'Mivo Privacy Policy: Your audio recordings and transcripts are private to your account and never used for public training.'
                   )
                 }
-                className="hover:underline"
+                className="hover:text-charcoal-950 hover:underline transition-colors"
               >
                 Privacy Policy
               </button>
-              <span>•</span>
+              <span className="text-charcoal-300">•</span>
               <button
                 onClick={() =>
                   alert('Mivo Terms of Service: Free to capture, organize, and export your voice notes anytime.')
                 }
-                className="hover:underline"
+                className="hover:text-charcoal-950 hover:underline transition-colors"
               >
                 Terms of Service
               </button>
