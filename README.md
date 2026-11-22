@@ -16,13 +16,6 @@
 
 <p align="center">
   <a href="https://mivo-voice.vercel.app/" target="_blank"><strong>🌐 Live App</strong></a> •
-  <a href="#features">Features</a> •
-  <a href="#system-architecture">Architecture</a> •
-  <a href="#tech-stack">Tech Stack</a> •
-  <a href="#getting-started">Getting Started</a> •
-  <a href="#supabase-setup">Supabase & Database</a> •
-  <a href="#google-oauth-setup">Google OAuth</a> •
-  <a href="#deployment">Deployment</a>
 </p>
 
 <p align="center">
