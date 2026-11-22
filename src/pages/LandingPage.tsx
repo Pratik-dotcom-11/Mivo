@@ -33,17 +33,17 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-[#FAF7F2] text-charcoal-800 font-sans selection:bg-terracotta-500 selection:text-white pb-16">
-      {/* Dreamy Floral Glow Ambient Background */}
+    <div className="min-h-screen relative overflow-hidden bg-[#FAF7F2] text-charcoal-900 font-sans selection:bg-terracotta-500 selection:text-white pb-16">
+      {/* Dreamy Floral Glow Ambient Background - Full Vibrant Visibility */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         {/* Organic Floral Glow Texture Wallpaper */}
         <img
           src="/dreamy-glow-bg.jpg"
           alt=""
-          className="w-full h-full object-cover object-top opacity-40 scale-105 filter saturate-110"
+          className="w-full h-full object-cover object-center opacity-95 filter saturate-125 contrast-105"
         />
-        {/* Soft atmospheric gradient wash ensuring maximum readability & contrast */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FAF7F2]/40 via-[#FAF7F2]/65 to-[#FAF7F2]/90" />
+        {/* Subtle vignette to frame content while leaving background fully visible */}
+        <div className="absolute inset-0 bg-black/[0.03] pointer-events-none" />
       </div>
 
       {/* Outer Shell Wrapper: mimics the showcase matte canvas frame */}
@@ -66,14 +66,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             ========================================================================= */}
         <section id="features" className="scroll-mt-20 space-y-10">
           <div className="text-center max-w-2xl mx-auto space-y-3">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-terracotta-100 dark:bg-terracotta-950/60 text-terracotta-800 dark:text-terracotta-300 border border-terracotta-200 dark:border-terracotta-800/40 text-xs font-bold uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5" />
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md text-terracotta-900 border border-terracotta-300/80 text-xs font-extrabold uppercase tracking-wider shadow-soft-sm">
+              <Sparkles className="w-3.5 h-3.5 text-glowOrange-600" />
               Core Capabilities
             </div>
-            <h2 className="text-3xl sm:text-4xl font-black text-charcoal-900 dark:text-white tracking-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-charcoal-950 tracking-tight drop-shadow-sm">
               Designed for speed and clarity
             </h2>
-            <p className="text-sm sm:text-base text-charcoal-600 dark:text-dark-muted font-medium">
+            <p className="text-sm sm:text-base text-charcoal-800 font-semibold max-w-xl mx-auto drop-shadow-sm">
               Everything you need to effortlessly turn spoken stream-of-consciousness into sharp, actionable notes.
             </p>
           </div>
@@ -163,10 +163,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             ========================================================================= */}
         <section id="how-it-works" className="scroll-mt-20 space-y-10">
           <div className="text-center max-w-2xl mx-auto space-y-3">
-            <h2 className="text-3xl sm:text-4xl font-black text-charcoal-900 dark:text-white tracking-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-charcoal-950 tracking-tight drop-shadow-sm">
               Three simple steps to clarity
             </h2>
-            <p className="text-sm sm:text-base text-charcoal-600 dark:text-dark-muted font-medium">
+            <p className="text-sm sm:text-base text-charcoal-800 font-semibold max-w-xl mx-auto drop-shadow-sm">
               From spontaneous spoken idea to structured, accessible knowledge in seconds.
             </p>
           </div>
