@@ -203,51 +203,46 @@ export const HeroShowcase: React.FC<HeroShowcaseProps> = ({
                 </span>
               </div>
 
-              {/* MOBILE ONLY: Graphic Elements in the user-marked empty section */}
-              <div className="lg:hidden absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none select-none z-20 animate-float-slow">
-                <div className="relative p-3 sm:p-3.5 rounded-2xl bg-white/15 backdrop-blur-xl border border-white/30 shadow-[0_12px_32px_rgba(0,0,0,0.35)] flex flex-col gap-2 w-[140px] sm:w-[155px]">
-                  {/* Live AI Status Bar */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5">
-                      <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-glowTeal-400 opacity-75" />
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-glowTeal-400" />
-                      </span>
-                      <span className="text-[10px] font-black uppercase tracking-wider text-white">AI Stream</span>
-                    </div>
-                    <Sparkles className="w-3 h-3 text-glowOrange-400 animate-spin-slow" />
-                  </div>
-
-                  {/* Animated Frequency Spectrum Waveform */}
-                  <div className="flex items-end justify-between gap-[3px] h-8 px-1.5 py-1 bg-black/25 rounded-xl border border-white/10 overflow-hidden">
-                    {[45, 80, 100, 60, 90, 40, 75, 95, 55, 85].map((h, i) => (
-                      <span
-                        key={i}
-                        className="w-1.5 rounded-full bg-gradient-to-t from-glowTeal-400 via-glowOrange-400 to-amber-300 animate-equalizer"
-                        style={{
-                          height: `${h}%`,
-                          animationDelay: `${i * 110}ms`,
-                          animationDuration: `${0.9 + (i % 3) * 0.25}s`,
-                        }}
-                      />
-                    ))}
-                  </div>
-
-                  {/* Audio Engine Specs */}
-                  <div className="flex items-center justify-between text-[9px] font-mono text-white/90 pt-1 border-t border-white/15">
-                    <span className="font-bold">99.8% Accuracy</span>
-                    <span className="text-glowTeal-300 font-extrabold">0.8s</span>
-                  </div>
-
-                  {/* Overlapping Floating Badge */}
-                  <div className="absolute -top-2.5 -right-2 px-2 py-0.5 rounded-full bg-gradient-to-r from-glowOrange-500 to-terracotta-500 text-[9px] font-black text-white shadow-soft-md shadow-glowOrange-500/40 flex items-center gap-1 border border-white/20 animate-bounce-subtle">
-                    <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                    <span>Whisper V3</span>
-                  </div>
+              {/* MOBILE ONLY: Futuristic Glowing Acoustic Sonic Orb & Live Note Pill (Replaces former soundwave box) */}
+              <div
+                className="lg:hidden absolute right-0 sm:right-2 top-1/2 -translate-y-1/2 pointer-events-none select-none z-20 animate-float-slow flex flex-col items-center gap-1.5 w-[145px] sm:w-[160px]"
+                aria-hidden="true"
+              >
+                {/* Floating Spoken Thought Pill */}
+                <div className="px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/35 shadow-soft-md flex items-center gap-1.5 animate-bounce-subtle">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="text-[10px] font-bold text-white tracking-tight">"Spoken idea"</span>
+                  <ArrowRight className="w-2.5 h-2.5 text-glowOrange-400" />
+                  <span className="text-[9px] font-mono font-bold text-glowTeal-300">Note</span>
                 </div>
 
-                {/* Secondary Floating Orb Glow */}
-                <div className="absolute -bottom-2 -left-2 w-8 h-8 rounded-full bg-gradient-to-tr from-glowTeal-400 to-glowOrange-500 opacity-60 blur-md -z-10 animate-pulse-glow" />
+                {/* 3D Acoustic Sonic Orb with Radiating Waves */}
+                <div className="relative w-20 h-20 flex items-center justify-center my-0.5">
+                  {/* Expanding Sonar Pulse Waves */}
+                  <span className="absolute inset-0 rounded-full border border-glowOrange-400/40 animate-ping" />
+                  <span className="absolute -inset-2 rounded-full border border-glowTeal-400/25 animate-pulse" />
+
+                  {/* Gradient Glow Aura */}
+                  <div className="absolute inset-1 rounded-full bg-gradient-to-tr from-glowOrange-600 via-terracotta-500 to-amber-400 blur-md opacity-75" />
+
+                  {/* The Glass Orb */}
+                  <div className="relative w-14 h-14 rounded-full bg-gradient-to-br from-white/40 via-glowOrange-500 to-terracotta-700 p-0.5 shadow-[0_0_25px_rgba(249,115,22,0.65)] border border-white/50 flex items-center justify-center">
+                    <div className="w-full h-full rounded-full bg-gradient-to-tr from-[#380F06] to-[#7B2C17] flex items-center justify-center">
+                      <Mic className="w-6 h-6 text-white drop-shadow-[0_2px_10px_rgba(249,115,22,0.9)]" />
+                    </div>
+                  </div>
+
+                  {/* Sparkle badge on orb corner */}
+                  <span className="absolute -top-1 -right-1 p-1 rounded-full bg-gradient-to-r from-glowOrange-500 to-amber-400 text-white shadow-soft-sm">
+                    <Sparkles className="w-3 h-3 text-white animate-spin-slow" />
+                  </span>
+                </div>
+
+                {/* Bottom Whisper AI Badge */}
+                <div className="px-2.5 py-0.5 rounded-full bg-black/45 backdrop-blur-md border border-white/20 text-[9px] font-semibold text-white/90 flex items-center gap-1.5 shadow-soft-sm">
+                  <span className="w-1.5 h-1.5 rounded-full bg-glowTeal-400 animate-pulse" />
+                  <span>Instant Whisper AI</span>
+                </div>
               </div>
             </div>
           </div>
