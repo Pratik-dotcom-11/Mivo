@@ -81,78 +81,78 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           {/* 4 Feature Cards with Frosted Glass & Reference-Inspired Styling */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {/* Feature 1 */}
-            <div className="group rounded-3xl bg-white/80 backdrop-blur-md p-6 shadow-soft-md hover:shadow-soft-xl border border-white/80 hover:border-terracotta-300/50 transition-all duration-200 flex flex-col justify-between hover:-translate-y-1">
+            <div className="group rounded-3xl bg-white/80 backdrop-blur-md p-6 shadow-soft-md hover:shadow-[0_20px_45px_rgba(0,0,0,0.12)] border border-white/80 hover:border-terracotta-300/80 hover:bg-white/95 transition-all duration-300 flex flex-col justify-between hover:-translate-y-2 cursor-pointer">
               <div className="space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-terracotta-600 to-glowOrange-500 text-white flex items-center justify-center shadow-soft-md shadow-terracotta-600/20 group-hover:scale-105 transition-transform">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-terracotta-600 to-glowOrange-500 text-white flex items-center justify-center shadow-soft-md shadow-terracotta-600/20 group-hover:scale-110 group-hover:rotate-3 group-hover:shadow-lg transition-all duration-300">
                   <Mic className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-bold text-charcoal-900 tracking-tight">
+                <h3 className="text-lg font-bold text-charcoal-900 tracking-tight group-hover:text-terracotta-700 transition-colors">
                   Voice Recording
                 </h3>
                 <p className="text-xs sm:text-sm text-charcoal-600 leading-relaxed">
                   Record your thoughts whenever inspiration strikes. Real-time visual waveforms confirm your microphone is capturing every nuance.
                 </p>
               </div>
-              <div className="pt-4 mt-4 border-t border-charcoal-100/80 text-xs font-bold text-terracotta-700 flex items-center gap-1">
+              <div className="pt-4 mt-4 border-t border-charcoal-100/80 text-xs font-bold text-terracotta-700 flex items-center gap-1 group-hover:translate-x-1.5 transition-transform duration-300">
                 <span>Instant audio capture</span>
-                <Zap className="w-3.5 h-3.5" />
+                <Zap className="w-3.5 h-3.5 text-glowOrange-500" />
               </div>
             </div>
 
             {/* Feature 2 */}
-            <div className="group rounded-3xl bg-white/80 backdrop-blur-md p-6 shadow-soft-md hover:shadow-soft-xl border border-white/80 hover:border-brand-300/50 transition-all duration-200 flex flex-col justify-between hover:-translate-y-1">
+            <div className="group rounded-3xl bg-white/80 backdrop-blur-md p-6 shadow-soft-md hover:shadow-[0_20px_45px_rgba(0,0,0,0.12)] border border-white/80 hover:border-brand-300/80 hover:bg-white/95 transition-all duration-300 flex flex-col justify-between hover:-translate-y-2 cursor-pointer">
               <div className="space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-600 to-glowTeal-500 text-white flex items-center justify-center shadow-soft-md shadow-brand-600/20 group-hover:scale-105 transition-transform">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-600 to-glowTeal-500 text-white flex items-center justify-center shadow-soft-md shadow-brand-600/20 group-hover:scale-110 group-hover:rotate-3 group-hover:shadow-lg transition-all duration-300">
                   <FileText className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-bold text-charcoal-900 tracking-tight">
+                <h3 className="text-lg font-bold text-charcoal-900 tracking-tight group-hover:text-brand-700 transition-colors">
                   Instant Transcription
                 </h3>
                 <p className="text-xs sm:text-sm text-charcoal-600 leading-relaxed">
                   Convert your recordings into readable, clean text. AI generates concise executive summaries and actionable bullet points automatically.
                 </p>
               </div>
-              <div className="pt-4 mt-4 border-t border-charcoal-100/80 text-xs font-bold text-brand-700 flex items-center gap-1">
+              <div className="pt-4 mt-4 border-t border-charcoal-100/80 text-xs font-bold text-brand-700 flex items-center gap-1 group-hover:translate-x-1.5 transition-transform duration-300">
                 <span>Accurate AI synthesis</span>
-                <Sparkles className="w-3.5 h-3.5" />
+                <Sparkles className="w-3.5 h-3.5 text-brand-500 animate-spin-slow" />
               </div>
             </div>
 
             {/* Feature 3 */}
-            <div className="group rounded-3xl bg-white/80 backdrop-blur-md p-6 shadow-soft-md hover:shadow-soft-xl border border-white/80 hover:border-glowOrange-300/50 transition-all duration-200 flex flex-col justify-between hover:-translate-y-1">
+            <div className="group rounded-3xl bg-white/80 backdrop-blur-md p-6 shadow-soft-md hover:shadow-[0_20px_45px_rgba(0,0,0,0.12)] border border-white/80 hover:border-glowOrange-300/80 hover:bg-white/95 transition-all duration-300 flex flex-col justify-between hover:-translate-y-2 cursor-pointer">
               <div className="space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-glowOrange-500 to-mivoYellow-500 text-white flex items-center justify-center shadow-soft-md shadow-glowOrange-500/20 group-hover:scale-105 transition-transform">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-glowOrange-500 to-mivoYellow-500 text-white flex items-center justify-center shadow-soft-md shadow-glowOrange-500/20 group-hover:scale-110 group-hover:rotate-3 group-hover:shadow-lg transition-all duration-300">
                   <FolderSync className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-bold text-charcoal-900 tracking-tight">
+                <h3 className="text-lg font-bold text-charcoal-900 tracking-tight group-hover:text-glowOrange-700 transition-colors">
                   Organized Notes
                 </h3>
                 <p className="text-xs sm:text-sm text-charcoal-600 leading-relaxed">
                   Keep your thoughts neatly sorted into simple categories: <strong className="text-charcoal-900 font-bold">Ideas</strong>, <strong className="text-charcoal-900 font-bold">Business</strong>, and <strong className="text-charcoal-900 font-bold">To-do</strong>.
                 </p>
               </div>
-              <div className="pt-4 mt-4 border-t border-charcoal-100/80 text-xs font-bold text-glowOrange-700 flex items-center gap-1">
+              <div className="pt-4 mt-4 border-t border-charcoal-100/80 text-xs font-bold text-glowOrange-700 flex items-center gap-1 group-hover:translate-x-1.5 transition-transform duration-300">
                 <span>Color-coded structure</span>
-                <FolderSync className="w-3.5 h-3.5" />
+                <FolderSync className="w-3.5 h-3.5 text-glowOrange-500" />
               </div>
             </div>
 
             {/* Feature 4 */}
-            <div className="group rounded-3xl bg-white/80 backdrop-blur-md p-6 shadow-soft-md hover:shadow-soft-xl border border-white/80 hover:border-glowTeal-300/50 transition-all duration-200 flex flex-col justify-between hover:-translate-y-1">
+            <div className="group rounded-3xl bg-white/80 backdrop-blur-md p-6 shadow-soft-md hover:shadow-[0_20px_45px_rgba(0,0,0,0.12)] border border-white/80 hover:border-glowTeal-300/80 hover:bg-white/95 transition-all duration-300 flex flex-col justify-between hover:-translate-y-2 cursor-pointer">
               <div className="space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-glowTeal-600 to-mivoGreen-500 text-white flex items-center justify-center shadow-soft-md shadow-glowTeal-600/20 group-hover:scale-105 transition-transform">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-glowTeal-600 to-mivoGreen-500 text-white flex items-center justify-center shadow-soft-md shadow-glowTeal-600/20 group-hover:scale-110 group-hover:rotate-3 group-hover:shadow-lg transition-all duration-300">
                   <Search className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-bold text-charcoal-900 tracking-tight">
+                <h3 className="text-lg font-bold text-charcoal-900 tracking-tight group-hover:text-glowTeal-700 transition-colors">
                   Easy Search
                 </h3>
                 <p className="text-xs sm:text-sm text-charcoal-600 leading-relaxed">
                   Quickly find any previously saved note or specific phrase. Full-text search queries both your raw transcriptions and AI summaries instantly.
                 </p>
               </div>
-              <div className="pt-4 mt-4 border-t border-charcoal-100/80 text-xs font-bold text-glowTeal-700 flex items-center gap-1">
+              <div className="pt-4 mt-4 border-t border-charcoal-100/80 text-xs font-bold text-glowTeal-700 flex items-center gap-1 group-hover:translate-x-1.5 transition-transform duration-300">
                 <span>Zero latency search</span>
-                <Search className="w-3.5 h-3.5" />
+                <Search className="w-3.5 h-3.5 text-glowTeal-500" />
               </div>
             </div>
           </div>
@@ -173,17 +173,17 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
             {/* Step 1 */}
-            <div className="rounded-3xl bg-white/80 backdrop-blur-md p-7 shadow-soft-md hover:shadow-soft-xl border border-white/80 hover:border-terracotta-300/50 transition-all duration-200 relative space-y-4 hover:-translate-y-1">
-              <div className="w-10 h-10 rounded-2xl bg-terracotta-100 text-terracotta-800 font-black text-sm flex items-center justify-center">
+            <div className="group rounded-3xl bg-white/80 backdrop-blur-md p-7 shadow-soft-md hover:shadow-[0_20px_45px_rgba(0,0,0,0.12)] border border-white/80 hover:border-terracotta-300/80 hover:bg-white/95 transition-all duration-300 relative space-y-4 hover:-translate-y-2 cursor-pointer">
+              <div className="w-10 h-10 rounded-2xl bg-terracotta-100 text-terracotta-800 font-black text-sm flex items-center justify-center group-hover:scale-110 group-hover:rotate-[-6deg] group-hover:shadow-soft-md transition-all duration-300">
                 01
               </div>
-              <h3 className="text-lg font-bold text-charcoal-900">
+              <h3 className="text-lg font-bold text-charcoal-900 group-hover:text-terracotta-700 transition-colors">
                 Step 1: Record your thoughts
               </h3>
               <p className="text-xs sm:text-sm text-charcoal-600 leading-relaxed">
                 Click the microphone button and talk naturally. Capture brainstorms, meeting takeaways, or quick reminders without typing.
               </p>
-              <div className="p-3 rounded-2xl bg-warm-100/90 border border-charcoal-200/60 flex items-center gap-3">
+              <div className="p-3 rounded-2xl bg-warm-100/90 border border-charcoal-200/60 flex items-center gap-3 group-hover:border-terracotta-200 transition-colors">
                 <span className="w-3 h-3 rounded-full bg-red-500 animate-ping" />
                 <span className="text-xs font-mono font-bold text-charcoal-800">
                   00:42 • Recording audio...
@@ -192,18 +192,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </div>
 
             {/* Step 2 */}
-            <div className="rounded-3xl bg-white/80 backdrop-blur-md p-7 shadow-soft-md hover:shadow-soft-xl border border-white/80 hover:border-brand-300/50 transition-all duration-200 relative space-y-4 hover:-translate-y-1">
-              <div className="w-10 h-10 rounded-2xl bg-brand-100 text-brand-800 font-black text-sm flex items-center justify-center">
+            <div className="group rounded-3xl bg-white/80 backdrop-blur-md p-7 shadow-soft-md hover:shadow-[0_20px_45px_rgba(0,0,0,0.12)] border border-white/80 hover:border-brand-300/80 hover:bg-white/95 transition-all duration-300 relative space-y-4 hover:-translate-y-2 cursor-pointer">
+              <div className="w-10 h-10 rounded-2xl bg-brand-100 text-brand-800 font-black text-sm flex items-center justify-center group-hover:scale-110 group-hover:rotate-[-6deg] group-hover:shadow-soft-md transition-all duration-300">
                 02
               </div>
-              <h3 className="text-lg font-bold text-charcoal-900">
+              <h3 className="text-lg font-bold text-charcoal-900 group-hover:text-brand-700 transition-colors">
                 Step 2: Convert your voice into text
               </h3>
               <p className="text-xs sm:text-sm text-charcoal-600 leading-relaxed">
                 Mivo automatically transcribes speech into clear prose, cleans up filler words, and generates an executive summary.
               </p>
-              <div className="p-3 rounded-2xl bg-brand-50/90 border border-brand-200/80 flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-brand-600 flex-shrink-0" />
+              <div className="p-3 rounded-2xl bg-brand-50/90 border border-brand-200/80 flex items-center gap-2 group-hover:border-brand-300 transition-colors">
+                <Sparkles className="w-4 h-4 text-brand-600 flex-shrink-0 animate-spin-slow" />
                 <span className="text-xs font-bold text-brand-900 truncate">
                   AI formatted &amp; structured
                 </span>
@@ -211,24 +211,24 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </div>
 
             {/* Step 3 */}
-            <div className="rounded-3xl bg-white/80 backdrop-blur-md p-7 shadow-soft-md hover:shadow-soft-xl border border-white/80 hover:border-glowTeal-300/50 transition-all duration-200 relative space-y-4 hover:-translate-y-1">
-              <div className="w-10 h-10 rounded-2xl bg-glowTeal-100 text-glowTeal-800 font-black text-sm flex items-center justify-center">
+            <div className="group rounded-3xl bg-white/80 backdrop-blur-md p-7 shadow-soft-md hover:shadow-[0_20px_45px_rgba(0,0,0,0.12)] border border-white/80 hover:border-glowTeal-300/80 hover:bg-white/95 transition-all duration-300 relative space-y-4 hover:-translate-y-2 cursor-pointer">
+              <div className="w-10 h-10 rounded-2xl bg-glowTeal-100 text-glowTeal-800 font-black text-sm flex items-center justify-center group-hover:scale-110 group-hover:rotate-[-6deg] group-hover:shadow-soft-md transition-all duration-300">
                 03
               </div>
-              <h3 className="text-lg font-bold text-charcoal-900">
+              <h3 className="text-lg font-bold text-charcoal-900 group-hover:text-glowTeal-700 transition-colors">
                 Step 3: Save and organize your notes
               </h3>
               <p className="text-xs sm:text-sm text-charcoal-600 leading-relaxed">
                 Assign notes to Ideas, Business, or To-do. Search, favorite, and listen back at multiple playback speeds whenever needed.
               </p>
               <div className="flex items-center gap-2">
-                <span className="px-3 py-1 rounded-full text-xs font-bold bg-brand-100 text-brand-800 border border-brand-300">
+                <span className="px-3 py-1 rounded-full text-xs font-bold bg-brand-100 text-brand-800 border border-brand-300 hover:scale-110 hover:shadow-soft-sm transition-transform duration-200 cursor-pointer">
                   Ideas
                 </span>
-                <span className="px-3 py-1 rounded-full text-xs font-bold bg-glowOrange-100 text-glowOrange-900 border border-glowOrange-300">
+                <span className="px-3 py-1 rounded-full text-xs font-bold bg-glowOrange-100 text-glowOrange-900 border border-glowOrange-300 hover:scale-110 hover:shadow-soft-sm transition-transform duration-200 cursor-pointer">
                   Business
                 </span>
-                <span className="px-3 py-1 rounded-full text-xs font-bold bg-mivoGreen-100 text-mivoGreen-900 border border-mivoGreen-300">
+                <span className="px-3 py-1 rounded-full text-xs font-bold bg-mivoGreen-100 text-mivoGreen-900 border border-mivoGreen-300 hover:scale-110 hover:shadow-soft-sm transition-transform duration-200 cursor-pointer">
                   To-do
                 </span>
               </div>
@@ -245,8 +245,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             background: 'linear-gradient(135deg, #380F06 0%, #6E2614 45%, #18181C 100%)',
           }}
         >
-          <div className="absolute top-0 right-1/4 w-80 h-80 bg-glowOrange-500/20 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-glowTeal-500/20 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-0 right-1/4 w-80 h-80 bg-glowOrange-500/20 rounded-full blur-3xl pointer-events-none animate-pulse-glow-soft" />
+          <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-glowTeal-500/20 rounded-full blur-3xl pointer-events-none animate-pulse-glow-soft" style={{ animationDelay: '2s' }} />
 
           <div className="relative z-10 max-w-2xl mx-auto space-y-6">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
@@ -258,10 +258,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             <div className="pt-2">
               <button
                 onClick={onNavigateToAuth}
-                className="inline-flex items-center gap-2 bg-white text-charcoal-900 hover:bg-warm-100 active:scale-95 transition-all duration-150 px-8 py-4 rounded-full font-extrabold text-base shadow-soft-xl shadow-black/40"
+                className="group inline-flex items-center gap-2 bg-white text-charcoal-900 hover:bg-warm-100 hover:scale-105 hover:-translate-y-1 hover:shadow-[0_0_35px_rgba(255,255,255,0.5)] active:scale-95 transition-all duration-200 px-8 py-4 rounded-full font-extrabold text-base shadow-soft-xl shadow-black/40"
               >
                 <span>Start Using Mivo</span>
-                <ArrowRight className="w-5 h-5 text-glowOrange-600" />
+                <ArrowRight className="w-5 h-5 text-glowOrange-600 group-hover:translate-x-1.5 transition-transform duration-200" />
               </button>
             </div>
           </div>
