@@ -168,8 +168,8 @@ Ensure you have the following installed on your machine:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/mivo.git
-cd mivo
+git clone https://github.com/Pratik-dotcom-11/Mivo.git
+cd Mivo
 ```
 
 ### 2. Install Dependencies
@@ -403,7 +403,7 @@ git commit -m "feat: complete Mivo AI voice notes platform with Supabase backend
 git branch -M main
 
 # 6. Link to your GitHub remote repository (replace with your repo URL)
-git remote add origin https://github.com/<your-github-username>/mivo.git
+git remote add origin https://github.com/Pratik-dotcom-11/Mivo.git
 
 # 7. Push to GitHub
 git push -u origin main
