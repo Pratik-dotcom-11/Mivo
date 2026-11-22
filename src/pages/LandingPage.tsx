@@ -33,9 +33,21 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F1EA] dark:bg-dark-bg text-charcoal-800 dark:text-charcoal-100 font-sans transition-colors duration-200 selection:bg-terracotta-500 selection:text-white pb-16">
+    <div className="min-h-screen relative overflow-hidden bg-[#FAF7F2] text-charcoal-800 font-sans selection:bg-terracotta-500 selection:text-white pb-16">
+      {/* Dreamy Floral Glow Ambient Background */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        {/* Organic Floral Glow Texture Wallpaper */}
+        <img
+          src="/dreamy-glow-bg.jpg"
+          alt=""
+          className="w-full h-full object-cover object-top opacity-40 scale-105 filter saturate-110"
+        />
+        {/* Soft atmospheric gradient wash ensuring maximum readability & contrast */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FAF7F2]/40 via-[#FAF7F2]/65 to-[#FAF7F2]/90" />
+      </div>
+
       {/* Outer Shell Wrapper: mimics the showcase matte canvas frame */}
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-4 sm:pt-6 space-y-16 sm:space-y-24">
+      <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-4 sm:pt-6 space-y-16 sm:space-y-24">
         {/* =========================================================================
             SECTION 1: HERO (Recreating the visual authority of the reference image)
             ========================================================================= */}
@@ -66,79 +78,79 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </p>
           </div>
 
-          {/* 4 Feature Cards with Reference-Inspired Styling */}
+          {/* 4 Feature Cards with Frosted Glass & Reference-Inspired Styling */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {/* Feature 1 */}
-            <div className="group rounded-3xl bg-white dark:bg-dark-card p-6 shadow-soft-sm hover:shadow-soft-lg border border-black/[0.08] dark:border-white/[0.06] transition-all duration-200 flex flex-col justify-between">
+            <div className="group rounded-3xl bg-white/80 backdrop-blur-md p-6 shadow-soft-md hover:shadow-soft-xl border border-white/80 hover:border-terracotta-300/50 transition-all duration-200 flex flex-col justify-between hover:-translate-y-1">
               <div className="space-y-4">
                 <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-terracotta-600 to-glowOrange-500 text-white flex items-center justify-center shadow-soft-md shadow-terracotta-600/20 group-hover:scale-105 transition-transform">
                   <Mic className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-bold text-charcoal-900 dark:text-white tracking-tight">
+                <h3 className="text-lg font-bold text-charcoal-900 tracking-tight">
                   Voice Recording
                 </h3>
-                <p className="text-xs sm:text-sm text-charcoal-600 dark:text-dark-muted leading-relaxed">
+                <p className="text-xs sm:text-sm text-charcoal-600 leading-relaxed">
                   Record your thoughts whenever inspiration strikes. Real-time visual waveforms confirm your microphone is capturing every nuance.
                 </p>
               </div>
-              <div className="pt-4 mt-4 border-t border-charcoal-100 dark:border-dark-border text-xs font-bold text-terracotta-700 dark:text-terracotta-400 flex items-center gap-1">
+              <div className="pt-4 mt-4 border-t border-charcoal-100/80 text-xs font-bold text-terracotta-700 flex items-center gap-1">
                 <span>Instant audio capture</span>
                 <Zap className="w-3.5 h-3.5" />
               </div>
             </div>
 
             {/* Feature 2 */}
-            <div className="group rounded-3xl bg-white dark:bg-dark-card p-6 shadow-soft-sm hover:shadow-soft-lg border border-black/[0.08] dark:border-white/[0.06] transition-all duration-200 flex flex-col justify-between">
+            <div className="group rounded-3xl bg-white/80 backdrop-blur-md p-6 shadow-soft-md hover:shadow-soft-xl border border-white/80 hover:border-brand-300/50 transition-all duration-200 flex flex-col justify-between hover:-translate-y-1">
               <div className="space-y-4">
                 <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-600 to-glowTeal-500 text-white flex items-center justify-center shadow-soft-md shadow-brand-600/20 group-hover:scale-105 transition-transform">
                   <FileText className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-bold text-charcoal-900 dark:text-white tracking-tight">
+                <h3 className="text-lg font-bold text-charcoal-900 tracking-tight">
                   Instant Transcription
                 </h3>
-                <p className="text-xs sm:text-sm text-charcoal-600 dark:text-dark-muted leading-relaxed">
+                <p className="text-xs sm:text-sm text-charcoal-600 leading-relaxed">
                   Convert your recordings into readable, clean text. AI generates concise executive summaries and actionable bullet points automatically.
                 </p>
               </div>
-              <div className="pt-4 mt-4 border-t border-charcoal-100 dark:border-dark-border text-xs font-bold text-brand-700 dark:text-brand-400 flex items-center gap-1">
+              <div className="pt-4 mt-4 border-t border-charcoal-100/80 text-xs font-bold text-brand-700 flex items-center gap-1">
                 <span>Accurate AI synthesis</span>
                 <Sparkles className="w-3.5 h-3.5" />
               </div>
             </div>
 
             {/* Feature 3 */}
-            <div className="group rounded-3xl bg-white dark:bg-dark-card p-6 shadow-soft-sm hover:shadow-soft-lg border border-black/[0.08] dark:border-white/[0.06] transition-all duration-200 flex flex-col justify-between">
+            <div className="group rounded-3xl bg-white/80 backdrop-blur-md p-6 shadow-soft-md hover:shadow-soft-xl border border-white/80 hover:border-glowOrange-300/50 transition-all duration-200 flex flex-col justify-between hover:-translate-y-1">
               <div className="space-y-4">
                 <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-glowOrange-500 to-mivoYellow-500 text-white flex items-center justify-center shadow-soft-md shadow-glowOrange-500/20 group-hover:scale-105 transition-transform">
                   <FolderSync className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-bold text-charcoal-900 dark:text-white tracking-tight">
+                <h3 className="text-lg font-bold text-charcoal-900 tracking-tight">
                   Organized Notes
                 </h3>
-                <p className="text-xs sm:text-sm text-charcoal-600 dark:text-dark-muted leading-relaxed">
-                  Keep your thoughts neatly sorted into simple categories: <strong className="text-charcoal-900 dark:text-white font-bold">Ideas</strong>, <strong className="text-charcoal-900 dark:text-white font-bold">Business</strong>, and <strong className="text-charcoal-900 dark:text-white font-bold">To-do</strong>.
+                <p className="text-xs sm:text-sm text-charcoal-600 leading-relaxed">
+                  Keep your thoughts neatly sorted into simple categories: <strong className="text-charcoal-900 font-bold">Ideas</strong>, <strong className="text-charcoal-900 font-bold">Business</strong>, and <strong className="text-charcoal-900 font-bold">To-do</strong>.
                 </p>
               </div>
-              <div className="pt-4 mt-4 border-t border-charcoal-100 dark:border-dark-border text-xs font-bold text-glowOrange-700 dark:text-glowOrange-400 flex items-center gap-1">
+              <div className="pt-4 mt-4 border-t border-charcoal-100/80 text-xs font-bold text-glowOrange-700 flex items-center gap-1">
                 <span>Color-coded structure</span>
                 <FolderSync className="w-3.5 h-3.5" />
               </div>
             </div>
 
             {/* Feature 4 */}
-            <div className="group rounded-3xl bg-white dark:bg-dark-card p-6 shadow-soft-sm hover:shadow-soft-lg border border-black/[0.08] dark:border-white/[0.06] transition-all duration-200 flex flex-col justify-between">
+            <div className="group rounded-3xl bg-white/80 backdrop-blur-md p-6 shadow-soft-md hover:shadow-soft-xl border border-white/80 hover:border-glowTeal-300/50 transition-all duration-200 flex flex-col justify-between hover:-translate-y-1">
               <div className="space-y-4">
                 <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-glowTeal-600 to-mivoGreen-500 text-white flex items-center justify-center shadow-soft-md shadow-glowTeal-600/20 group-hover:scale-105 transition-transform">
                   <Search className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-bold text-charcoal-900 dark:text-white tracking-tight">
+                <h3 className="text-lg font-bold text-charcoal-900 tracking-tight">
                   Easy Search
                 </h3>
-                <p className="text-xs sm:text-sm text-charcoal-600 dark:text-dark-muted leading-relaxed">
+                <p className="text-xs sm:text-sm text-charcoal-600 leading-relaxed">
                   Quickly find any previously saved note or specific phrase. Full-text search queries both your raw transcriptions and AI summaries instantly.
                 </p>
               </div>
-              <div className="pt-4 mt-4 border-t border-charcoal-100 dark:border-dark-border text-xs font-bold text-glowTeal-700 dark:text-glowTeal-400 flex items-center gap-1">
+              <div className="pt-4 mt-4 border-t border-charcoal-100/80 text-xs font-bold text-glowTeal-700 flex items-center gap-1">
                 <span>Zero latency search</span>
                 <Search className="w-3.5 h-3.5" />
               </div>
@@ -161,52 +173,52 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
             {/* Step 1 */}
-            <div className="rounded-3xl bg-white dark:bg-dark-card p-7 shadow-soft-sm border border-black/[0.08] dark:border-white/[0.06] relative space-y-4">
-              <div className="w-10 h-10 rounded-2xl bg-terracotta-100 dark:bg-terracotta-950/50 text-terracotta-800 dark:text-terracotta-300 font-black text-sm flex items-center justify-center">
+            <div className="rounded-3xl bg-white/80 backdrop-blur-md p-7 shadow-soft-md hover:shadow-soft-xl border border-white/80 hover:border-terracotta-300/50 transition-all duration-200 relative space-y-4 hover:-translate-y-1">
+              <div className="w-10 h-10 rounded-2xl bg-terracotta-100 text-terracotta-800 font-black text-sm flex items-center justify-center">
                 01
               </div>
-              <h3 className="text-lg font-bold text-charcoal-900 dark:text-white">
+              <h3 className="text-lg font-bold text-charcoal-900">
                 Step 1: Record your thoughts
               </h3>
-              <p className="text-xs sm:text-sm text-charcoal-600 dark:text-dark-muted leading-relaxed">
+              <p className="text-xs sm:text-sm text-charcoal-600 leading-relaxed">
                 Click the microphone button and talk naturally. Capture brainstorms, meeting takeaways, or quick reminders without typing.
               </p>
-              <div className="p-3 rounded-2xl bg-warm-100 dark:bg-dark-surface border border-charcoal-200/60 dark:border-white/[0.06] flex items-center gap-3">
+              <div className="p-3 rounded-2xl bg-warm-100/90 border border-charcoal-200/60 flex items-center gap-3">
                 <span className="w-3 h-3 rounded-full bg-red-500 animate-ping" />
-                <span className="text-xs font-mono font-bold text-charcoal-800 dark:text-charcoal-200">
+                <span className="text-xs font-mono font-bold text-charcoal-800">
                   00:42 • Recording audio...
                 </span>
               </div>
             </div>
 
             {/* Step 2 */}
-            <div className="rounded-3xl bg-white dark:bg-dark-card p-7 shadow-soft-sm border border-black/[0.08] dark:border-white/[0.06] relative space-y-4">
-              <div className="w-10 h-10 rounded-2xl bg-brand-100 dark:bg-brand-950/50 text-brand-800 dark:text-brand-300 font-black text-sm flex items-center justify-center">
+            <div className="rounded-3xl bg-white/80 backdrop-blur-md p-7 shadow-soft-md hover:shadow-soft-xl border border-white/80 hover:border-brand-300/50 transition-all duration-200 relative space-y-4 hover:-translate-y-1">
+              <div className="w-10 h-10 rounded-2xl bg-brand-100 text-brand-800 font-black text-sm flex items-center justify-center">
                 02
               </div>
-              <h3 className="text-lg font-bold text-charcoal-900 dark:text-white">
+              <h3 className="text-lg font-bold text-charcoal-900">
                 Step 2: Convert your voice into text
               </h3>
-              <p className="text-xs sm:text-sm text-charcoal-600 dark:text-dark-muted leading-relaxed">
+              <p className="text-xs sm:text-sm text-charcoal-600 leading-relaxed">
                 Mivo automatically transcribes speech into clear prose, cleans up filler words, and generates an executive summary.
               </p>
-              <div className="p-3 rounded-2xl bg-brand-50 dark:bg-brand-950/30 border border-brand-200/80 dark:border-brand-900/40 flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-brand-600 dark:text-brand-400 flex-shrink-0" />
-                <span className="text-xs font-bold text-brand-900 dark:text-brand-200 truncate">
+              <div className="p-3 rounded-2xl bg-brand-50/90 border border-brand-200/80 flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-brand-600 flex-shrink-0" />
+                <span className="text-xs font-bold text-brand-900 truncate">
                   AI formatted &amp; structured
                 </span>
               </div>
             </div>
 
             {/* Step 3 */}
-            <div className="rounded-3xl bg-white dark:bg-dark-card p-7 shadow-soft-sm border border-black/[0.08] dark:border-white/[0.06] relative space-y-4">
-              <div className="w-10 h-10 rounded-2xl bg-glowTeal-100 dark:bg-glowTeal-950/50 text-glowTeal-800 dark:text-glowTeal-300 font-black text-sm flex items-center justify-center">
+            <div className="rounded-3xl bg-white/80 backdrop-blur-md p-7 shadow-soft-md hover:shadow-soft-xl border border-white/80 hover:border-glowTeal-300/50 transition-all duration-200 relative space-y-4 hover:-translate-y-1">
+              <div className="w-10 h-10 rounded-2xl bg-glowTeal-100 text-glowTeal-800 font-black text-sm flex items-center justify-center">
                 03
               </div>
-              <h3 className="text-lg font-bold text-charcoal-900 dark:text-white">
+              <h3 className="text-lg font-bold text-charcoal-900">
                 Step 3: Save and organize your notes
               </h3>
-              <p className="text-xs sm:text-sm text-charcoal-600 dark:text-dark-muted leading-relaxed">
+              <p className="text-xs sm:text-sm text-charcoal-600 leading-relaxed">
                 Assign notes to Ideas, Business, or To-do. Search, favorite, and listen back at multiple playback speeds whenever needed.
               </p>
               <div className="flex items-center gap-2">
