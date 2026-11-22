@@ -23,8 +23,8 @@ export const CategoryFilterPills: React.FC<CategoryFilterPillsProps> = ({
         className={cn(
           'flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-150 border',
           activeCategoryId === null
-            ? 'bg-charcoal-900 text-white border-charcoal-900 dark:bg-white dark:text-charcoal-900 dark:border-white shadow-soft-sm'
-            : 'bg-white dark:bg-dark-card text-charcoal-600 dark:text-dark-muted border-charcoal-200/80 dark:border-dark-border hover:bg-warm-100 dark:hover:bg-dark-cardHover'
+            ? 'bg-charcoal-900 text-white border-charcoal-900 shadow-soft-sm'
+            : 'bg-white/85 backdrop-blur-md text-charcoal-700 border-white/80 hover:bg-white shadow-soft-xs'
         )}
       >
         <span>All Notes</span>
@@ -33,8 +33,8 @@ export const CategoryFilterPills: React.FC<CategoryFilterPillsProps> = ({
             className={cn(
               'px-1.5 py-0.2 rounded-full text-[10px] font-mono',
               activeCategoryId === null
-                ? 'bg-white/20 text-white dark:bg-black/20 dark:text-charcoal-900'
-                : 'bg-warm-200 dark:bg-dark-border text-charcoal-500 dark:text-dark-muted'
+                ? 'bg-white/20 text-white'
+                : 'bg-warm-200 text-charcoal-600'
             )}
           >
             {allNotesCount}
@@ -52,8 +52,8 @@ export const CategoryFilterPills: React.FC<CategoryFilterPillsProps> = ({
             className={cn(
               'flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-150 border',
               isActive
-                ? 'shadow-soft-sm'
-                : 'bg-white dark:bg-dark-card text-charcoal-600 dark:text-dark-muted border-charcoal-200/80 dark:border-dark-border hover:bg-warm-100 dark:hover:bg-dark-cardHover'
+                ? 'shadow-soft-sm font-bold'
+                : 'bg-white/85 backdrop-blur-md text-charcoal-700 border-white/80 hover:bg-white shadow-soft-xs'
             )}
             style={
               isActive

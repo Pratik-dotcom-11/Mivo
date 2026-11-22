@@ -25,12 +25,12 @@ export const Card: React.FC<CardProps> = ({
   return (
     <div
       className={cn(
-        'rounded-2xl bg-white dark:bg-dark-card border border-black/[0.04] dark:border-white/[0.06] shadow-soft-sm transition-all duration-200',
+        'rounded-2xl bg-white/90 backdrop-blur-md border border-white/80 shadow-soft-sm transition-all duration-200',
         paddings[padding],
         hoverable &&
-          'hover:border-charcoal-200 dark:hover:border-dark-border hover:shadow-soft-md hover:-translate-y-0.5 cursor-pointer',
+          'hover:border-terracotta-300/60 hover:shadow-soft-lg hover:-translate-y-0.5 cursor-pointer',
         selected &&
-          'border-brand-500/60 dark:border-brand-500/60 ring-2 ring-brand-500/20 bg-brand-50/20 dark:bg-brand-950/20',
+          'border-brand-500/80 ring-2 ring-brand-500/20 bg-brand-50/40',
         className
       )}
       {...props}

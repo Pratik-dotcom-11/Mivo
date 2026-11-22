@@ -7,26 +7,38 @@ export interface AuthLayoutProps {
 
 export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
   return (
-    <div className="min-h-screen bg-warm-100 dark:bg-dark-bg text-charcoal-800 dark:text-charcoal-100 flex flex-col justify-between p-4 sm:p-6 transition-colors duration-200">
-      {/* Top Header */}
-      <header className="max-w-6xl mx-auto w-full flex items-center justify-between py-2">
-        <Logo size="md" showTagline />
-      </header>
+    <div className="min-h-screen relative overflow-hidden bg-[#FAF7F2] text-charcoal-900 flex flex-col justify-between p-4 sm:p-6 font-sans">
+      {/* Dreamy Floral Glow Ambient Background */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <img
+          src="/dreamy-glow-bg.jpg"
+          alt=""
+          className="w-full h-full object-cover object-center opacity-85 filter saturate-120 contrast-105"
+        />
+        <div className="absolute inset-0 bg-white/15 backdrop-blur-[2px] pointer-events-none" />
+      </div>
 
-      {/* Centered Auth Card */}
-      <main className="w-full max-w-md mx-auto my-auto py-8">
-        <div className="bg-white dark:bg-dark-card border border-black/[0.04] dark:border-white/[0.06] rounded-3xl p-6 sm:p-8 shadow-soft-lg space-y-6">
-          {children}
-        </div>
+      <div className="relative z-10 flex flex-col justify-between min-h-screen w-full">
+        {/* Top Header */}
+        <header className="max-w-6xl mx-auto w-full flex items-center justify-between py-2">
+          <Logo size="md" showTagline />
+        </header>
 
-        {/* Minimal Footer */}
-        <p className="text-center text-xs text-charcoal-400 dark:text-dark-muted mt-6 font-medium">
-          Mivo — Minimal AI Voice Notes &copy; {new Date().getFullYear()}
-        </p>
-      </main>
+        {/* Centered Auth Card */}
+        <main className="w-full max-w-md mx-auto my-auto py-8">
+          <div className="bg-white/90 backdrop-blur-xl border border-white/80 rounded-3xl p-6 sm:p-8 shadow-soft-2xl space-y-6">
+            {children}
+          </div>
 
-      {/* Decorative Bottom Bar spacer */}
-      <div className="h-6" />
+          {/* Minimal Footer */}
+          <p className="text-center text-xs text-charcoal-500 mt-6 font-semibold">
+            Mivo — Minimal AI Voice Notes &copy; {new Date().getFullYear()}
+          </p>
+        </main>
+
+        {/* Decorative Bottom Bar spacer */}
+        <div className="h-6" />
+      </div>
     </div>
   );
 };

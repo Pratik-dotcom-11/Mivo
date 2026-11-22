@@ -85,29 +85,40 @@ export const AuthPage: React.FC<AuthPageProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-warm-200/50 dark:bg-dark-bg text-charcoal-800 dark:text-charcoal-100 flex flex-col justify-between p-4 sm:p-6 transition-colors duration-200">
-      {/* Top Header */}
-      <header className="max-w-6xl mx-auto w-full flex items-center justify-between py-2">
-        <div className="flex items-center gap-3">
-          {onBackToLanding && (
-            <button
-              onClick={onBackToLanding}
-              className="px-3 py-1.5 rounded-xl text-charcoal-600 hover:text-charcoal-900 dark:text-dark-muted dark:hover:text-white hover:bg-warm-100 dark:hover:bg-dark-card transition-colors flex items-center gap-1.5 text-xs font-semibold"
-              title="Return to Mivo Home"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              <span>Home</span>
-            </button>
-          )}
-          <Logo size="md" showTagline />
-        </div>
-      </header>
+    <div className="min-h-screen relative overflow-hidden bg-[#FAF7F2] text-charcoal-900 flex flex-col justify-between p-4 sm:p-6 font-sans">
+      {/* Dreamy Floral Glow Ambient Background */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <img
+          src="/dreamy-glow-bg.jpg"
+          alt=""
+          className="w-full h-full object-cover object-center opacity-85 filter saturate-120 contrast-105"
+        />
+        <div className="absolute inset-0 bg-white/15 backdrop-blur-[2px] pointer-events-none" />
+      </div>
 
-      {/* Main Centered Authentication Card */}
-      <main className="w-full max-w-md mx-auto my-auto py-6">
-        <div className="bg-white dark:bg-dark-card border border-black/[0.04] dark:border-white/[0.06] rounded-[2.5rem] p-7 sm:p-9 shadow-soft-xl space-y-6 relative overflow-hidden">
-          {/* Subtle Decorative Glow at top */}
-          <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-terracotta-500 via-glowOrange-500 to-terracotta-600" />
+      <div className="relative z-10 flex flex-col justify-between min-h-screen w-full">
+        {/* Top Header */}
+        <header className="max-w-6xl mx-auto w-full flex items-center justify-between py-2">
+          <div className="flex items-center gap-3">
+            {onBackToLanding && (
+              <button
+                onClick={onBackToLanding}
+                className="px-3 py-1.5 rounded-xl text-charcoal-700 hover:text-charcoal-900 bg-white/70 backdrop-blur-md border border-white/80 hover:bg-white transition-colors flex items-center gap-1.5 text-xs font-semibold shadow-soft-xs"
+                title="Return to Mivo Home"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                <span>Home</span>
+              </button>
+            )}
+            <Logo size="md" showTagline />
+          </div>
+        </header>
+
+        {/* Main Centered Authentication Card */}
+        <main className="w-full max-w-md mx-auto my-auto py-6">
+          <div className="bg-white/90 backdrop-blur-xl border border-white/90 rounded-[2.5rem] p-7 sm:p-9 shadow-soft-2xl space-y-6 relative overflow-hidden">
+            {/* Subtle Decorative Glow at top */}
+            <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-terracotta-500 via-glowOrange-500 to-terracotta-600" />
 
           {/* Header & Branding */}
           <div className="text-center space-y-2 pt-1">
@@ -401,6 +412,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
           </p>
         </div>
       </Modal>
+      </div>
     </div>
   );
 };

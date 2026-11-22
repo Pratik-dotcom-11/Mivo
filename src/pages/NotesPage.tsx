@@ -385,13 +385,13 @@ export const NotesPage: React.FC<NotesPageProps> = ({ onNavigateToLanding }) => 
         )}
 
         {/* Section 1: Welcome Section */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 sm:p-7 rounded-[2rem] bg-white dark:bg-dark-card border border-black/[0.04] dark:border-white/[0.06] shadow-soft-sm">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 sm:p-7 rounded-[2rem] bg-white/85 backdrop-blur-xl border border-white/80 shadow-soft-md">
           <div className="space-y-1">
-            <h1 className="text-2xl sm:text-3xl font-black text-charcoal-900 dark:text-white tracking-tight flex items-center gap-2">
+            <h1 className="text-2xl sm:text-3xl font-black text-charcoal-900 tracking-tight flex items-center gap-2">
               <span>{timeGreeting}, {displayName}</span>
               <span className="text-xl">👋</span>
             </h1>
-            <p className="text-xs sm:text-sm text-charcoal-500 dark:text-dark-muted font-medium">
+            <p className="text-xs sm:text-sm text-charcoal-600 font-medium">
               Record your thoughts freely. Mivo turns your recordings into organized, searchable notes.
             </p>
           </div>
@@ -400,7 +400,7 @@ export const NotesPage: React.FC<NotesPageProps> = ({ onNavigateToLanding }) => 
             {onNavigateToLanding && (
               <button
                 onClick={onNavigateToLanding}
-                className="text-xs font-semibold text-charcoal-500 hover:text-charcoal-900 dark:text-dark-muted dark:hover:text-white px-3.5 py-2.5 rounded-xl hover:bg-warm-100 dark:hover:bg-dark-surface transition-colors"
+                className="text-xs font-semibold text-charcoal-600 hover:text-charcoal-900 px-3.5 py-2.5 rounded-xl hover:bg-white/80 transition-colors"
               >
                 Landing Page
               </button>
@@ -424,24 +424,24 @@ export const NotesPage: React.FC<NotesPageProps> = ({ onNavigateToLanding }) => 
           <button
             type="button"
             onClick={() => setActiveCategory(null)}
-            className={`p-4 sm:p-5 rounded-2xl bg-white dark:bg-dark-card border transition-all text-left shadow-soft-xs hover:shadow-soft-md ${
+            className={`p-4 sm:p-5 rounded-2xl bg-white/85 backdrop-blur-xl border transition-all text-left shadow-soft-sm hover:shadow-soft-lg hover:-translate-y-0.5 ${
               activeCategory === null
-                ? 'border-terracotta-400 dark:border-terracotta-500 ring-2 ring-terracotta-400/20'
-                : 'border-black/[0.04] dark:border-white/[0.06]'
+                ? 'border-terracotta-500 ring-2 ring-terracotta-500/25'
+                : 'border-white/80'
             }`}
           >
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-charcoal-400 dark:text-dark-muted">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-charcoal-500">
                 Total Notes
               </span>
-              <div className="w-8 h-8 rounded-xl bg-warm-100 dark:bg-dark-surface flex items-center justify-center text-charcoal-600 dark:text-charcoal-300">
-                <FileText className="w-4 h-4" />
+              <div className="w-8 h-8 rounded-xl bg-warm-100 flex items-center justify-center text-charcoal-700 shadow-soft-xs">
+                <FileText className="w-4 h-4 text-terracotta-600" />
               </div>
             </div>
-            <div className="text-2xl sm:text-3xl font-black text-charcoal-900 dark:text-white">
+            <div className="text-2xl sm:text-3xl font-black text-charcoal-900">
               {overviewStats.total}
             </div>
-            <p className="text-[11px] text-charcoal-400 dark:text-dark-muted mt-1 font-medium">
+            <p className="text-[11px] text-charcoal-500 mt-1 font-medium">
               Saved in your vault
             </p>
           </button>
@@ -450,24 +450,24 @@ export const NotesPage: React.FC<NotesPageProps> = ({ onNavigateToLanding }) => 
           <button
             type="button"
             onClick={() => setActiveCategory(activeCategory === 'Ideas' ? null : 'Ideas')}
-            className={`p-4 sm:p-5 rounded-2xl bg-white dark:bg-dark-card border transition-all text-left shadow-soft-xs hover:shadow-soft-md ${
+            className={`p-4 sm:p-5 rounded-2xl bg-white/85 backdrop-blur-xl border transition-all text-left shadow-soft-sm hover:shadow-soft-lg hover:-translate-y-0.5 ${
               activeCategory === 'Ideas'
-                ? 'border-[#8B5CF6] ring-2 ring-[#8B5CF6]/20'
-                : 'border-black/[0.04] dark:border-white/[0.06]'
+                ? 'border-[#8B5CF6] ring-2 ring-[#8B5CF6]/25'
+                : 'border-white/80'
             }`}
           >
             <div className="flex items-center justify-between mb-2">
               <span className="text-[11px] font-bold uppercase tracking-wider text-[#8B5CF6]">
                 Ideas
               </span>
-              <div className="w-8 h-8 rounded-xl bg-brand-50 dark:bg-brand-950/40 flex items-center justify-center text-[#8B5CF6]">
+              <div className="w-8 h-8 rounded-xl bg-purple-50 flex items-center justify-center text-[#8B5CF6] shadow-soft-xs">
                 <Sparkles className="w-4 h-4" />
               </div>
             </div>
-            <div className="text-2xl sm:text-3xl font-black text-charcoal-900 dark:text-white">
+            <div className="text-2xl sm:text-3xl font-black text-charcoal-900">
               {overviewStats.ideas}
             </div>
-            <p className="text-[11px] text-charcoal-400 dark:text-dark-muted mt-1 font-medium">
+            <p className="text-[11px] text-charcoal-500 mt-1 font-medium">
               Creative thoughts
             </p>
           </button>
@@ -476,24 +476,24 @@ export const NotesPage: React.FC<NotesPageProps> = ({ onNavigateToLanding }) => 
           <button
             type="button"
             onClick={() => setActiveCategory(activeCategory === 'Business' ? null : 'Business')}
-            className={`p-4 sm:p-5 rounded-2xl bg-white dark:bg-dark-card border transition-all text-left shadow-soft-xs hover:shadow-soft-md ${
+            className={`p-4 sm:p-5 rounded-2xl bg-white/85 backdrop-blur-xl border transition-all text-left shadow-soft-sm hover:shadow-soft-lg hover:-translate-y-0.5 ${
               activeCategory === 'Business'
-                ? 'border-[#F97316] ring-2 ring-[#F97316]/20'
-                : 'border-black/[0.04] dark:border-white/[0.06]'
+                ? 'border-[#F97316] ring-2 ring-[#F97316]/25'
+                : 'border-white/80'
             }`}
           >
             <div className="flex items-center justify-between mb-2">
               <span className="text-[11px] font-bold uppercase tracking-wider text-[#F97316]">
                 Business
               </span>
-              <div className="w-8 h-8 rounded-xl bg-orange-50 dark:bg-orange-950/40 flex items-center justify-center text-[#F97316]">
+              <div className="w-8 h-8 rounded-xl bg-orange-50 flex items-center justify-center text-[#F97316] shadow-soft-xs">
                 <Briefcase className="w-4 h-4" />
               </div>
             </div>
-            <div className="text-2xl sm:text-3xl font-black text-charcoal-900 dark:text-white">
+            <div className="text-2xl sm:text-3xl font-black text-charcoal-900">
               {overviewStats.business}
             </div>
-            <p className="text-[11px] text-charcoal-400 dark:text-dark-muted mt-1 font-medium">
+            <p className="text-[11px] text-charcoal-500 mt-1 font-medium">
               Work &amp; strategy
             </p>
           </button>
@@ -502,24 +502,24 @@ export const NotesPage: React.FC<NotesPageProps> = ({ onNavigateToLanding }) => 
           <button
             type="button"
             onClick={() => setActiveCategory(activeCategory === 'To-do' ? null : 'To-do')}
-            className={`p-4 sm:p-5 rounded-2xl bg-white dark:bg-dark-card border transition-all text-left shadow-soft-xs hover:shadow-soft-md ${
+            className={`p-4 sm:p-5 rounded-2xl bg-white/85 backdrop-blur-xl border transition-all text-left shadow-soft-sm hover:shadow-soft-lg hover:-translate-y-0.5 ${
               activeCategory === 'To-do'
-                ? 'border-[#10B981] ring-2 ring-[#10B981]/20'
-                : 'border-black/[0.04] dark:border-white/[0.06]'
+                ? 'border-[#10B981] ring-2 ring-[#10B981]/25'
+                : 'border-white/80'
             }`}
           >
             <div className="flex items-center justify-between mb-2">
               <span className="text-[11px] font-bold uppercase tracking-wider text-[#10B981]">
                 To-do
               </span>
-              <div className="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center text-[#10B981]">
+              <div className="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center text-[#10B981] shadow-soft-xs">
                 <ListTodo className="w-4 h-4" />
               </div>
             </div>
-            <div className="text-2xl sm:text-3xl font-black text-charcoal-900 dark:text-white">
+            <div className="text-2xl sm:text-3xl font-black text-charcoal-900">
               {overviewStats.todo}
             </div>
-            <p className="text-[11px] text-charcoal-400 dark:text-dark-muted mt-1 font-medium">
+            <p className="text-[11px] text-charcoal-500 mt-1 font-medium">
               Tasks &amp; actions
             </p>
           </button>

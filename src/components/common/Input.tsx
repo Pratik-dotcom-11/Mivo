@@ -36,8 +36,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             value={value}
             className={cn(
-              'w-full rounded-xl border border-charcoal-200/90 dark:border-dark-border bg-white dark:bg-dark-card px-3.5 py-2 text-sm text-charcoal-900 dark:text-charcoal-100 placeholder-charcoal-400 dark:placeholder-dark-muted transition-all duration-150 shadow-soft-sm',
-              'focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 dark:focus:ring-brand-400/25',
+              'w-full rounded-xl border border-white/80 bg-white/90 backdrop-blur-md px-3.5 py-2 text-sm text-charcoal-900 placeholder-charcoal-400 transition-all duration-150 shadow-soft-xs',
+              'focus:bg-white focus:border-glowOrange-500 focus:outline-none focus:ring-2 focus:ring-glowOrange-500/20',
               leftIcon && 'pl-10',
               (rightIcon || (onClear && value)) && 'pr-10',
               error && 'border-red-400 focus:border-red-500 focus:ring-red-500/20',

@@ -12,7 +12,7 @@ export const ViewToggle: React.FC<ViewToggleProps> = ({ viewMode, onChange, clas
   return (
     <div
       className={cn(
-        'inline-flex items-center p-1 rounded-xl bg-warm-200/80 dark:bg-dark-surface border border-black/[0.04] dark:border-white/[0.06]',
+        'inline-flex items-center p-1 rounded-xl bg-white/80 backdrop-blur-md border border-white/80 shadow-soft-xs',
         className
       )}
     >
@@ -20,8 +20,8 @@ export const ViewToggle: React.FC<ViewToggleProps> = ({ viewMode, onChange, clas
         type="button"
         onClick={() => onChange('grid')}
         className={cn(
-          'p-1.5 rounded-lg text-charcoal-500 dark:text-dark-muted hover:text-charcoal-900 dark:hover:text-white transition-all',
-          viewMode === 'grid' && 'bg-white dark:bg-dark-card text-charcoal-900 dark:text-white shadow-soft-sm'
+          'p-1.5 rounded-lg text-charcoal-500 hover:text-charcoal-900 transition-all',
+          viewMode === 'grid' && 'bg-white text-charcoal-900 shadow-soft-xs'
         )}
         title="Grid view"
       >
@@ -32,8 +32,8 @@ export const ViewToggle: React.FC<ViewToggleProps> = ({ viewMode, onChange, clas
         type="button"
         onClick={() => onChange('list')}
         className={cn(
-          'p-1.5 rounded-lg text-charcoal-500 dark:text-dark-muted hover:text-charcoal-900 dark:hover:text-white transition-all',
-          viewMode === 'list' && 'bg-white dark:bg-dark-card text-charcoal-900 dark:text-white shadow-soft-sm'
+          'p-1.5 rounded-lg text-charcoal-500 hover:text-charcoal-900 transition-all',
+          viewMode === 'list' && 'bg-white text-charcoal-900 shadow-soft-xs'
         )}
         title="List view"
       >
