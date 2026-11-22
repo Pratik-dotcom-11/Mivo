@@ -14,9 +14,6 @@
   </a>
 </p>
 
-<p align="center">
-  <a href="https://mivo-voice.vercel.app/" target="_blank"><strong>🌐 Live App</strong></a> 
-</p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/React-18.3-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 18" />
