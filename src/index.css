@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-bg-base: #FAF8F5;
+    --color-text-base: #18181C;
+    --color-card-base: #FFFFFF;
+  }
+
+  .dark {
+    --color-bg-base: #0C0C10;
+    --color-text-base: #F6F6F7;
+    --color-card-base: #1B1B26;
+  }
+
+  body {
+    background-color: var(--color-bg-base);
+    color: var(--color-text-base);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  /* Custom subtle scrollbars */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(140, 140, 160, 0.25);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(140, 140, 160, 0.45);
+  }
+}
+
+/* Guaranteed reference image atmospheric hero gradient (Never fails regardless of Tailwind JIT state) */
+.mivo-hero-gradient {
+  background: #421308 !important;
+  background: linear-gradient(135deg, #380F06 0%, #5C1D0F 28%, #852F1A 60%, #9E3C22 75%, #0D2624 100%) !important;
+}
+
+.mivo-cta-gradient {
+  background: #380F06 !important;
+  background: linear-gradient(135deg, #380F06 0%, #6E2614 45%, #18181C 100%) !important;
+}

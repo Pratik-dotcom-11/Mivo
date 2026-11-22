@@ -1,0 +1,15 @@
+project_id = "mivo-app"
+
+[api]
+port = 54321
+extra_search_path = ["public", "extensions"]
+
+[db]
+port = 54322
+
+[studio]
+port = 54323
+
+[storage]
+enabled = true
+file_size_limit = "50MiB"
