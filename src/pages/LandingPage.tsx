@@ -1,7 +1,6 @@
 import React from 'react';
 import { HeroShowcase } from '@/components/landing/HeroShowcase';
 import { Logo } from '@/components/common/Logo';
-import { ThemeToggle } from '@/components/common/ThemeToggle';
 import { useAuth } from '@/hooks/useAuth';
 import {
   Mic,
@@ -300,9 +299,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 </button>
               )}
             </div>
-
-            {/* Theme switcher */}
-            <ThemeToggle variant="pill" />
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-charcoal-200 dark:border-dark-border text-xs text-charcoal-500 dark:text-dark-muted">

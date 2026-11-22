@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { Logo, Button, ThemeToggle } from '@/components/common';
+import { Logo, Button } from '@/components/common';
 import { GoogleIcon } from '@/components/common/Button';
 import {
   Mic,
@@ -126,8 +126,6 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
             >
               Record Voice Note
             </Button>
-
-            <ThemeToggle variant="icon" />
 
             {/* Authenticated User Profile Pill */}
             <div className="flex items-center gap-2 pl-2 border-l border-charcoal-200 dark:border-dark-border">

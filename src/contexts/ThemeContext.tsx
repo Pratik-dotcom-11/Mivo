@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useEffect, useState, useMemo } from 'react';
+import React, { createContext, useContext, useEffect, useMemo } from 'react';
 
-export type Theme = 'light' | 'dark' | 'system';
-export type ResolvedTheme = 'light' | 'dark';
+export type Theme = 'light';
+export type ResolvedTheme = 'light';
 
 interface ThemeContextType {
   theme: Theme;
@@ -15,73 +15,33 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 const THEME_STORAGE_KEY = 'mivo-theme-preference';
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setThemeState] = useState<Theme>(() => {
-    try {
-      const saved = localStorage.getItem(THEME_STORAGE_KEY) as Theme;
-      if (saved && ['light', 'dark', 'system'].includes(saved)) {
-        return saved;
-      }
-    } catch {
-      // Ignore localStorage read errors in restricted contexts
-    }
-    return 'system';
-  });
-
-  const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>(() => {
-    if (typeof window === 'undefined') return 'light';
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  });
-
   useEffect(() => {
+    // Strictly lock to light mode
     const root = document.documentElement;
-
-    const applyTheme = (isDark: boolean) => {
-      if (isDark) {
-        root.classList.add('dark');
-        setResolvedTheme('dark');
-      } else {
-        root.classList.remove('dark');
-        setResolvedTheme('light');
-      }
-    };
-
-    if (theme === 'system') {
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      applyTheme(mediaQuery.matches);
-
-      const handleChange = (e: MediaQueryListEvent) => {
-        applyTheme(e.matches);
-      };
-
-      mediaQuery.addEventListener('change', handleChange);
-      return () => mediaQuery.removeEventListener('change', handleChange);
-    } else {
-      applyTheme(theme === 'dark');
-    }
-  }, [theme]);
-
-  const setTheme = (newTheme: Theme) => {
-    setThemeState(newTheme);
+    root.classList.remove('dark');
     try {
-      localStorage.setItem(THEME_STORAGE_KEY, newTheme);
+      localStorage.setItem(THEME_STORAGE_KEY, 'light');
     } catch {
-      // Ignore localStorage write error
+      // Ignore localStorage errors
     }
+  }, []);
+
+  const setTheme = () => {
+    // Light mode only
   };
 
   const toggleTheme = () => {
-    const next = resolvedTheme === 'dark' ? 'light' : 'dark';
-    setTheme(next);
+    // Light mode only
   };
 
   const value = useMemo(
     () => ({
-      theme,
-      resolvedTheme,
+      theme: 'light' as const,
+      resolvedTheme: 'light' as const,
       setTheme,
       toggleTheme,
     }),
-    [theme, resolvedTheme]
+    []
   );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;

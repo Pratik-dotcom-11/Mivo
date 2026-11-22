@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { Button, Logo, ThemeToggle, Modal } from '@/components/common';
+import { Button, Logo, Modal } from '@/components/common';
 import {
   ArrowLeft,
   Mail,
@@ -101,8 +101,6 @@ export const AuthPage: React.FC<AuthPageProps> = ({
           )}
           <Logo size="md" showTagline />
         </div>
-
-        <ThemeToggle variant="icon" />
       </header>
 
       {/* Main Centered Authentication Card */}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Logo, ThemeToggle } from '@/components/common';
+import { Logo } from '@/components/common';
 
 export interface AuthLayoutProps {
   children: React.ReactNode;
@@ -8,10 +8,9 @@ export interface AuthLayoutProps {
 export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
   return (
     <div className="min-h-screen bg-warm-100 dark:bg-dark-bg text-charcoal-800 dark:text-charcoal-100 flex flex-col justify-between p-4 sm:p-6 transition-colors duration-200">
-      {/* Top Header with Theme Switcher */}
+      {/* Top Header */}
       <header className="max-w-6xl mx-auto w-full flex items-center justify-between py-2">
         <Logo size="md" showTagline />
-        <ThemeToggle variant="icon" />
       </header>
 
       {/* Centered Auth Card */}
