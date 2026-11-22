@@ -4,80 +4,133 @@ import type { UserProfile } from '@/types/auth';
 
 export const authService = {
   /**
-   * Initiates official Supabase Google OAuth sign-in flow
-   * @param redirectTo Optional custom redirect URI (defaults to window.location.origin)
+   * Signs in with Gmail / Email and password
    */
-  async signInWithGoogle(redirectTo?: string): Promise<{ error: AuthError | Error | null }> {
+  async signInWithPassword(
+    email: string,
+    password: string
+  ): Promise<{ user: User | null; session: Session | null; error: Error | null }> {
     if (!isSupabaseConfigured) {
       return {
-        error: new Error(
-          'Supabase is not configured yet. Please supply VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your .env file.'
-        ),
+        user: null,
+        session: null,
+        error: new Error('Supabase client is not configured.'),
       };
     }
 
     try {
-      // Standard redirect back to the app root (Supabase Auth appends token/code)
-      const targetRedirect =
-        redirectTo || (typeof window !== 'undefined' ? `${window.location.origin}/` : undefined);
+      const cleanEmail = email.trim().toLowerCase();
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: cleanEmail,
+        password,
+      });
 
-      // Use skipBrowserRedirect so we can safely verify if Google provider is enabled in Supabase
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
+      if (error) {
+        let msg = error.message;
+        if (msg.toLowerCase().includes('invalid login credentials')) {
+          msg = 'Invalid Gmail address or password. If you are new, click "Create Account" below.';
+        }
+        return { user: null, session: null, error: new Error(msg) };
+      }
+
+      return { user: data.user, session: data.session, error: null };
+    } catch (err: unknown) {
+      const formattedError =
+        err instanceof Error ? err : new Error('Failed to sign in with Gmail');
+      return { user: null, session: null, error: formattedError };
+    }
+  },
+
+  /**
+   * Registers a new user with Gmail / Email and password.
+   * Supabase trigger auto_confirm_user automatically confirms the email immediately.
+   */
+  async signUp(
+    email: string,
+    password: string,
+    fullName?: string
+  ): Promise<{ user: User | null; session: Session | null; error: Error | null }> {
+    if (!isSupabaseConfigured) {
+      return {
+        user: null,
+        session: null,
+        error: new Error('Supabase client is not configured.'),
+      };
+    }
+
+    try {
+      const cleanEmail = email.trim().toLowerCase();
+      const derivedName = fullName?.trim() || cleanEmail.split('@')[0];
+
+      const { data, error } = await supabase.auth.signUp({
+        email: cleanEmail,
+        password,
         options: {
-          redirectTo: targetRedirect,
-          skipBrowserRedirect: true,
-          queryParams: {
-            access_type: 'offline',
-            prompt: 'select_account',
+          data: {
+            full_name: derivedName,
+            name: derivedName,
           },
         },
       });
 
       if (error) {
-        let msg = error.message;
-        if (
-          msg.toLowerCase().includes('unsupported provider') ||
-          msg.toLowerCase().includes('not enabled')
-        ) {
-          return { error: new Error('GOOGLE_PROVIDER_DISABLED') };
-        }
-        return { error: new Error(msg) };
+        return { user: null, session: null, error: new Error(error.message) };
       }
 
-      if (!data?.url) {
-        throw new Error('Supabase did not return an OAuth authorization URL');
+      // If session is returned directly
+      if (data.session) {
+        return { user: data.user, session: data.session, error: null };
       }
 
-      // Preflight check: prevent sending the user to a raw JSON error page if Google provider is disabled
-      try {
-        const probe = await fetch(data.url, {
-          method: 'GET',
-          headers: { Accept: 'application/json' },
-        });
+      // Automatically sign in now that user is created and auto-confirmed
+      const loginRes = await supabase.auth.signInWithPassword({
+        email: cleanEmail,
+        password,
+      });
 
-        if (!probe.ok) {
-          const body = await probe.json().catch(() => ({}));
-          if (
-            body?.msg?.includes('provider is not enabled') ||
-            body?.error_code === 'validation_failed' ||
-            probe.status === 400
-          ) {
-            return { error: new Error('GOOGLE_PROVIDER_DISABLED') };
-          }
-        }
-      } catch (probeErr) {
-        // If fetch was blocked by CORS redirect, that's expected for live Google redirects
-        console.info('[Mivo Auth] Preflight check passed/redirected:', probeErr);
+      return {
+        user: loginRes.data?.user || data.user,
+        session: loginRes.data?.session || null,
+        error: loginRes.error ? new Error(loginRes.error.message) : null,
+      };
+    } catch (err: unknown) {
+      const formattedError =
+        err instanceof Error ? err : new Error('Failed to create Mivo account');
+      return { user: null, session: null, error: formattedError };
+    }
+  },
+
+  /**
+   * Sends passwordless Magic Link to Gmail
+   */
+  async sendMagicLink(
+    email: string,
+    redirectTo?: string
+  ): Promise<{ error: Error | null }> {
+    if (!isSupabaseConfigured) {
+      return { error: new Error('Supabase is not configured.') };
+    }
+
+    try {
+      const cleanEmail = email.trim().toLowerCase();
+      const targetRedirect =
+        redirectTo || (typeof window !== 'undefined' ? `${window.location.origin}/` : undefined);
+
+      const { error } = await supabase.auth.signInWithOtp({
+        email: cleanEmail,
+        options: {
+          emailRedirectTo: targetRedirect,
+        },
+      });
+
+      if (error) {
+        return { error: new Error(error.message) };
       }
 
-      // If enabled, smoothly navigate the browser to Google OAuth
-      window.location.href = data.url;
       return { error: null };
     } catch (err: unknown) {
       const formattedError =
-        err instanceof Error ? err : new Error('Failed to initiate Google authentication');
-      console.error('[Mivo Auth] Google OAuth initiation failed:', formattedError);
+        err instanceof Error ? err : new Error('Failed to send login link to your Gmail');
       return { error: formattedError };
     }
   },
@@ -116,7 +169,7 @@ export const authService = {
   },
 
   /**
-   * Derives standardized user profile from Supabase user and Google OAuth metadata
+   * Derives standardized user profile from Supabase user metadata
    */
   getUserProfile(user: User | null): UserProfile | null {
     if (!user) return null;
@@ -126,15 +179,15 @@ export const authService = {
       metadata.full_name ||
       metadata.name ||
       metadata.user_name ||
-      (user.email ? user.email.split('@')[0] : 'Mivo User');
+      (user.email ? user.email.split('@')[0] : 'Mivo Creator');
 
     const avatarUrl =
       metadata.avatar_url ||
       metadata.picture ||
       metadata.avatar ||
-      null;
+      `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(fullName)}&backgroundColor=c85a32,e07a5f`;
 
-    const provider = user.app_metadata?.provider || 'google';
+    const provider = user.app_metadata?.provider || 'gmail';
 
     return {
       id: user.id,
@@ -146,17 +199,15 @@ export const authService = {
   },
 
   /**
-   * Parses OAuth callback errors from browser location
+   * Parses OAuth or email callback errors from browser location
    */
   parseOAuthErrorFromUrl(): string | null {
     if (typeof window === 'undefined') return null;
 
-    // 1. Check query parameters (?error=...&error_description=...)
     const searchParams = new URLSearchParams(window.location.search);
     const searchErr = searchParams.get('error_description') || searchParams.get('error');
     if (searchErr) return decodeURIComponent(searchErr.replace(/\+/g, ' '));
 
-    // 2. Check hash fragment (#error=...&error_description=...)
     if (window.location.hash) {
       const hashContent = window.location.hash.startsWith('#')
         ? window.location.hash.substring(1)
@@ -170,21 +221,18 @@ export const authService = {
   },
 
   /**
-   * Cleans OAuth token parameters or error fragments from browser address bar
+   * Cleans token parameters from browser address bar
    */
   cleanOAuthUrl(destinationHash = '#app') {
     if (typeof window === 'undefined') return;
     try {
       const url = new URL(window.location.href);
-      // Remove OAuth query params
       url.searchParams.delete('code');
       url.searchParams.delete('error');
       url.searchParams.delete('error_description');
       url.searchParams.delete('error_code');
-      // Set clean hash
       window.history.replaceState(null, '', `${url.pathname}${destinationHash}`);
     } catch {
-      // Fallback
       window.location.hash = destinationHash;
     }
   },

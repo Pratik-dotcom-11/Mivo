@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState, useMemo, useCallback } from 'react';
+import React, { createContext, useEffect, useState, useMemo, useCallback } from 'react';
 import type { User, Session } from '@supabase/supabase-js';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { authService } from '@/services/authService';
@@ -12,7 +12,9 @@ export interface AuthContextType {
   isConfigured: boolean;
   error: string | null;
   clearError: () => void;
-  signInWithGoogle: (redirectTo?: string) => Promise<{ error: Error | null }>;
+  signInWithGmailPassword: (email: string, password: string) => Promise<{ error: Error | null }>;
+  signUpWithGmail: (email: string, password: string, fullName?: string) => Promise<{ error: Error | null }>;
+  sendGmailMagicLink: (email: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
   demoSignIn: () => void;
 }
@@ -31,10 +33,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   useEffect(() => {
-    // 1. Detect any OAuth errors passed in the redirect callback URL
+    // 1. Detect any callback errors passed in URL
     const urlOAuthError = authService.parseOAuthErrorFromUrl();
     if (urlOAuthError) {
-      setError(`Google Authentication error: ${urlOAuthError}`);
+      setError(`Authentication notice: ${urlOAuthError}`);
     }
 
     // 2. If Supabase is not configured, complete loading
@@ -54,7 +56,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser(currentSession.user);
         setProfile(authService.getUserProfile(currentSession.user));
 
-        // If returned from OAuth callback with tokens or code, clean the URL
         if (
           window.location.hash.includes('access_token') ||
           window.location.search.includes('code')
@@ -65,7 +66,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setIsLoading(false);
     });
 
-    // 4. Real-time auth listener for OAuth redirects and token refresh
+    // 4. Real-time auth listener for token refresh and session state changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, newSession) => {
@@ -76,7 +77,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (event === 'SIGNED_IN' && newSession?.user) {
         setError(null);
-        // Automatically route to protected app view on successful Google sign-in
         if (
           window.location.hash.includes('access_token') ||
           window.location.search.includes('code')
@@ -100,12 +100,54 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   /**
-   * Initiates Google OAuth Sign In
+   * Signs in with Gmail and password
    */
-  const signInWithGoogle = useCallback(
-    async (redirectTo?: string): Promise<{ error: Error | null }> => {
+  const signInWithGmailPassword = useCallback(
+    async (email: string, password: string): Promise<{ error: Error | null }> => {
       setError(null);
-      const res = await authService.signInWithGoogle(redirectTo);
+      const res = await authService.signInWithPassword(email, password);
+      if (res.error) {
+        setError(res.error.message);
+        return { error: res.error };
+      }
+      if (res.user) {
+        setUser(res.user);
+        setSession(res.session);
+        setProfile(authService.getUserProfile(res.user));
+      }
+      return { error: null };
+    },
+    []
+  );
+
+  /**
+   * Registers a new user with Gmail and password
+   */
+  const signUpWithGmail = useCallback(
+    async (email: string, password: string, fullName?: string): Promise<{ error: Error | null }> => {
+      setError(null);
+      const res = await authService.signUp(email, password, fullName);
+      if (res.error) {
+        setError(res.error.message);
+        return { error: res.error };
+      }
+      if (res.user) {
+        setUser(res.user);
+        setSession(res.session);
+        setProfile(authService.getUserProfile(res.user));
+      }
+      return { error: null };
+    },
+    []
+  );
+
+  /**
+   * Sends a passwordless Magic Link to Gmail
+   */
+  const sendGmailMagicLink = useCallback(
+    async (email: string): Promise<{ error: Error | null }> => {
+      setError(null);
+      const res = await authService.sendMagicLink(email);
       if (res.error) {
         setError(res.error.message);
         return { error: res.error };
@@ -125,7 +167,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(null);
       setSession(null);
       setProfile(null);
-      // Return to landing page after sign out
       if (window.location.hash === '#app') {
         window.location.hash = '';
       }
@@ -133,7 +174,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   /**
-   * Demo Sign-In for seamless evaluation before production credentials are tied
+   * Demo Sign-In for instant evaluation
    */
   const demoSignIn = useCallback(() => {
     const demoUser = {
@@ -144,8 +185,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       email_confirmed_at: new Date().toISOString(),
       created_at: new Date().toISOString(),
       app_metadata: {
-        provider: 'google',
-        providers: ['google'],
+        provider: 'gmail',
+        providers: ['gmail'],
       },
       user_metadata: {
         full_name: 'Mivo Creator',
@@ -158,15 +199,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     setUser(demoUser);
     setProfile({
-      id: 'demo-user-mivo-001',
+      id: demoUser.id,
       email: 'creator@mivo.app',
       fullName: 'Mivo Creator',
       avatarUrl:
         'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
-      provider: 'google',
+      provider: 'demo',
     });
     setError(null);
-    window.location.hash = '#app';
   }, []);
 
   const value = useMemo(
@@ -178,20 +218,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       isConfigured: isSupabaseConfigured,
       error,
       clearError,
-      signInWithGoogle,
+      signInWithGmailPassword,
+      signUpWithGmail,
+      sendGmailMagicLink,
       signOut,
       demoSignIn,
     }),
-    [user, session, profile, isLoading, error, clearError, signInWithGoogle, signOut, demoSignIn]
+    [
+      user,
+      session,
+      profile,
+      isLoading,
+      error,
+      clearError,
+      signInWithGmailPassword,
+      signUpWithGmail,
+      sendGmailMagicLink,
+      signOut,
+      demoSignIn,
+    ]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
-
-export function useAuthContext(): AuthContextType {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuthContext must be used within an AuthProvider');
-  }
-  return context;
-}

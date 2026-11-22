@@ -3,12 +3,16 @@ import { useAuth } from '@/hooks/useAuth';
 import { Button, Logo, ThemeToggle, Modal } from '@/components/common';
 import {
   ArrowLeft,
+  Mail,
+  Lock,
+  User as UserIcon,
+  Eye,
+  EyeOff,
+  Sparkles,
   ShieldCheck,
   AlertTriangle,
-  Sparkles,
-  ExternalLink,
-  Copy,
-  Check,
+  CheckCircle2,
+  Send,
 } from 'lucide-react';
 import { APP_NAME, APP_TAGLINE } from '@/utils/constants';
 
@@ -17,40 +21,59 @@ export interface AuthPageProps {
   onAuthenticated?: () => void;
 }
 
+type AuthMode = 'signin' | 'signup' | 'magiclink';
+
 export const AuthPage: React.FC<AuthPageProps> = ({
   onBackToLanding,
   onAuthenticated,
 }) => {
-  const { signInWithGoogle, demoSignIn, error, clearError } = useAuth();
+  const {
+    signInWithGmailPassword,
+    signUpWithGmail,
+    sendGmailMagicLink,
+    demoSignIn,
+    error,
+    clearError,
+  } = useAuth();
+
+  const [mode, setMode] = useState<AuthMode>('signin');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [activeModal, setActiveModal] = useState<'privacy' | 'terms' | null>(null);
-  const [showGoogleSetupModal, setShowGoogleSetupModal] = useState(false);
-  const [copiedCallback, setCopiedCallback] = useState(false);
+  const [magicLinkSent, setMagicLinkSent] = useState(false);
+  const [activeLegalModal, setActiveLegalModal] = useState<'privacy' | 'terms' | null>(null);
 
-  const SUPABASE_PROJECT_ID = 'npixrygnfkqahlxntwai';
-  const SUPABASE_CALLBACK_URL = `https://${SUPABASE_PROJECT_ID}.supabase.co/auth/v1/callback`;
-  const SUPABASE_PROVIDERS_URL = `https://supabase.com/dashboard/project/${SUPABASE_PROJECT_ID}/auth/providers`;
-
-  const handleGoogleSignIn = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     clearError();
+    setMagicLinkSent(false);
+
+    if (!email.trim()) return;
 
     setIsLoading(true);
-    const res = await signInWithGoogle();
-    setIsLoading(false);
 
-    if (res.error) {
-      if (
-        res.error.message === 'GOOGLE_PROVIDER_DISABLED' ||
-        res.error.message.toLowerCase().includes('unsupported provider') ||
-        res.error.message.toLowerCase().includes('not enabled')
-      ) {
-        setShowGoogleSetupModal(true);
+    try {
+      if (mode === 'magiclink') {
+        const res = await sendGmailMagicLink(email);
+        if (!res.error) {
+          setMagicLinkSent(true);
+        }
+      } else if (mode === 'signup') {
+        const res = await signUpWithGmail(email, password, fullName);
+        if (!res.error && onAuthenticated) {
+          onAuthenticated();
+        }
+      } else {
+        // Sign in
+        const res = await signInWithGmailPassword(email, password);
+        if (!res.error && onAuthenticated) {
+          onAuthenticated();
+        }
       }
-      return;
-    }
-
-    if (!res.error && onAuthenticated) {
-      onAuthenticated();
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -60,16 +83,6 @@ export const AuthPage: React.FC<AuthPageProps> = ({
       onAuthenticated();
     }
   };
-
-  const handleCopyCallback = () => {
-    navigator.clipboard.writeText(SUPABASE_CALLBACK_URL);
-    setCopiedCallback(true);
-    setTimeout(() => setCopiedCallback(false), 2000);
-  };
-
-  const isGoogleDisabledError =
-    error === 'GOOGLE_PROVIDER_DISABLED' ||
-    (error && (error.toLowerCase().includes('provider') || error.toLowerCase().includes('enabled')));
 
   return (
     <div className="min-h-screen bg-warm-200/50 dark:bg-dark-bg text-charcoal-800 dark:text-charcoal-100 flex flex-col justify-between p-4 sm:p-6 transition-colors duration-200">
@@ -92,106 +105,233 @@ export const AuthPage: React.FC<AuthPageProps> = ({
         <ThemeToggle variant="icon" />
       </header>
 
-      {/* Main Centered Minimal Authentication Card */}
-      <main className="w-full max-w-md mx-auto my-auto py-8">
-        <div className="bg-white dark:bg-dark-card border border-black/[0.04] dark:border-white/[0.06] rounded-[2.5rem] p-8 sm:p-10 shadow-soft-xl space-y-7 relative overflow-hidden">
+      {/* Main Centered Authentication Card */}
+      <main className="w-full max-w-md mx-auto my-auto py-6">
+        <div className="bg-white dark:bg-dark-card border border-black/[0.04] dark:border-white/[0.06] rounded-[2.5rem] p-7 sm:p-9 shadow-soft-xl space-y-6 relative overflow-hidden">
           {/* Subtle Decorative Glow at top */}
           <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-terracotta-500 via-glowOrange-500 to-terracotta-600" />
 
           {/* Header & Branding */}
-          <div className="text-center space-y-2.5 pt-2">
-            <div className="w-14 h-14 mx-auto rounded-2xl bg-gradient-to-tr from-terracotta-600 to-glowOrange-500 text-white flex items-center justify-center shadow-glow-orange mb-3">
-              <span className="font-mono font-black text-xl">M</span>
+          <div className="text-center space-y-2 pt-1">
+            <div className="w-12 h-12 mx-auto rounded-2xl bg-gradient-to-tr from-terracotta-600 to-glowOrange-500 text-white flex items-center justify-center shadow-glow-orange mb-2">
+              <Mail className="w-6 h-6" />
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-charcoal-900 dark:text-white tracking-tight">
-              Sign in to {APP_NAME}
+              {mode === 'signup'
+                ? 'Create your account'
+                : mode === 'magiclink'
+                ? 'Gmail Magic Link'
+                : 'Sign in with Gmail'}
             </h1>
             <p className="text-xs font-bold text-terracotta-700 dark:text-terracotta-400 uppercase tracking-widest">
               {APP_TAGLINE}
             </p>
-            <p className="text-xs text-charcoal-500 dark:text-dark-muted font-medium max-w-xs mx-auto leading-relaxed pt-1">
-              Capture your thoughts, get instant AI transcriptions, and keep your notes safe in one minimal space.
+            <p className="text-xs text-charcoal-500 dark:text-dark-muted font-medium max-w-xs mx-auto leading-relaxed">
+              {mode === 'magiclink'
+                ? 'We will send a passwordless sign-in link directly to your Gmail inbox.'
+                : 'Enter your Gmail address to securely access your voice notes.'}
             </p>
+          </div>
+
+          {/* Mode Switcher Tabs */}
+          <div className="flex rounded-2xl bg-warm-100 dark:bg-dark-bg p-1 text-xs font-bold">
+            <button
+              type="button"
+              onClick={() => {
+                setMode('signin');
+                clearError();
+                setMagicLinkSent(false);
+              }}
+              className={`flex-1 py-2 rounded-xl transition-all ${
+                mode === 'signin'
+                  ? 'bg-white dark:bg-dark-card text-charcoal-900 dark:text-white shadow-soft-sm'
+                  : 'text-charcoal-500 dark:text-dark-muted hover:text-charcoal-900 dark:hover:text-white'
+              }`}
+            >
+              Sign In
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setMode('signup');
+                clearError();
+                setMagicLinkSent(false);
+              }}
+              className={`flex-1 py-2 rounded-xl transition-all ${
+                mode === 'signup'
+                  ? 'bg-white dark:bg-dark-card text-charcoal-900 dark:text-white shadow-soft-sm'
+                  : 'text-charcoal-500 dark:text-dark-muted hover:text-charcoal-900 dark:hover:text-white'
+              }`}
+            >
+              Create Account
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setMode('magiclink');
+                clearError();
+                setMagicLinkSent(false);
+              }}
+              className={`flex-1 py-2 rounded-xl transition-all ${
+                mode === 'magiclink'
+                  ? 'bg-white dark:bg-dark-card text-charcoal-900 dark:text-white shadow-soft-sm'
+                  : 'text-charcoal-500 dark:text-dark-muted hover:text-charcoal-900 dark:hover:text-white'
+              }`}
+            >
+              Magic Link
+            </button>
           </div>
 
           {/* Error Banner */}
           {error && (
-            <div className="p-3.5 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/40 text-xs text-amber-900 dark:text-amber-200 flex items-start gap-2.5">
-              <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
-              <div className="flex-1 space-y-2">
-                <p className="leading-snug font-medium">
-                  {isGoogleDisabledError
-                    ? 'Google OAuth provider is not enabled in your Supabase project yet.'
-                    : error}
+            <div className="p-3.5 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/40 text-xs text-amber-900 dark:text-amber-200 flex items-start gap-2.5 animate-fade-in">
+              <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+              <p className="leading-snug font-medium flex-1">{error}</p>
+            </div>
+          )}
+
+          {/* Magic Link Confirmation */}
+          {magicLinkSent && (
+            <div className="p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/40 text-xs text-emerald-900 dark:text-emerald-200 flex items-start gap-2.5 animate-fade-in">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <p className="font-bold">Magic Link Sent to your Gmail!</p>
+                <p className="leading-relaxed">
+                  We sent a sign-in link to <strong>{email}</strong>. Open your Gmail inbox and click the link to log in instantly.
                 </p>
-                {isGoogleDisabledError && (
-                  <div className="flex flex-wrap gap-2 pt-1">
-                    <Button
-                      type="button"
-                      variant="primary"
-                      size="xs"
-                      onClick={() => setShowGoogleSetupModal(true)}
-                      className="font-bold bg-amber-600 hover:bg-amber-700 text-white"
-                    >
-                      View 2-Min Setup Guide
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="xs"
-                      onClick={handleDemoAccess}
-                      className="font-medium"
-                    >
-                      Use Demo Mode Now
-                    </Button>
-                  </div>
-                )}
               </div>
             </div>
           )}
 
-          {/* Primary Action: Continue with Google Button */}
-          <div className="space-y-4 pt-1">
-            <Button
-              type="button"
-              variant="google"
-              size="lg"
-              className="w-full text-sm font-bold py-3.5 rounded-2xl shadow-soft-sm hover:shadow-soft-md transition-all active:scale-[0.99] border-charcoal-200 dark:border-dark-border"
-              isLoading={isLoading}
-              onClick={handleGoogleSignIn}
-            >
-              Continue with Google
-            </Button>
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Full Name field (Only in signup mode) */}
+            {mode === 'signup' && (
+              <div className="space-y-1">
+                <label className="text-[11px] font-bold uppercase tracking-wider text-charcoal-500 dark:text-dark-muted pl-1">
+                  Your Name
+                </label>
+                <div className="relative">
+                  <UserIcon className="w-4 h-4 text-charcoal-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    required
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    placeholder="e.g. Pratik Ghosh"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-charcoal-200 dark:border-dark-border bg-warm-100/40 dark:bg-dark-bg text-charcoal-900 dark:text-white placeholder-charcoal-400 text-xs focus:outline-none focus:ring-2 focus:ring-terracotta-500 transition-all font-medium"
+                  />
+                </div>
+              </div>
+            )}
 
-            {/* Seamless Demo Mode Option (For local development & evaluation) */}
-            <div className="pt-2 text-center">
-              <button
-                type="button"
-                onClick={handleDemoAccess}
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-charcoal-500 hover:text-terracotta-600 dark:text-dark-muted dark:hover:text-terracotta-300 transition-colors py-1"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-terracotta-500" />
-                <span>Try Instant Demo Mode (No account needed)</span>
-              </button>
+            {/* Gmail input */}
+            <div className="space-y-1">
+              <label className="text-[11px] font-bold uppercase tracking-wider text-charcoal-500 dark:text-dark-muted pl-1">
+                Gmail Address
+              </label>
+              <div className="relative">
+                <Mail className="w-4 h-4 text-charcoal-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="name@gmail.com"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-charcoal-200 dark:border-dark-border bg-warm-100/40 dark:bg-dark-bg text-charcoal-900 dark:text-white placeholder-charcoal-400 text-xs focus:outline-none focus:ring-2 focus:ring-terracotta-500 transition-all font-medium"
+                />
+              </div>
             </div>
+
+            {/* Password input (Only in signin and signup modes) */}
+            {mode !== 'magiclink' && (
+              <div className="space-y-1">
+                <div className="flex items-center justify-between pl-1">
+                  <label className="text-[11px] font-bold uppercase tracking-wider text-charcoal-500 dark:text-dark-muted">
+                    Password
+                  </label>
+                  {mode === 'signin' && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setMode('magiclink');
+                        clearError();
+                      }}
+                      className="text-[11px] text-terracotta-600 dark:text-terracotta-400 hover:underline font-semibold"
+                    >
+                      Forgot password?
+                    </button>
+                  )}
+                </div>
+                <div className="relative">
+                  <Lock className="w-4 h-4 text-charcoal-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    minLength={6}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="At least 6 characters"
+                    className="w-full pl-10 pr-10 py-2.5 rounded-2xl border border-charcoal-200 dark:border-dark-border bg-warm-100/40 dark:bg-dark-bg text-charcoal-900 dark:text-white placeholder-charcoal-400 text-xs focus:outline-none focus:ring-2 focus:ring-terracotta-500 transition-all font-medium"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-charcoal-400 hover:text-charcoal-600 dark:hover:text-white"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              variant="primary"
+              size="lg"
+              className="w-full font-bold py-3 rounded-2xl shadow-glow-orange hover:brightness-105 active:scale-[0.99] transition-all text-xs"
+              isLoading={isLoading}
+              leftIcon={mode === 'magiclink' ? <Send className="w-4 h-4" /> : undefined}
+            >
+              {mode === 'signup'
+                ? 'Create Mivo Account'
+                : mode === 'magiclink'
+                ? 'Send Magic Link to Gmail'
+                : 'Sign In to Mivo'}
+            </Button>
+          </form>
+
+          {/* Quick Demo Mode fallback */}
+          <div className="pt-2 text-center border-t border-charcoal-100 dark:border-dark-border">
+            <button
+              type="button"
+              onClick={handleDemoAccess}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-charcoal-500 hover:text-terracotta-600 dark:text-dark-muted dark:hover:text-terracotta-300 transition-colors py-1"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-terracotta-500" />
+              <span>Try Instant Demo Mode (No account needed)</span>
+            </button>
           </div>
 
           {/* Security & Privacy Badging */}
-          <div className="pt-2 border-t border-charcoal-100 dark:border-dark-border space-y-3">
+          <div className="pt-1 space-y-2.5">
             <div className="flex items-center justify-center gap-2 text-[11px] font-semibold text-charcoal-500 dark:text-dark-muted">
               <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               <span>End-to-end user isolation with Supabase Row Level Security</span>
             </div>
             <div className="flex items-center justify-center gap-4 text-[11px] text-charcoal-400 dark:text-dark-muted">
               <button
-                onClick={() => setActiveModal('privacy')}
+                type="button"
+                onClick={() => setActiveLegalModal('privacy')}
                 className="hover:underline hover:text-charcoal-600 dark:hover:text-white"
               >
                 Privacy Policy
               </button>
               <span>•</span>
               <button
-                onClick={() => setActiveModal('terms')}
+                type="button"
+                onClick={() => setActiveLegalModal('terms')}
                 className="hover:underline hover:text-charcoal-600 dark:hover:text-white"
               >
                 Terms of Service
@@ -206,71 +346,10 @@ export const AuthPage: React.FC<AuthPageProps> = ({
         &copy; {new Date().getFullYear()} {APP_NAME}. {APP_TAGLINE}
       </footer>
 
-      {/* Google OAuth Quick Setup Modal */}
-      <Modal
-        isOpen={showGoogleSetupModal}
-        onClose={() => setShowGoogleSetupModal(false)}
-        title="Enable Google Sign-In in Supabase"
-        size="md"
-      >
-        <div className="space-y-4 text-xs text-charcoal-600 dark:text-dark-muted">
-          <p className="leading-relaxed">
-            Your Supabase project is active, but Google OAuth is toggled OFF by default. To enable one-click Google Sign-In:
-          </p>
-
-          <ol className="list-decimal pl-4 space-y-2.5 font-medium text-charcoal-700 dark:text-charcoal-300">
-            <li>
-              <span>In Google Cloud Console, add this <strong>Authorized Redirect URI</strong>:</span>
-              <div className="mt-1 flex items-center justify-between gap-2 p-2 rounded-xl bg-warm-100 dark:bg-dark-bg border border-charcoal-200 dark:border-dark-border font-mono text-[11px] break-all select-all">
-                <span>{SUPABASE_CALLBACK_URL}</span>
-                <button
-                  type="button"
-                  onClick={handleCopyCallback}
-                  className="p-1 rounded-lg hover:bg-white dark:hover:bg-dark-card shrink-0 transition-colors"
-                  title="Copy Redirect URI"
-                >
-                  {copiedCallback ? (
-                    <Check className="w-3.5 h-3.5 text-emerald-600" />
-                  ) : (
-                    <Copy className="w-3.5 h-3.5" />
-                  )}
-                </button>
-              </div>
-            </li>
-            <li>
-              <span>Open your Supabase Project Auth Providers and toggle <strong>Google</strong> to ON.</span>
-            </li>
-            <li>
-              <span>Paste your Google <strong>Client ID</strong> and <strong>Client Secret</strong> and click <strong>Save</strong>.</span>
-            </li>
-          </ol>
-
-          <div className="pt-2 flex flex-col sm:flex-row items-center gap-2">
-            <a
-              href={SUPABASE_PROVIDERS_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition-colors"
-            >
-              <span>Open Supabase Auth Providers</span>
-              <ExternalLink className="w-3.5 h-3.5" />
-            </a>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleDemoAccess}
-              className="w-full sm:w-auto text-xs"
-            >
-              Continue in Demo Mode for Now
-            </Button>
-          </div>
-        </div>
-      </Modal>
-
       {/* Privacy Policy Modal */}
       <Modal
-        isOpen={activeModal === 'privacy'}
-        onClose={() => setActiveModal(null)}
+        isOpen={activeLegalModal === 'privacy'}
+        onClose={() => setActiveLegalModal(null)}
         title="Privacy Policy"
         size="md"
       >
@@ -284,11 +363,11 @@ export const AuthPage: React.FC<AuthPageProps> = ({
             Row Level Security.
           </p>
           <p className="font-semibold text-charcoal-800 dark:text-white">
-            2. Google Authentication Data
+            2. Email Authentication Data
           </p>
           <p>
-            When signing in with Google OAuth, Mivo only accesses your name, email address, and profile
-            photo. We never request access to your Google Drive, contacts, or other Google services.
+            When signing in with your Gmail address, Mivo uses your email strictly for session
+            authentication. We never send marketing emails or share your contact info.
           </p>
           <p className="font-semibold text-charcoal-800 dark:text-white">
             3. Data Isolation
@@ -302,8 +381,8 @@ export const AuthPage: React.FC<AuthPageProps> = ({
 
       {/* Terms of Service Modal */}
       <Modal
-        isOpen={activeModal === 'terms'}
-        onClose={() => setActiveModal(null)}
+        isOpen={activeLegalModal === 'terms'}
+        onClose={() => setActiveLegalModal(null)}
         title="Terms of Service"
         size="md"
       >
