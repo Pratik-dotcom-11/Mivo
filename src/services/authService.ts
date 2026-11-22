@@ -17,8 +17,9 @@ export const authService = {
     }
 
     try {
-      // Directs to dashboard route on successful auth
-      const targetRedirect = redirectTo || `${window.location.origin}/#app`;
+      // Standard redirect back to the app root (Supabase Auth appends token/code)
+      const targetRedirect =
+        redirectTo || (typeof window !== 'undefined' ? `${window.location.origin}/` : undefined);
 
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -31,7 +32,17 @@ export const authService = {
         },
       });
 
-      if (error) throw error;
+      if (error) {
+        let msg = error.message;
+        if (
+          msg.toLowerCase().includes('unsupported provider') ||
+          msg.toLowerCase().includes('not enabled')
+        ) {
+          msg =
+            'Google Sign-In is not enabled yet in your Supabase project. Go to Supabase Dashboard > Authentication > Providers > Google, enable it, and add your Google Client ID & Secret.';
+        }
+        return { error: new Error(msg) };
+      }
       return { error: null };
     } catch (err: unknown) {
       const formattedError =
