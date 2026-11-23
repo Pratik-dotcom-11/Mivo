@@ -131,3 +131,77 @@
 .animate-pulse-glow-soft {
   animation: pulseGlowSoft 4s ease-in-out infinite;
 }
+
+/* ============================================================
+   ANIMATED WAVY BACKGROUND — Aurora / Liquid Wave Layer
+   ============================================================ */
+
+@keyframes waveShift1 {
+  0%   { transform: translate(0%, 0%) scale(1) rotate(0deg); }
+  25%  { transform: translate(8%, -6%) scale(1.07) rotate(8deg); }
+  50%  { transform: translate(-5%, 10%) scale(1.12) rotate(-6deg); }
+  75%  { transform: translate(-10%, -4%) scale(1.05) rotate(12deg); }
+  100% { transform: translate(0%, 0%) scale(1) rotate(0deg); }
+}
+
+@keyframes waveShift2 {
+  0%   { transform: translate(0%, 0%) scale(1.1) rotate(0deg); }
+  33%  { transform: translate(-10%, 8%) scale(1.0) rotate(-10deg); }
+  66%  { transform: translate(12%, -5%) scale(1.15) rotate(6deg); }
+  100% { transform: translate(0%, 0%) scale(1.1) rotate(0deg); }
+}
+
+@keyframes waveShift3 {
+  0%   { transform: translate(0%, 0%) scale(1.05); }
+  40%  { transform: translate(6%, 12%) scale(0.95); }
+  70%  { transform: translate(-8%, -8%) scale(1.1); }
+  100% { transform: translate(0%, 0%) scale(1.05); }
+}
+
+@keyframes backgroundPan {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes glowOrb1 {
+  0%, 100% { transform: translateX(0) translateY(0) scale(1);    opacity: 0.55; }
+  25%       { transform: translateX(12%) translateY(-8%) scale(1.15); opacity: 0.70; }
+  50%       { transform: translateX(-8%) translateY(14%) scale(0.90); opacity: 0.45; }
+  75%       { transform: translateX(-14%) translateY(-4%) scale(1.10); opacity: 0.65; }
+}
+
+@keyframes glowOrb2 {
+  0%, 100% { transform: translateX(0) translateY(0) scale(1.1);  opacity: 0.50; }
+  33%       { transform: translateX(-10%) translateY(10%) scale(0.90); opacity: 0.65; }
+  66%       { transform: translateX(14%) translateY(-6%) scale(1.20); opacity: 0.40; }
+}
+
+@keyframes glowOrb3 {
+  0%, 100% { transform: translateX(0) translateY(0) scale(1);    opacity: 0.40; }
+  50%       { transform: translateX(8%) translateY(-12%) scale(1.18); opacity: 0.60; }
+}
+
+@keyframes shimmerWave {
+  0%   { opacity: 0.0; transform: translateX(-100%) skewX(-8deg); }
+  50%  { opacity: 0.12; }
+  100% { opacity: 0.0; transform: translateX(200%) skewX(-8deg); }
+}
+
+/* Utility classes used in LandingPage.tsx */
+.bg-wave-orb-1 {
+  animation: glowOrb1 18s ease-in-out infinite;
+}
+.bg-wave-orb-2 {
+  animation: glowOrb2 22s ease-in-out infinite 3s;
+}
+.bg-wave-orb-3 {
+  animation: glowOrb3 26s ease-in-out infinite 6s;
+}
+.bg-shimmer-wave {
+  animation: shimmerWave 8s ease-in-out infinite 2s;
+}
+.bg-image-wave {
+  animation: waveShift1 20s ease-in-out infinite;
+  transform-origin: center center;
+}

@@ -34,16 +34,52 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-[#FAF7F2] text-charcoal-900 font-sans selection:bg-terracotta-500 selection:text-white pb-16">
-      {/* Dreamy Floral Glow Ambient Background - Full Vibrant Visibility */}
+      {/* Animated Wavy Background — Dreamy Aurora Liquid Layer */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        {/* Organic Floral Glow Texture Wallpaper */}
+        {/* Base texture wallpaper — slightly zoomed so wave motion stays within frame */}
         <img
           src="/dreamy-glow-bg.jpg"
           alt=""
-          className="w-full h-full object-cover object-center opacity-95 filter saturate-125 contrast-105"
+          className="absolute inset-0 w-[120%] h-[120%] -top-[10%] -left-[10%] object-cover object-center opacity-90 filter saturate-150 contrast-110 bg-image-wave"
         />
-        {/* Subtle vignette to frame content while leaving background fully visible */}
-        <div className="absolute inset-0 bg-black/[0.03] pointer-events-none" />
+
+        {/* Wave Orb 1 — Large warm terracotta blob drifting top-left */}
+        <div
+          className="bg-wave-orb-1 absolute -top-32 -left-32 w-[55vw] h-[55vw] max-w-3xl max-h-3xl rounded-full pointer-events-none"
+          style={{
+            background: 'radial-gradient(circle at 40% 40%, rgba(206,108,83,0.45) 0%, rgba(180,70,40,0.25) 50%, transparent 75%)',
+            filter: 'blur(60px)',
+          }}
+        />
+
+        {/* Wave Orb 2 — Teal/mint blob drifting bottom-right */}
+        <div
+          className="bg-wave-orb-2 absolute -bottom-24 -right-24 w-[50vw] h-[50vw] max-w-2xl max-h-2xl rounded-full pointer-events-none"
+          style={{
+            background: 'radial-gradient(circle at 60% 60%, rgba(20,184,166,0.35) 0%, rgba(13,148,136,0.18) 55%, transparent 80%)',
+            filter: 'blur(70px)',
+          }}
+        />
+
+        {/* Wave Orb 3 — Amber glow blooming from center-right */}
+        <div
+          className="bg-wave-orb-3 absolute top-1/4 right-0 w-[40vw] h-[40vw] max-w-xl max-h-xl rounded-full pointer-events-none"
+          style={{
+            background: 'radial-gradient(circle at 50% 50%, rgba(249,115,22,0.30) 0%, rgba(234,88,12,0.12) 60%, transparent 85%)',
+            filter: 'blur(80px)',
+          }}
+        />
+
+        {/* Shimmer wave sweep — a bright light sheen that sweeps diagonally every 8s */}
+        <div
+          className="bg-shimmer-wave absolute inset-0 w-full h-full pointer-events-none"
+          style={{
+            background: 'linear-gradient(105deg, transparent 20%, rgba(255,255,255,0.18) 50%, transparent 80%)',
+          }}
+        />
+
+        {/* Vignette frame */}
+        <div className="absolute inset-0 bg-black/[0.04] pointer-events-none" />
       </div>
 
       {/* Outer Shell Wrapper: mimics the showcase matte canvas frame */}
