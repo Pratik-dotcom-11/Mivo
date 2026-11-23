@@ -36,37 +36,48 @@ export const LandingPage: React.FC<LandingPageProps> = ({
     <div className="min-h-screen relative overflow-hidden bg-[#FAF7F2] text-charcoal-900 font-sans selection:bg-terracotta-500 selection:text-white pb-16">
       {/* Animated Wavy Background — Dreamy Aurora Liquid Layer */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        {/* Base texture wallpaper — slightly zoomed so wave motion stays within frame */}
-        <img
-          src="/dreamy-glow-bg.jpg"
-          alt=""
-          className="absolute inset-0 w-[120%] h-[120%] -top-[10%] -left-[10%] object-cover object-center opacity-90 filter saturate-150 contrast-110 bg-image-wave"
-        />
+        {/* Oversized wrapper centred in the viewport — the animation target.
+            Being 150% wide/tall means even 25% translate still keeps the image fully on screen. */}
+        <div
+          className="absolute bg-image-wave"
+          style={{
+            width: '150%',
+            height: '150%',
+            top: '-25%',
+            left: '-25%',
+          }}
+        >
+          <img
+            src="/dreamy-glow-bg.jpg"
+            alt=""
+            className="w-full h-full object-cover object-center opacity-90 filter saturate-150 contrast-110"
+          />
+        </div>
 
         {/* Wave Orb 1 — Large warm terracotta blob drifting top-left */}
         <div
-          className="bg-wave-orb-1 absolute -top-32 -left-32 w-[55vw] h-[55vw] max-w-3xl max-h-3xl rounded-full pointer-events-none"
+          className="bg-wave-orb-1 absolute -top-32 -left-32 w-[65vw] h-[65vw] rounded-full pointer-events-none"
           style={{
             background: 'radial-gradient(circle at 40% 40%, rgba(206,108,83,0.45) 0%, rgba(180,70,40,0.25) 50%, transparent 75%)',
-            filter: 'blur(60px)',
+            filter: 'blur(70px)',
           }}
         />
 
         {/* Wave Orb 2 — Teal/mint blob drifting bottom-right */}
         <div
-          className="bg-wave-orb-2 absolute -bottom-24 -right-24 w-[50vw] h-[50vw] max-w-2xl max-h-2xl rounded-full pointer-events-none"
+          className="bg-wave-orb-2 absolute -bottom-24 -right-24 w-[60vw] h-[60vw] rounded-full pointer-events-none"
           style={{
             background: 'radial-gradient(circle at 60% 60%, rgba(20,184,166,0.35) 0%, rgba(13,148,136,0.18) 55%, transparent 80%)',
-            filter: 'blur(70px)',
+            filter: 'blur(80px)',
           }}
         />
 
         {/* Wave Orb 3 — Amber glow blooming from center-right */}
         <div
-          className="bg-wave-orb-3 absolute top-1/4 right-0 w-[40vw] h-[40vw] max-w-xl max-h-xl rounded-full pointer-events-none"
+          className="bg-wave-orb-3 absolute top-1/4 right-0 w-[50vw] h-[50vw] rounded-full pointer-events-none"
           style={{
             background: 'radial-gradient(circle at 50% 50%, rgba(249,115,22,0.30) 0%, rgba(234,88,12,0.12) 60%, transparent 85%)',
-            filter: 'blur(80px)',
+            filter: 'blur(90px)',
           }}
         />
 

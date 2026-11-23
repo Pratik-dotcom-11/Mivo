@@ -137,11 +137,11 @@
    ============================================================ */
 
 @keyframes waveShift1 {
-  0%   { transform: translate(0%, 0%) scale(1) rotate(0deg); }
-  25%  { transform: translate(8%, -6%) scale(1.07) rotate(8deg); }
-  50%  { transform: translate(-5%, 10%) scale(1.12) rotate(-6deg); }
-  75%  { transform: translate(-10%, -4%) scale(1.05) rotate(12deg); }
-  100% { transform: translate(0%, 0%) scale(1) rotate(0deg); }
+  0%   { transform: scale(1) rotate(0deg); }
+  25%  { transform: scale(1.06) rotate(2deg); }
+  50%  { transform: scale(1.10) rotate(-2deg); }
+  75%  { transform: scale(1.05) rotate(1.5deg); }
+  100% { transform: scale(1) rotate(0deg); }
 }
 
 @keyframes waveShift2 {
