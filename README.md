@@ -71,43 +71,52 @@ Great ideas strike at unexpected moments — during commutes, brainstorming sess
 
 ## 🏗️ System Architecture
 
+<p align="center">
+  <img src="public/system-architecture.svg" alt="Mivo System Architecture Diagram" width="100%" />
+</p>
+
+<details>
+<summary><b>📐 View Mermaid Diagram Specification</b></summary>
+
 ```mermaid
 flowchart TD
-    User["👤 User Browser (Desktop / Mobile)"]
+    User["User Browser (Desktop / Mobile)"]
     
     subgraph Frontend["Mivo Frontend (React + Vite + Tailwind)"]
         Landing["Landing Page (Hero & Showcase)"]
-        AuthView["Gmail & Email Sign-In Modal"]
+        AuthView["Auth & Session Modal"]
         NotesView["Notes Dashboard & Search"]
         Recorder["Voice Recorder Modal & Visualizer"]
     end
     
     subgraph SupabasePlatform["Supabase Cloud Platform"]
-        Auth["Supabase Auth (Gmail & Email Sessions)"]
-        Postgres[("PostgreSQL Database<br/>Table: public.voice_notes<br/>RLS: auth.uid = user_id")]
-        Storage[("Supabase Storage<br/>Bucket: voice-recordings<br/>Private / Signed URLs")]
-        EdgeFn["Edge Function: transcribe-audio<br/>(Deno Runtime)"]
+        Auth["Supabase Auth (Google OAuth & Email)"]
+        Postgres[("PostgreSQL Database (voice_notes + RLS)")]
+        Storage[("Supabase Storage (voice-recordings Bucket)")]
+        EdgeFn["Edge Function (transcribe-audio)"]
     end
     
     subgraph AIProvider["OpenAI Cloud API"]
-        Whisper["OpenAI Whisper API<br/>Model: whisper-1"]
+        Whisper["OpenAI Whisper API (whisper-1)"]
     end
 
-    User -->|Visits| Landing
-    User -->|Authenticates| AuthView
-    AuthView -->|Email Authentication| Auth
-    Auth -->|Returns Session JWT| Frontend
+    User -->|1. Visits & Interacts| Landing
+    User -->|2. Authenticates| AuthView
+    AuthView -->|Google OAuth Login| Auth
+    Auth -->|Returns Session JWT| AuthView
     
-    User -->|Records Voice Note| Recorder
-    Recorder -->|Uploads Raw Audio| Storage
-    Recorder -->|Invokes with Audio Path| EdgeFn
+    User -->|3. Records Voice Note| Recorder
+    Recorder -->|4. Uploads Raw Audio| Storage
+    Recorder -->|5. Invokes with Audio Path| EdgeFn
     EdgeFn -->|Validates JWT| Auth
-    EdgeFn -->|Reads Audio from Storage| Storage
-    EdgeFn -->|"Transcribes Audio via Server Secret"| Whisper
+    EdgeFn -->|Reads Audio from Bucket| Storage
+    EdgeFn -->|6. Transcribes Audio| Whisper
     Whisper -->|Returns Transcript| EdgeFn
-    EdgeFn -->|Saves Note & Returns Text| Postgres
-    NotesView -->|Queries / Filters / Edits| Postgres
+    EdgeFn -->|7. Saves Note & Text| Postgres
+    NotesView -->|8. Real-time Query & Search| Postgres
 ```
+
+</details>
 
 ---
 
