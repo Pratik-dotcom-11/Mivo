@@ -140,6 +140,7 @@ export const HeroShowcase: React.FC<HeroShowcaseProps> = ({
                 <img
                   src="/ai-robot-hero.jpg"
                   alt=""
+                  decoding="async"
                   className="w-full h-full object-cover object-center rounded-full [mask-image:radial-gradient(circle_at_center,black_45%,transparent_80%)] filter contrast-115 saturate-125"
                 />
                 {/* Subtle cybernetic pulse aura */}
@@ -255,6 +256,7 @@ export const HeroShowcase: React.FC<HeroShowcaseProps> = ({
                 <img
                   src="/ai-robot-hero.jpg"
                   alt="Mivo AI Voice Model"
+                  decoding="async"
                   className="w-full h-full object-cover rounded-3xl lg:rounded-full [mask-image:radial-gradient(ellipse_at_center,black_55%,transparent_90%)] opacity-95 drop-shadow-[0_20px_50px_rgba(0,0,0,0.7)] transition-all duration-700"
                 />
                 {/* Subtle cybernetic pulse aura */}
@@ -286,7 +288,7 @@ export const HeroShowcase: React.FC<HeroShowcaseProps> = ({
                 ].map((h, i) => (
                   <span
                     key={i}
-                    className={`w-[3px] rounded-full bg-gradient-to-t from-[#0D9488] to-[#2DD4BF] transition-all duration-150 ${isPlaying ? 'animate-equalizer' : ''}`}
+                    className={`w-[3px] rounded-full bg-gradient-to-t from-[#0D9488] to-[#2DD4BF] ${isPlaying ? 'animate-equalizer' : 'transition-all duration-150'}`}
                     style={{
                       height: `${isPlaying ? Math.max(20, (h * (i % 2 === 0 ? 1 : 0.75))) : h * 0.4}%`,
                       animationDelay: `${i * 65}ms`,

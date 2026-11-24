@@ -84,15 +84,16 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-[#FAF7F2] text-charcoal-900 flex flex-col font-sans selection:bg-terracotta-500 selection:text-white">
-      {/* Dreamy Floral Glow Ambient Background */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+      {/* Dreamy Floral Glow Ambient Background (GPU Optimized) */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" style={{ contain: 'strict' }}>
         <img
           src="/dreamy-glow-bg.jpg"
           alt=""
+          decoding="async"
           className="w-full h-full object-cover object-center opacity-85 filter saturate-120 contrast-105"
         />
-        {/* Soft frosted glass diffusion wash keeping the app minimal, clean, and legible */}
-        <div className="absolute inset-0 bg-white/20 backdrop-blur-[2px] pointer-events-none" />
+        {/* Soft frosted glass diffusion wash keeping the app minimal, clean, and legible without scroll-throttling backdrop blur */}
+        <div className="absolute inset-0 bg-[#FAF7F2]/60 pointer-events-none" />
       </div>
 
       <div className="relative z-10 flex flex-col min-h-screen">

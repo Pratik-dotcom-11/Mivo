@@ -117,7 +117,10 @@ export function useAudioRecorder() {
         analyserRef.current = analyser;
 
         const dataArray = new Uint8Array(analyser.frequencyBinCount);
-        const updateLevel = () => {
+        let lastLevel = -1;
+        let lastUpdateTime = 0;
+
+        const updateLevel = (timestamp: number) => {
           if (analyserRef.current) {
             analyserRef.current.getByteFrequencyData(dataArray);
             let sum = 0;
@@ -125,11 +128,18 @@ export function useAudioRecorder() {
               sum += dataArray[i];
             }
             const avg = sum / dataArray.length;
-            setAudioLevel(Math.min(100, Math.round((avg / 255) * 100)));
+            const newLevel = Math.min(100, Math.round((avg / 255) * 100));
+
+            // Throttle React state updates to ~50ms (20fps) to prevent layout thrashing & CPU heat
+            if (timestamp - lastUpdateTime >= 50 && (Math.abs(newLevel - lastLevel) >= 2 || (newLevel === 0 && lastLevel !== 0))) {
+              lastUpdateTime = timestamp;
+              lastLevel = newLevel;
+              setAudioLevel(newLevel);
+            }
             animFrameRef.current = requestAnimationFrame(updateLevel);
           }
         };
-        updateLevel();
+        animFrameRef.current = requestAnimationFrame(updateLevel);
       } catch (err) {
         console.warn('[Mivo] Web Audio Analyser setup failed, visualizer will use fallback:', err);
       }

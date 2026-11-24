@@ -61,7 +61,8 @@ export const AudioWaveform: React.FC<AudioWaveformProps> = ({
             disabled={!interactive}
             onClick={() => handleBarClick(index)}
             className={cn(
-              'w-[3px] rounded-full transition-all duration-75',
+              'w-[3px] rounded-full',
+              isRecording ? 'transition-[height] duration-75 ease-out' : 'transition-all duration-150',
               interactive && 'cursor-pointer hover:opacity-80 focus:outline-none',
               isRecording
                 ? 'bg-gradient-to-t from-red-500 to-mivoPink-500'

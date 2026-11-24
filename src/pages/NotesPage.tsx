@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useDeferredValue } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useNotes } from '@/hooks/useNotes';
 import { useAudioRecorder } from '@/hooks/useAudioRecorder';
@@ -97,6 +97,7 @@ export const NotesPage: React.FC<NotesPageProps> = ({ onNavigateToLanding }) => 
   const [activeCategory, setActiveCategory] = useState<VoiceNoteCategory | null>(null);
   const [favoriteOnly, setFavoriteOnly] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const deferredSearchQuery = useDeferredValue(searchQuery);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [isStudioModalOpen, setIsStudioModalOpen] = useState(false);
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
@@ -143,7 +144,7 @@ export const NotesPage: React.FC<NotesPageProps> = ({ onNavigateToLanding }) => 
     return { total, ideas, business, todo };
   }, [allNotes]);
 
-  // Section 4 & 5: Filtered notes based on activeCategory and searchQuery
+  // Section 4 & 5: Filtered notes based on activeCategory and searchQuery (deferred for zero typing lag)
   const filteredNotes = useMemo(() => {
     return allNotes.filter((note) => {
       if (activeCategory && note.category !== activeCategory) {
@@ -152,8 +153,8 @@ export const NotesPage: React.FC<NotesPageProps> = ({ onNavigateToLanding }) => 
       if (favoriteOnly && !note.is_favorite) {
         return false;
       }
-      if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase();
+      if (deferredSearchQuery.trim()) {
+        const q = deferredSearchQuery.toLowerCase();
         const matchesTitle = note.title.toLowerCase().includes(q);
         const matchesTranscript = note.transcription?.toLowerCase().includes(q);
         const matchesSummary = note.summary?.toLowerCase().includes(q);
@@ -163,7 +164,7 @@ export const NotesPage: React.FC<NotesPageProps> = ({ onNavigateToLanding }) => 
       }
       return true;
     });
-  }, [allNotes, activeCategory, favoriteOnly, searchQuery]);
+  }, [allNotes, activeCategory, favoriteOnly, deferredSearchQuery]);
 
   const favoritesCount = useMemo(() => allNotes.filter((n) => n.is_favorite).length, [allNotes]);
 

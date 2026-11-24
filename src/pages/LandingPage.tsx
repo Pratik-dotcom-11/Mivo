@@ -34,8 +34,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-[#FAF7F2] text-charcoal-900 font-sans selection:bg-terracotta-500 selection:text-white pb-16">
-      {/* Animated Wavy Background — Dreamy Aurora Liquid Layer */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+      {/* Animated Wavy Background — Dreamy Aurora Liquid Layer (GPU Optimized) */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" style={{ contain: 'strict' }}>
         {/* Oversized wrapper centred in the viewport — the animation target.
             Being 150% wide/tall means even 25% translate still keeps the image fully on screen. */}
         <div
@@ -45,11 +45,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             height: '150%',
             top: '-25%',
             left: '-25%',
+            willChange: 'transform',
           }}
         >
           <img
             src="/dreamy-glow-bg.jpg"
             alt=""
+            decoding="async"
             className="w-full h-full object-cover object-center opacity-90 filter saturate-150 contrast-110"
           />
         </div>
@@ -59,7 +61,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           className="bg-wave-orb-1 absolute -top-32 -left-32 w-[65vw] h-[65vw] rounded-full pointer-events-none"
           style={{
             background: 'radial-gradient(circle at 40% 40%, rgba(206,108,83,0.45) 0%, rgba(180,70,40,0.25) 50%, transparent 75%)',
-            filter: 'blur(70px)',
+            filter: 'blur(36px)',
+            willChange: 'transform, opacity',
           }}
         />
 
@@ -68,7 +71,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           className="bg-wave-orb-2 absolute -bottom-24 -right-24 w-[60vw] h-[60vw] rounded-full pointer-events-none"
           style={{
             background: 'radial-gradient(circle at 60% 60%, rgba(20,184,166,0.35) 0%, rgba(13,148,136,0.18) 55%, transparent 80%)',
-            filter: 'blur(80px)',
+            filter: 'blur(40px)',
+            willChange: 'transform, opacity',
           }}
         />
 
@@ -77,7 +81,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           className="bg-wave-orb-3 absolute top-1/4 right-0 w-[50vw] h-[50vw] rounded-full pointer-events-none"
           style={{
             background: 'radial-gradient(circle at 50% 50%, rgba(249,115,22,0.30) 0%, rgba(234,88,12,0.12) 60%, transparent 85%)',
-            filter: 'blur(90px)',
+            filter: 'blur(44px)',
+            willChange: 'transform, opacity',
           }}
         />
 
@@ -86,6 +91,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           className="bg-shimmer-wave absolute inset-0 w-full h-full pointer-events-none"
           style={{
             background: 'linear-gradient(105deg, transparent 20%, rgba(255,255,255,0.18) 50%, transparent 80%)',
+            willChange: 'transform, opacity',
           }}
         />
 

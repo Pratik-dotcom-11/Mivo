@@ -50,7 +50,7 @@
   background: linear-gradient(135deg, #380F06 0%, #6E2614 45%, #18181C 100%) !important;
 }
 
-/* Rich interactive landing page animations */
+/* Rich interactive landing page animations - Hardware accelerated (GPU composited) */
 @keyframes spinSlow {
   from {
     transform: rotate(0deg);
@@ -62,100 +62,118 @@
 
 @keyframes bounceSubtle {
   0%, 100% {
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
   }
   50% {
-    transform: translateY(-5px);
+    transform: translate3d(0, -5px, 0);
   }
 }
 
 @keyframes floatGentle {
   0%, 100% {
-    transform: translateY(0px);
+    transform: translate3d(0, 0px, 0);
   }
   50% {
-    transform: translateY(-8px);
+    transform: translate3d(0, -8px, 0);
   }
 }
 
 @keyframes floatReverse {
   0%, 100% {
-    transform: translateY(0px);
+    transform: translate3d(0, 0px, 0);
   }
   50% {
-    transform: translateY(8px);
+    transform: translate3d(0, 8px, 0);
   }
 }
 
 @keyframes equalizerLive {
   0%, 100% {
-    transform: scaleY(0.25);
+    transform: scale3d(1, 0.25, 1);
   }
   50% {
-    transform: scaleY(1);
+    transform: scale3d(1, 1, 1);
   }
 }
 
 @keyframes pulseGlowSoft {
   0%, 100% {
-    transform: scale(1);
+    transform: scale3d(1, 1, 1);
     opacity: 0.6;
   }
   50% {
-    transform: scale(1.08);
+    transform: scale3d(1.08, 1.08, 1);
     opacity: 0.9;
   }
 }
 
 .animate-spin-slow {
   animation: spinSlow 60s linear infinite;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .animate-bounce-subtle {
   animation: bounceSubtle 3s ease-in-out infinite;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .animate-float-gentle {
   animation: floatGentle 5s ease-in-out infinite;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .animate-float-reverse {
   animation: floatReverse 6s ease-in-out infinite;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .animate-equalizer {
   transform-origin: bottom;
   animation: equalizerLive 1.1s ease-in-out infinite;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .animate-pulse-glow-soft {
   animation: pulseGlowSoft 4s ease-in-out infinite;
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 /* ============================================================
-   ANIMATED WAVY BACKGROUND — Aurora / Liquid Wave Layer
+   ANIMATED WAVY BACKGROUND — Aurora / Liquid Wave Layer (GPU Composited)
    ============================================================ */
 
 @keyframes waveShift1 {
-  0%   { transform: scale(1) rotate(0deg); }
-  25%  { transform: scale(1.06) rotate(2deg); }
-  50%  { transform: scale(1.10) rotate(-2deg); }
-  75%  { transform: scale(1.05) rotate(1.5deg); }
-  100% { transform: scale(1) rotate(0deg); }
+  0%   { transform: translate3d(0, 0, 0) scale3d(1, 1, 1) rotate(0deg); }
+  25%  { transform: translate3d(0.5%, -0.5%, 0) scale3d(1.04, 1.04, 1) rotate(1deg); }
+  50%  { transform: translate3d(-0.5%, 0.5%, 0) scale3d(1.06, 1.06, 1) rotate(-1deg); }
+  75%  { transform: translate3d(0.5%, 0.5%, 0) scale3d(1.03, 1.03, 1) rotate(0.5deg); }
+  100% { transform: translate3d(0, 0, 0) scale3d(1, 1, 1) rotate(0deg); }
 }
 
 @keyframes waveShift2 {
-  0%   { transform: translate(0%, 0%) scale(1.1) rotate(0deg); }
-  33%  { transform: translate(-10%, 8%) scale(1.0) rotate(-10deg); }
-  66%  { transform: translate(12%, -5%) scale(1.15) rotate(6deg); }
-  100% { transform: translate(0%, 0%) scale(1.1) rotate(0deg); }
+  0%   { transform: translate3d(0%, 0%, 0) scale3d(1.05, 1.05, 1) rotate(0deg); }
+  33%  { transform: translate3d(-5%, 4%, 0) scale3d(1.0, 1.0, 1) rotate(-5deg); }
+  66%  { transform: translate3d(6%, -3%, 0) scale3d(1.08, 1.08, 1) rotate(3deg); }
+  100% { transform: translate3d(0%, 0%, 0) scale3d(1.05, 1.05, 1) rotate(0deg); }
 }
 
 @keyframes waveShift3 {
-  0%   { transform: translate(0%, 0%) scale(1.05); }
-  40%  { transform: translate(6%, 12%) scale(0.95); }
-  70%  { transform: translate(-8%, -8%) scale(1.1); }
-  100% { transform: translate(0%, 0%) scale(1.05); }
+  0%   { transform: translate3d(0%, 0%, 0) scale3d(1.03, 1.03, 1); }
+  40%  { transform: translate3d(3%, 6%, 0) scale3d(0.97, 0.97, 1); }
+  70%  { transform: translate3d(-4%, -4%, 0) scale3d(1.05, 1.05, 1); }
+  100% { transform: translate3d(0%, 0%, 0) scale3d(1.03, 1.03, 1); }
 }
 
 @keyframes backgroundPan {
@@ -165,106 +183,139 @@
 }
 
 @keyframes glowOrb1 {
-  0%, 100% { transform: translateX(0) translateY(0) scale(1);    opacity: 0.55; }
-  25%       { transform: translateX(12%) translateY(-8%) scale(1.15); opacity: 0.70; }
-  50%       { transform: translateX(-8%) translateY(14%) scale(0.90); opacity: 0.45; }
-  75%       { transform: translateX(-14%) translateY(-4%) scale(1.10); opacity: 0.65; }
+  0%, 100% { transform: translate3d(0, 0, 0) scale3d(1, 1, 1);       opacity: 0.55; }
+  25%       { transform: translate3d(8%, -5%, 0) scale3d(1.1, 1.1, 1); opacity: 0.70; }
+  50%       { transform: translate3d(-5%, 8%, 0) scale3d(0.95, 0.95, 1); opacity: 0.45; }
+  75%       { transform: translate3d(-8%, -3%, 0) scale3d(1.05, 1.05, 1); opacity: 0.65; }
 }
 
 @keyframes glowOrb2 {
-  0%, 100% { transform: translateX(0) translateY(0) scale(1.1);  opacity: 0.50; }
-  33%       { transform: translateX(-10%) translateY(10%) scale(0.90); opacity: 0.65; }
-  66%       { transform: translateX(14%) translateY(-6%) scale(1.20); opacity: 0.40; }
+  0%, 100% { transform: translate3d(0, 0, 0) scale3d(1.05, 1.05, 1); opacity: 0.50; }
+  33%       { transform: translate3d(-6%, 6%, 0) scale3d(0.95, 0.95, 1); opacity: 0.65; }
+  66%       { transform: translate3d(8%, -4%, 0) scale3d(1.12, 1.12, 1); opacity: 0.40; }
 }
 
 @keyframes glowOrb3 {
-  0%, 100% { transform: translateX(0) translateY(0) scale(1);    opacity: 0.40; }
-  50%       { transform: translateX(8%) translateY(-12%) scale(1.18); opacity: 0.60; }
+  0%, 100% { transform: translate3d(0, 0, 0) scale3d(1, 1, 1);       opacity: 0.40; }
+  50%       { transform: translate3d(5%, -7%, 0) scale3d(1.1, 1.1, 1); opacity: 0.60; }
 }
 
 @keyframes shimmerWave {
-  0%   { opacity: 0.0; transform: translateX(-100%) skewX(-8deg); }
+  0%   { opacity: 0.0; transform: translate3d(-100%, 0, 0) skewX(-8deg); }
   50%  { opacity: 0.12; }
-  100% { opacity: 0.0; transform: translateX(200%) skewX(-8deg); }
+  100% { opacity: 0.0; transform: translate3d(200%, 0, 0) skewX(-8deg); }
 }
 
-/* Utility classes used in LandingPage.tsx */
+/* Utility classes used in LandingPage.tsx - Hardware accelerated */
 .bg-wave-orb-1 {
   animation: glowOrb1 18s ease-in-out infinite;
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 .bg-wave-orb-2 {
   animation: glowOrb2 22s ease-in-out infinite 3s;
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 .bg-wave-orb-3 {
   animation: glowOrb3 26s ease-in-out infinite 6s;
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 .bg-shimmer-wave {
   animation: shimmerWave 8s ease-in-out infinite 2s;
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 .bg-image-wave {
   animation: waveShift1 20s ease-in-out infinite;
   transform-origin: center center;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 /* ============================================================
-   CINEMATIC AI ORB ANIMATIONS — VoiceRecorderModal
+   CINEMATIC AI ORB ANIMATIONS — VoiceRecorderModal (GPU Composited)
    ============================================================ */
 
 @keyframes orbFloat {
-  0%, 100% { transform: translateY(0px) scale(1); }
-  33%       { transform: translateY(-6px) scale(1.02); }
-  66%       { transform: translateY(4px) scale(0.99); }
+  0%, 100% { transform: translate3d(0, 0px, 0) scale3d(1, 1, 1); }
+  33%       { transform: translate3d(0, -6px, 0) scale3d(1.02, 1.02, 1); }
+  66%       { transform: translate3d(0, 4px, 0) scale3d(0.99, 0.99, 1); }
 }
 
 @keyframes orbFloatDelay {
-  0%, 100% { transform: translateY(0px) scale(1); }
-  40%       { transform: translateY(8px) scale(1.03); }
-  70%       { transform: translateY(-5px) scale(0.98); }
+  0%, 100% { transform: translate3d(0, 0px, 0) scale3d(1, 1, 1); }
+  40%       { transform: translate3d(0, 8px, 0) scale3d(1.03, 1.03, 1); }
+  70%       { transform: translate3d(0, -5px, 0) scale3d(0.98, 0.98, 1); }
 }
 
 @keyframes orbPulse {
-  0%, 100% { transform: scale(1);    opacity: 0.5; }
-  50%       { transform: scale(1.18); opacity: 0.85; }
+  0%, 100% { transform: scale3d(1, 1, 1);       opacity: 0.5; }
+  50%       { transform: scale3d(1.15, 1.15, 1); opacity: 0.85; }
 }
 
 @keyframes sonarRing1 {
-  0%   { transform: scale(0.6); opacity: 0.6; }
-  70%  { transform: scale(1);   opacity: 0.0; }
-  100% { transform: scale(1);   opacity: 0.0; }
+  0%   { transform: scale3d(0.6, 0.6, 1); opacity: 0.6; }
+  70%  { transform: scale3d(1, 1, 1);     opacity: 0.0; }
+  100% { transform: scale3d(1, 1, 1);     opacity: 0.0; }
 }
 
 @keyframes sonarRing2 {
-  0%   { transform: scale(0.5); opacity: 0.4; }
-  70%  { transform: scale(1);   opacity: 0.0; }
-  100% { transform: scale(1);   opacity: 0.0; }
+  0%   { transform: scale3d(0.5, 0.5, 1); opacity: 0.4; }
+  70%  { transform: scale3d(1, 1, 1);     opacity: 0.0; }
+  100% { transform: scale3d(1, 1, 1);     opacity: 0.0; }
 }
 
 @keyframes sonarRing3 {
-  0%   { transform: scale(0.4); opacity: 0.5; }
-  70%  { transform: scale(1);   opacity: 0.0; }
-  100% { transform: scale(1);   opacity: 0.0; }
+  0%   { transform: scale3d(0.4, 0.4, 1); opacity: 0.5; }
+  70%  { transform: scale3d(1, 1, 1);     opacity: 0.0; }
+  100% { transform: scale3d(1, 1, 1);     opacity: 0.0; }
 }
 
 .animate-orb-float {
   animation: orbFloat 5s ease-in-out infinite;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .animate-orb-float-delay {
   animation: orbFloatDelay 7s ease-in-out infinite 1.5s;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .animate-orb-pulse {
   animation: orbPulse 3s ease-in-out infinite;
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .animate-sonar-ring-1 {
   animation: sonarRing1 2.4s ease-out infinite;
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .animate-sonar-ring-2 {
   animation: sonarRing2 2.4s ease-out infinite 0.8s;
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .animate-sonar-ring-3 {
   animation: sonarRing3 2.4s ease-out infinite 1.6s;
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
