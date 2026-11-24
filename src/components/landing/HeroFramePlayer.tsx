@@ -8,16 +8,13 @@ const SOURCE_WIDTH = 1920;
 
 export interface HeroFramePlayerProps {
   className?: string;
-  isCinematicMode?: boolean;
 }
 
 export const HeroFramePlayer: React.FC<HeroFramePlayerProps> = ({
   className = '',
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [isPlaying, setIsPlaying] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [loadedCount, setLoadedCount] = useState(0);
 
   // Cached frame images
   const imagesRef = useRef<(HTMLImageElement | null)[]>(new Array(TOTAL_FRAMES).fill(null));
@@ -115,10 +112,6 @@ export const HeroFramePlayer: React.FC<HeroFramePlayerProps> = ({
 
   // Animation loop
   useEffect(() => {
-    isPlayingRef.current = isPlaying;
-  }, [isPlaying]);
-
-  useEffect(() => {
     const loop = (timestamp: number) => {
       animFrameIdRef.current = requestAnimationFrame(loop);
 
@@ -163,7 +156,6 @@ export const HeroFramePlayer: React.FC<HeroFramePlayerProps> = ({
       if (isCancelled) return;
       imagesRef.current[0] = firstImg;
       setIsLoaded(true);
-      setLoadedCount(1);
       updateCanvasDimensions();
       renderFrame(0);
 
@@ -184,7 +176,6 @@ export const HeroFramePlayer: React.FC<HeroFramePlayerProps> = ({
           img.onload = () => {
             if (!isCancelled) {
               imagesRef.current[idx] = img;
-              setLoadedCount((prev) => prev + 1);
             }
             resolve();
           };
@@ -246,28 +237,6 @@ export const HeroFramePlayer: React.FC<HeroFramePlayerProps> = ({
           <div className="w-8 h-8 rounded-full border-2 border-white/20 border-t-glowOrange-500 animate-spin" />
         </div>
       )}
-
-      {/* Interactive Play/Pause & Live Frame Badge Pill */}
-      <div className="absolute bottom-3 right-3 z-30 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/15 text-[10px] font-mono text-white/80 shadow-soft-sm select-none">
-        <button
-          type="button"
-          onClick={() => setIsPlaying((p) => !p)}
-          className="hover:text-glowOrange-400 transition-colors flex items-center gap-1 cursor-pointer"
-          title={isPlaying ? 'Pause hero animation' : 'Play hero animation'}
-        >
-          <span
-            className={`w-1.5 h-1.5 rounded-full ${
-              isPlaying ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'
-            }`}
-          />
-          <span>{isPlaying ? 'LIVE ANIMATION' : 'PAUSED'}</span>
-        </button>
-        {loadedCount < TOTAL_FRAMES && (
-          <span className="text-white/40 text-[9px] border-l border-white/15 pl-1.5">
-            {Math.round((loadedCount / TOTAL_FRAMES) * 100)}%
-          </span>
-        )}
-      </div>
     </div>
   );
 };
