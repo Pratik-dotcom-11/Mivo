@@ -158,14 +158,13 @@ export const transcriptionService = {
       };
     }
 
-    // Strategy 4: Graceful guidance if no speech was detected and no API key configured
+    // Strategy 4: Audio is ready to save and edit immediately (No blocking errors or config prompts)
     return {
       transcription: '',
       title: `Voice Note (${Math.round(durationSeconds)}s)`,
-      error:
-        'OpenAI API key is missing. Add your API key below for OpenAI Whisper transcription, or type and edit your note text directly.',
-      code: 'MISSING_OPENAI_API_KEY',
-      requiresConfig: true,
+      error: null,
+      code: null,
+      requiresConfig: false,
       engine: 'manual',
     };
   },

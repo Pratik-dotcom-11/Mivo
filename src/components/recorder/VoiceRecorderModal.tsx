@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, Button, AudioWaveform, AudioPlayer, Badge, Spinner } from '@/components/common';
 import { formatDuration } from '@/utils/formatters';
-import {
-  transcriptionService,
-  getStoredOpenAIApiKey,
-  setStoredOpenAIApiKey,
-} from '@/services/transcriptionService';
+import { transcriptionService } from '@/services/transcriptionService';
 import {
   Mic,
   Square,
@@ -16,7 +12,6 @@ import {
   RotateCcw,
   AlertTriangle,
   FileText,
-  Key,
 } from 'lucide-react';
 import type { Category, AudioRecordResult, VoiceNoteCategory } from '@/types';
 
@@ -68,45 +63,28 @@ export const VoiceRecorderModal: React.FC<VoiceRecorderModalProps> = ({
   const [noteTitle, setNoteTitle] = useState('');
   const [noteText, setNoteText] = useState('');
   const [isTranscribing, setIsTranscribing] = useState(false);
-  const [transcriptionError, setTranscriptionError] = useState<string | null>(null);
   const [transcriptionEngine, setTranscriptionEngine] = useState<'whisper' | 'browser' | 'manual' | null>(null);
-  const [apiKeyInput, setApiKeyInput] = useState(() => getStoredOpenAIApiKey());
-  const [showKeyConfig, setShowKeyConfig] = useState(false);
-  const [keySavedSuccess, setKeySavedSuccess] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
   // Trigger speech-to-text with multi-engine fallback
   const processTranscription = async (blob: Blob, durationSeconds: number, liveTranscript?: string) => {
     setIsTranscribing(true);
-    setTranscriptionError(null);
 
     const res = await transcriptionService.transcribeAudio(blob, durationSeconds, liveTranscript);
     setIsTranscribing(false);
 
-    if (res.transcription) {
-      setNoteText(res.transcription);
+    if (res.transcription && res.transcription.trim()) {
+      setNoteText(res.transcription.trim());
       setNoteTitle(res.title || `Voice Note (${formatDuration(durationSeconds)})`);
       setTranscriptionEngine(res.engine || 'whisper');
-      setTranscriptionError(null);
-    } else if (res.error) {
-      setTranscriptionError(res.error);
-      setNoteTitle(`Voice Note (${formatDuration(durationSeconds)})`);
+    } else {
+      setNoteTitle(res.title || `Voice Note (${formatDuration(durationSeconds)})`);
       setTranscriptionEngine(res.engine || 'manual');
-    }
-  };
-
-  const handleSaveApiKey = async () => {
-    setStoredOpenAIApiKey(apiKeyInput);
-    setKeySavedSuccess(true);
-    setTimeout(() => setKeySavedSuccess(false), 3000);
-    if (recordedAudio) {
-      await processTranscription(recordedAudio.blob, recordedAudio.durationSeconds);
     }
   };
 
   const handleStart = async () => {
     setRecordedAudio(null);
-    setTranscriptionError(null);
     setTranscriptionEngine(null);
     setNoteText('');
     setNoteTitle('');
@@ -124,7 +102,6 @@ export const VoiceRecorderModal: React.FC<VoiceRecorderModalProps> = ({
   const handleCancel = () => {
     cancelRecording();
     setRecordedAudio(null);
-    setTranscriptionError(null);
     setNoteText('');
     setNoteTitle('');
     onClose();
@@ -133,7 +110,6 @@ export const VoiceRecorderModal: React.FC<VoiceRecorderModalProps> = ({
   const handleRecordAgain = async () => {
     cancelRecording();
     setRecordedAudio(null);
-    setTranscriptionError(null);
     setNoteText('');
     setNoteTitle('');
     await startRecording();
@@ -435,77 +411,15 @@ export const VoiceRecorderModal: React.FC<VoiceRecorderModalProps> = ({
               </div>
             )}
 
-            {/* Transcription Status / Success / Configuration Banner */}
-            {transcriptionEngine && !isTranscribing && !transcriptionError && (
-              <div className="p-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/40 text-xs text-emerald-900 dark:text-emerald-200 flex items-center justify-between gap-2.5">
-                <div className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
-                  <span className="font-semibold text-[11px]">
-                    {transcriptionEngine === 'whisper'
-                      ? 'Transcribed accurately with OpenAI Whisper AI'
-                      : 'Transcribed in real time with voice recognition engine'}
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setShowKeyConfig((prev) => !prev)}
-                  className="text-[10px] text-emerald-700 dark:text-emerald-300 hover:underline flex items-center gap-1 font-semibold cursor-pointer"
-                >
-                  <Key className="w-3 h-3" />
-                  {showKeyConfig ? 'Hide API Key' : 'API Key Settings'}
-                </button>
-              </div>
-            )}
-
-            {/* OpenAI API Key Configuration or Fallback Banner */}
-            {((transcriptionError && !isTranscribing) || showKeyConfig) && (
-              <div className="p-3.5 rounded-2xl bg-warm-100/80 dark:bg-dark-card border border-amber-200/80 dark:border-amber-800/40 text-xs text-charcoal-900 dark:text-charcoal-100 space-y-3">
-                <div className="flex items-start justify-between gap-2.5">
-                  <div className="flex items-start gap-2">
-                    <Key className="w-4 h-4 text-glowOrange-600 dark:text-glowOrange-400 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-bold text-xs">OpenAI Whisper API Key Configuration</p>
-                      <p className="text-[11px] text-charcoal-600 dark:text-charcoal-300 leading-relaxed pt-0.5">
-                        Add an OpenAI API Key below to enable cloud Whisper speech-to-text. Keys are stored safely in your browser.
-                      </p>
-                    </div>
-                  </div>
-                  {showKeyConfig && !transcriptionError && (
-                    <button
-                      type="button"
-                      onClick={() => setShowKeyConfig(false)}
-                      className="text-charcoal-400 hover:text-charcoal-700 text-xs font-bold cursor-pointer"
-                    >
-                      ✕
-                    </button>
-                  )}
-                </div>
-
-                <div className="flex flex-col sm:flex-row items-center gap-2 pt-1">
-                  <input
-                    type="password"
-                    value={apiKeyInput}
-                    onChange={(e) => setApiKeyInput(e.target.value)}
-                    placeholder="sk-proj-... or your OpenAI API key"
-                    className="w-full flex-1 rounded-xl border border-charcoal-300 dark:border-dark-border bg-white dark:bg-dark-surface px-3 py-1.5 text-xs text-charcoal-900 dark:text-white placeholder-charcoal-400 focus:outline-none focus:ring-2 focus:ring-glowOrange-500/30 font-mono"
-                  />
-                  <div className="flex items-center gap-2 w-full sm:w-auto">
-                    <button
-                      type="button"
-                      onClick={handleSaveApiKey}
-                      disabled={isTranscribing}
-                      className="w-full sm:w-auto px-4 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-glowOrange-500 to-glowOrange-600 hover:from-glowOrange-600 hover:to-glowOrange-700 text-white shadow-soft-sm active:scale-95 transition-all cursor-pointer whitespace-nowrap"
-                    >
-                      {keySavedSuccess ? '✓ Saved!' : 'Save & Transcribe'}
-                    </button>
-                  </div>
-                </div>
-
-                {keySavedSuccess && (
-                  <p className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
-                    <Check className="w-3 h-3" /> Key saved successfully! Audio is now ready for Whisper transcription.
-                  </p>
-                )}
+            {/* Transcription Status / Success Banner */}
+            {transcriptionEngine && !isTranscribing && noteText.trim() && (
+              <div className="p-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/40 text-xs text-emerald-900 dark:text-emerald-200 flex items-center gap-2">
+                <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+                <span className="font-semibold text-[11px]">
+                  {transcriptionEngine === 'whisper'
+                    ? 'Transcribed accurately with OpenAI Whisper AI'
+                    : 'Transcribed in real time with voice recognition engine'}
+                </span>
               </div>
             )}
 

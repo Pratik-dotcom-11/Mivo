@@ -59,47 +59,35 @@ serve(async (req) => {
     // 2. Check OpenAI API Key in Supabase Secrets or client-supplied payload
     const openaiApiKey = (Deno.env.get('OPENAI_API_KEY') || payload.clientApiKey || '').trim();
     if (!openaiApiKey) {
-      // If client provided a browser-captured transcript, use it as graceful fallback
-      if (payload.clientTranscript && payload.clientTranscript.trim()) {
-        const transcription = payload.clientTranscript.trim();
-        const words = transcription.split(/\s+/).slice(0, 6).join(' ');
-        const derivedTitle = words.length < transcription.length ? `${words}...` : words;
+      // Graceful handling when OpenAI key is not yet set: return success with client transcript or empty note
+      const transcription = (payload.clientTranscript || '').trim();
+      const words = transcription ? transcription.split(/\s+/).slice(0, 6).join(' ') : '';
+      const derivedTitle = words
+        ? words.length < transcription.length
+          ? `${words}...`
+          : words
+        : `Voice Note (${Math.round(payload.durationSeconds || 0)}s)`;
 
-        if (payload.noteId) {
-          await userClient
-            .from('voice_notes')
-            .update({
-              title: derivedTitle,
-              transcription,
-              updated_at: new Date().toISOString(),
-            })
-            .eq('id', payload.noteId)
-            .eq('user_id', user.id);
-        }
-
-        return new Response(
-          JSON.stringify({
-            success: true,
-            transcription,
+      if (payload.noteId) {
+        await userClient
+          .from('voice_notes')
+          .update({
             title: derivedTitle,
-            source: 'browser_speech',
-          }),
-          {
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          }
-        );
+            transcription,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', payload.noteId)
+          .eq('user_id', user.id);
       }
 
       return new Response(
         JSON.stringify({
-          success: false,
-          error:
-            'OpenAI API key is missing. Please configure OPENAI_API_KEY in your Supabase project secrets or enter your API key in the app.',
-          code: 'MISSING_OPENAI_API_KEY',
-          requiresConfig: true,
+          success: true,
+          transcription,
+          title: derivedTitle,
+          source: transcription ? 'browser_speech' : 'audio_ready',
         }),
         {
-          status: 400,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         }
       );

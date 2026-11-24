@@ -17,6 +17,7 @@ export function useAudioRecorder() {
   const streamRef = useRef<MediaStream | null>(null);
   const speechRecognitionRef = useRef<any>(null);
   const speechTranscriptRef = useRef<string>('');
+  const isRecordingRef = useRef<boolean>(false);
 
   const cleanupAudioAnalyser = useCallback(() => {
     if (animFrameRef.current) {
@@ -88,6 +89,7 @@ export function useAudioRecorder() {
     }
 
     try {
+      isRecordingRef.current = true;
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: true,
@@ -174,31 +176,56 @@ export function useAudioRecorder() {
           (window as any).webkitSpeechRecognition;
 
         if (SpeechRecognition) {
-          try {
-            const recognition = new SpeechRecognition();
-            recognition.continuous = true;
-            recognition.interimResults = true;
-            recognition.lang = navigator.language || 'en-US';
+          let accumulatedFinal = '';
+          const setupRecognition = () => {
+            if (!isRecordingRef.current) return;
+            try {
+              const recognition = new SpeechRecognition();
+              recognition.continuous = true;
+              recognition.interimResults = true;
+              recognition.lang = navigator.language || 'en-US';
 
-            recognition.onresult = (event: any) => {
-              let fullTranscript = '';
-              for (let i = 0; i < event.results.length; i++) {
-                fullTranscript += event.results[i][0].transcript;
-              }
-              if (fullTranscript.trim()) {
-                speechTranscriptRef.current = fullTranscript.trim();
-              }
-            };
+              recognition.onresult = (event: any) => {
+                let interim = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                  const part = event.results[i][0].transcript;
+                  if (event.results[i].isFinal) {
+                    accumulatedFinal += ' ' + part;
+                  } else {
+                    interim += part;
+                  }
+                }
+                const fullText = (accumulatedFinal + ' ' + interim).trim();
+                if (fullText) {
+                  speechTranscriptRef.current = fullText;
+                }
+              };
 
-            recognition.onerror = (e: any) => {
-              console.warn('[Mivo] Web Speech recognition notice:', e?.error);
-            };
+              recognition.onerror = (e: any) => {
+                if (e?.error !== 'no-speech' && e?.error !== 'aborted') {
+                  console.warn('[Mivo] Web Speech recognition notice:', e?.error);
+                }
+              };
 
-            recognition.start();
-            speechRecognitionRef.current = recognition;
-          } catch (err) {
-            console.warn('[Mivo] Speech recognition start notice:', err);
-          }
+              recognition.onend = () => {
+                // If recording is still active (e.g. mobile pause or silence timeout), restart
+                if (isRecordingRef.current) {
+                  try {
+                    recognition.start();
+                  } catch {
+                    // Ignore restart collision
+                  }
+                }
+              };
+
+              recognition.start();
+              speechRecognitionRef.current = recognition;
+            } catch (err) {
+              console.warn('[Mivo] Speech recognition start notice:', err);
+            }
+          };
+
+          setupRecognition();
         }
       }
 
@@ -277,6 +304,7 @@ export function useAudioRecorder() {
    */
   const stopRecording = useCallback((): Promise<AudioRecordResult | null> => {
     return new Promise((resolve) => {
+      isRecordingRef.current = false;
       clearTimer();
       cleanupAudioAnalyser();
       stopSpeechRecognition();
@@ -322,6 +350,7 @@ export function useAudioRecorder() {
    * Cancel and discard recording
    */
   const cancelRecording = useCallback(() => {
+    isRecordingRef.current = false;
     clearTimer();
     cleanupAudioAnalyser();
     stopMediaStream();
