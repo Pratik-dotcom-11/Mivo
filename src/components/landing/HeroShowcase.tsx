@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Logo } from '@/components/common/Logo';
+import { HeroFramePlayer } from './HeroFramePlayer';
 import {
   Play,
   Pause,
@@ -10,6 +11,7 @@ import {
   Mic,
   ArrowRight,
   Sparkles,
+  Film,
 } from 'lucide-react';
 
 export interface HeroShowcaseProps {
@@ -28,6 +30,7 @@ export const HeroShowcase: React.FC<HeroShowcaseProps> = ({
   onGoToApp,
 }) => {
   const [isPlaying, setIsPlaying] = useState(true);
+  const [isCinematicMode, setIsCinematicMode] = useState(false);
 
   return (
     <div
@@ -37,19 +40,31 @@ export const HeroShowcase: React.FC<HeroShowcaseProps> = ({
           'linear-gradient(135deg, #380F06 0%, #5C1D0F 28%, #852F1A 60%, #9E3C22 75%, #0D2624 100%)',
       }}
     >
-      {/* Dynamic atmospheric radial glows */}
-      <div className="absolute -top-32 -left-32 w-96 h-96 bg-[#CE6C53]/35 rounded-full blur-[100px] pointer-events-none animate-pulse-glow-soft" />
-      <div className="absolute top-1/4 left-1/3 w-[36rem] h-[36rem] bg-[#F97316]/20 rounded-full blur-[120px] pointer-events-none animate-pulse-glow-soft" style={{ animationDelay: '2s' }} />
-      <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-[#14B8A6]/25 rounded-full blur-[100px] pointer-events-none animate-pulse-glow-soft" style={{ animationDelay: '1s' }} />
-
-      {/* Decorative concentric orbital rings (exact reference image background geometry) */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20 animate-spin-slow">
-        <div className="w-[32rem] h-[32rem] rounded-full border border-white/40" />
-        <div className="absolute w-[44rem] h-[44rem] rounded-full border border-white/30" />
-        <div className="absolute w-[56rem] h-[56rem] rounded-full border border-white/20" />
+      {/* Full-Motion 235-Frame Animation Canvas Player */}
+      <div className="absolute inset-0 z-0 pointer-events-auto">
+        <HeroFramePlayer isCinematicMode={isCinematicMode} />
       </div>
 
-      <div className="relative z-10 p-6 sm:p-10 lg:p-12 flex flex-col justify-between min-h-[640px] lg:min-h-[700px]">
+      {/* Atmospheric left-side contrast scrim so text and buttons remain 100% sharp and readable */}
+      <div
+        className={`absolute inset-0 z-[1] pointer-events-none transition-opacity duration-500 ${
+          isCinematicMode ? 'opacity-0' : 'opacity-100'
+        }`}
+        style={{
+          background:
+            'linear-gradient(to right, rgba(42, 12, 6, 0.90) 0%, rgba(56, 15, 6, 0.72) 42%, rgba(13, 38, 36, 0.20) 75%, transparent 100%)',
+        }}
+      />
+
+      {/* Dynamic atmospheric radial glows */}
+      <div className="absolute -top-32 -left-32 w-96 h-96 bg-[#CE6C53]/25 rounded-full blur-[100px] pointer-events-none animate-pulse-glow-soft z-[2]" />
+      <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-[#14B8A6]/20 rounded-full blur-[100px] pointer-events-none animate-pulse-glow-soft z-[2]" style={{ animationDelay: '1s' }} />
+
+      <div
+        className={`relative z-10 p-6 sm:p-10 lg:p-12 flex flex-col justify-between min-h-[640px] lg:min-h-[700px] transition-opacity duration-500 ${
+          isCinematicMode ? 'opacity-30 hover:opacity-100' : 'opacity-100'
+        }`}
+      >
         {/* Navigation Bar inside the hero frame */}
         <header className="flex items-center justify-between gap-4 pb-8 sm:pb-12">
           {/* Logo with clean white presentation */}
@@ -98,8 +113,22 @@ export const HeroShowcase: React.FC<HeroShowcaseProps> = ({
             )}
           </nav>
 
-          {/* Pill CTA button (reference signature) */}
-          <div className="flex items-center gap-3">
+          {/* Pill CTA button & Cinematic View Toggle */}
+          <div className="flex items-center gap-2.5">
+            <button
+              type="button"
+              onClick={() => setIsCinematicMode((c) => !c)}
+              className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-bold transition-all duration-200 border cursor-pointer ${
+                isCinematicMode
+                  ? 'bg-glowOrange-500 text-white border-glowOrange-400 shadow-glow-orange scale-105'
+                  : 'bg-white/15 hover:bg-white/25 text-white border-white/20 hover:border-white/40'
+              }`}
+              title="Toggle full cinematic animation view"
+            >
+              <Film className="w-3.5 h-3.5 text-glowOrange-300" />
+              <span className="hidden sm:inline">{isCinematicMode ? 'Exit Cinematic' : 'Cinematic View'}</span>
+            </button>
+
             {isLoggedIn ? (
               <button
                 onClick={onGoToApp}
@@ -131,24 +160,6 @@ export const HeroShowcase: React.FC<HeroShowcaseProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center my-auto">
           {/* Left Column: Headlines & Pillars */}
           <div className="lg:col-span-6 space-y-6 lg:space-y-8 relative">
-            {/* MOBILE ONLY: Ambient Cybernetic Robot Artwork Blended Seamlessly Behind Text Elements */}
-            <div
-              className="lg:hidden absolute top-2 sm:top-6 -right-6 sm:-right-8 w-72 sm:w-88 aspect-square pointer-events-none select-none z-0 overflow-visible opacity-60 mix-blend-lighten"
-              aria-hidden="true"
-            >
-              <div className="relative w-full h-full flex items-center justify-center">
-                <img
-                  src="/ai-robot-hero.jpg"
-                  alt=""
-                  decoding="async"
-                  className="w-full h-full object-cover object-center rounded-full [mask-image:radial-gradient(circle_at_center,black_45%,transparent_80%)] filter contrast-115 saturate-125"
-                />
-                {/* Subtle cybernetic pulse aura */}
-                <div className="absolute inset-4 rounded-full border border-glowOrange-400/25 animate-pulse pointer-events-none" />
-                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-glowOrange-600/15 via-transparent to-teal-400/10 blur-xl pointer-events-none" />
-              </div>
-            </div>
-
             {/* Eyebrow caption */}
             <div className="relative z-10 inline-flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-glowOrange-400 animate-pulse" />
@@ -171,7 +182,7 @@ export const HeroShowcase: React.FC<HeroShowcaseProps> = ({
               </p>
             </div>
 
-            {/* CTAs & Badges Container with Mobile Holographic Audio Graphic */}
+            {/* CTAs & Badges Container */}
             <div className="relative z-10 pt-2">
               {/* CTAs */}
               <div className="flex flex-wrap items-center gap-3 max-w-[215px] sm:max-w-none">
@@ -191,7 +202,7 @@ export const HeroShowcase: React.FC<HeroShowcaseProps> = ({
                 </button>
               </div>
 
-              {/* Frosted Pill Badges (recreating reference image bottom-left tags) */}
+              {/* Frosted Pill Badges */}
               <div className="flex flex-wrap items-center gap-2.5 pt-4 max-w-[215px] sm:max-w-none">
                 <span className="px-4 py-1.5 rounded-full text-xs font-semibold bg-white/15 backdrop-blur-md border border-white/25 text-white shadow-soft-sm hover:scale-105 hover:bg-white/25 hover:border-white/40 hover:-translate-y-0.5 active:scale-95 transition-all duration-200 cursor-pointer">
                   Voice Notes
@@ -203,67 +214,11 @@ export const HeroShowcase: React.FC<HeroShowcaseProps> = ({
                   Smart Categories
                 </span>
               </div>
-
-              {/* MOBILE ONLY: Futuristic Glowing Acoustic Sonic Orb & Live Note Pill (Replaces former soundwave box) */}
-              <div
-                className="lg:hidden absolute right-0 sm:right-2 top-1/2 -translate-y-1/2 pointer-events-none select-none z-20 animate-float-slow flex flex-col items-center gap-1.5 w-[145px] sm:w-[160px]"
-                aria-hidden="true"
-              >
-                {/* Floating Spoken Thought Pill */}
-                <div className="px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/35 shadow-soft-md flex items-center gap-1.5 animate-bounce-subtle">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-[10px] font-bold text-white tracking-tight">"Spoken idea"</span>
-                  <ArrowRight className="w-2.5 h-2.5 text-glowOrange-400" />
-                  <span className="text-[9px] font-mono font-bold text-glowTeal-300">Note</span>
-                </div>
-
-                {/* 3D Acoustic Sonic Orb with Radiating Waves */}
-                <div className="relative w-20 h-20 flex items-center justify-center my-0.5">
-                  {/* Expanding Sonar Pulse Waves */}
-                  <span className="absolute inset-0 rounded-full border border-glowOrange-400/40 animate-ping" />
-                  <span className="absolute -inset-2 rounded-full border border-glowTeal-400/25 animate-pulse" />
-
-                  {/* Gradient Glow Aura */}
-                  <div className="absolute inset-1 rounded-full bg-gradient-to-tr from-glowOrange-600 via-terracotta-500 to-amber-400 blur-md opacity-75" />
-
-                  {/* The Glass Orb */}
-                  <div className="relative w-14 h-14 rounded-full bg-gradient-to-br from-white/40 via-glowOrange-500 to-terracotta-700 p-0.5 shadow-[0_0_25px_rgba(249,115,22,0.65)] border border-white/50 flex items-center justify-center">
-                    <div className="w-full h-full rounded-full bg-gradient-to-tr from-[#380F06] to-[#7B2C17] flex items-center justify-center">
-                      <Mic className="w-6 h-6 text-white drop-shadow-[0_2px_10px_rgba(249,115,22,0.9)]" />
-                    </div>
-                  </div>
-
-                  {/* Sparkle badge on orb corner */}
-                  <span className="absolute -top-1 -right-1 p-1 rounded-full bg-gradient-to-r from-glowOrange-500 to-amber-400 text-white shadow-soft-sm">
-                    <Sparkles className="w-3 h-3 text-white animate-spin-slow" />
-                  </span>
-                </div>
-
-                {/* Bottom Whisper AI Badge */}
-                <div className="px-2.5 py-0.5 rounded-full bg-black/45 backdrop-blur-md border border-white/20 text-[9px] font-semibold text-white/90 flex items-center gap-1.5 shadow-soft-sm">
-                  <span className="w-1.5 h-1.5 rounded-full bg-glowTeal-400 animate-pulse" />
-                  <span>Instant Whisper AI</span>
-                </div>
-              </div>
             </div>
           </div>
 
-          {/* Right Column: AI Robot + Floating Frosted Cards Composition (Authentic Reference Match) */}
+          {/* Right Column: Floating Frosted Cards Composition over Animated Robot */}
           <div className="lg:col-span-6 relative flex flex-col sm:flex-row lg:flex-col items-center justify-center gap-4 sm:gap-6 min-h-[460px] lg:h-[500px]">
-            {/* DESKTOP ONLY: AI Cybernetic Robot Focal Artwork (100% unchanged for desktop) */}
-            <div className="hidden lg:flex absolute inset-0 items-center justify-start lg:-left-20 pointer-events-none select-none z-0 overflow-visible">
-              <div className="relative w-[340px] sm:w-[420px] lg:w-[480px] aspect-[16/10] sm:aspect-square flex items-center justify-center">
-                <img
-                  src="/ai-robot-hero.jpg"
-                  alt="Mivo AI Voice Model"
-                  decoding="async"
-                  className="w-full h-full object-cover rounded-3xl lg:rounded-full [mask-image:radial-gradient(ellipse_at_center,black_55%,transparent_90%)] opacity-95 drop-shadow-[0_20px_50px_rgba(0,0,0,0.7)] transition-all duration-700"
-                />
-                {/* Subtle cybernetic pulse aura */}
-                <div className="absolute inset-4 rounded-full border border-glowOrange-400/25 animate-pulse pointer-events-none" />
-              </div>
-            </div>
-
             {/* CARD 1: Central Audio Waveform & Player Card */}
             <div className="w-full max-w-sm sm:max-w-xs md:max-w-sm rounded-3xl bg-white/95 backdrop-blur-md text-charcoal-900 p-5 shadow-2xl border border-white/70 animate-float-slow z-20 lg:ml-auto lg:mr-2 hover:scale-[1.02] hover:-translate-y-1.5 hover:shadow-[0_25px_60px_rgba(0,0,0,0.35)] transition-all duration-300">
               <div className="flex items-center justify-between mb-2">
@@ -378,32 +333,26 @@ export const HeroShowcase: React.FC<HeroShowcaseProps> = ({
 
               {/* Topic Breakdown Metrics with colored dots */}
               <div className="space-y-1.5 pt-1 border-t border-charcoal-100">
-                <div className="flex items-center justify-between text-[11px] font-bold text-charcoal-700">
-                  <span>Category Distribution</span>
-                </div>
-
-                <div className="flex items-center justify-between text-[10px] text-charcoal-600 hover:bg-warm-100/70 rounded-lg px-1.5 py-0.5 transition-colors cursor-default">
-                  <span className="flex items-center gap-1.5 font-medium">
-                    <span className="w-2 h-2 rounded-full bg-brand-500 animate-pulse" />
-                    Ideas
+                <p className="text-[10px] font-bold uppercase tracking-wider text-charcoal-400 mb-1">
+                  Category Distribution
+                </p>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="flex items-center gap-1.5 text-charcoal-700 font-medium">
+                    <span className="w-2 h-2 rounded-full bg-brand-500" /> Ideas
                   </span>
-                  <span className="font-mono font-bold text-charcoal-800">25%</span>
+                  <span className="font-bold text-charcoal-900">25%</span>
                 </div>
-
-                <div className="flex items-center justify-between text-[10px] text-charcoal-600 hover:bg-warm-100/70 rounded-lg px-1.5 py-0.5 transition-colors cursor-default">
-                  <span className="flex items-center gap-1.5 font-medium">
-                    <span className="w-2 h-2 rounded-full bg-glowOrange-500 animate-pulse" />
-                    Business
+                <div className="flex items-center justify-between text-xs">
+                  <span className="flex items-center gap-1.5 text-charcoal-700 font-medium">
+                    <span className="w-2 h-2 rounded-full bg-glowOrange-500" /> Business
                   </span>
-                  <span className="font-mono font-bold text-charcoal-800">55%</span>
+                  <span className="font-bold text-charcoal-900">55%</span>
                 </div>
-
-                <div className="flex items-center justify-between text-[10px] text-charcoal-600 hover:bg-warm-100/70 rounded-lg px-1.5 py-0.5 transition-colors cursor-default">
-                  <span className="flex items-center gap-1.5 font-medium">
-                    <span className="w-2 h-2 rounded-full bg-[#14B8A6] animate-pulse" />
-                    To-do
+                <div className="flex items-center justify-between text-xs">
+                  <span className="flex items-center gap-1.5 text-charcoal-700 font-medium">
+                    <span className="w-2 h-2 rounded-full bg-mivoGreen-500" /> To-do
                   </span>
-                  <span className="font-mono font-bold text-charcoal-800">20%</span>
+                  <span className="font-bold text-charcoal-900">20%</span>
                 </div>
               </div>
             </div>
