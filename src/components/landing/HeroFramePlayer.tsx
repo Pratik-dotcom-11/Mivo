@@ -2,9 +2,10 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 
 const TOTAL_FRAMES = 235;
 const FRAME_INTERVAL_MS = 1000 / 24; // 24 frames per second
-const SOURCE_CROP_Y = 84; // Crop out top black letterbox bar
-const SOURCE_CROP_HEIGHT = 912; // 1080 - 84 - 84 = 912 (crops out bottom bar & watermark)
-const SOURCE_WIDTH = 1920;
+const SOURCE_CROP_X = 185; // Exact X start of hero container inside 1920x1080 frame
+const SOURCE_CROP_Y = 120; // Exact Y start of hero container inside 1920x1080 frame
+const SOURCE_CROP_WIDTH = 1530; // Exact width of hero container
+const SOURCE_CROP_HEIGHT = 875; // Exact height of hero container
 
 export interface HeroFramePlayerProps {
   className?: string;
@@ -56,8 +57,8 @@ export const HeroFramePlayer: React.FC<HeroFramePlayerProps> = ({
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
 
-    // Calculate aspect ratio cover mapping
-    const sWidth = SOURCE_WIDTH;
+    // Calculate aspect ratio mapping
+    const sWidth = SOURCE_CROP_WIDTH;
     const sHeight = SOURCE_CROP_HEIGHT;
     const sRatio = sWidth / sHeight;
     const cRatio = canvasWidth / canvasHeight;
@@ -67,24 +68,24 @@ export const HeroFramePlayer: React.FC<HeroFramePlayerProps> = ({
     let dx = 0;
     let dy = 0;
 
-    if (cRatio > sRatio) {
-      // Canvas is wider than source
+    if (Math.abs(cRatio - sRatio) < 0.01) {
+      dWidth = canvasWidth;
+      dHeight = canvasHeight;
+    } else if (cRatio > sRatio) {
       dWidth = canvasWidth;
       dHeight = canvasWidth / sRatio;
       dy = (canvasHeight - dHeight) / 2;
     } else {
-      // Canvas is taller than source (mobile & narrow screens)
-      // Focus slightly towards center-right where the robot and audio waves are
       dHeight = canvasHeight;
       dWidth = canvasHeight * sRatio;
-      dx = (canvasWidth - dWidth) * 0.65;
+      dx = (canvasWidth - dWidth) / 2;
     }
 
     ctx.drawImage(
       img,
-      0,
+      SOURCE_CROP_X,
       SOURCE_CROP_Y,
-      SOURCE_WIDTH,
+      SOURCE_CROP_WIDTH,
       SOURCE_CROP_HEIGHT,
       dx,
       dy,
