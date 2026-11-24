@@ -13,6 +13,8 @@ interface TranscribePayload {
   audioBase64?: string;
   mimeType?: string;
   durationSeconds?: number;
+  clientTranscript?: string;
+  clientApiKey?: string;
 }
 
 serve(async (req) => {
@@ -54,14 +56,45 @@ serve(async (req) => {
 
     const payload = (await req.json()) as TranscribePayload;
 
-    // 2. Check OpenAI API Key in Supabase Secrets
-    const openaiApiKey = Deno.env.get('OPENAI_API_KEY');
+    // 2. Check OpenAI API Key in Supabase Secrets or client-supplied payload
+    const openaiApiKey = (Deno.env.get('OPENAI_API_KEY') || payload.clientApiKey || '').trim();
     if (!openaiApiKey) {
+      // If client provided a browser-captured transcript, use it as graceful fallback
+      if (payload.clientTranscript && payload.clientTranscript.trim()) {
+        const transcription = payload.clientTranscript.trim();
+        const words = transcription.split(/\s+/).slice(0, 6).join(' ');
+        const derivedTitle = words.length < transcription.length ? `${words}...` : words;
+
+        if (payload.noteId) {
+          await userClient
+            .from('voice_notes')
+            .update({
+              title: derivedTitle,
+              transcription,
+              updated_at: new Date().toISOString(),
+            })
+            .eq('id', payload.noteId)
+            .eq('user_id', user.id);
+        }
+
+        return new Response(
+          JSON.stringify({
+            success: true,
+            transcription,
+            title: derivedTitle,
+            source: 'browser_speech',
+          }),
+          {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          }
+        );
+      }
+
       return new Response(
         JSON.stringify({
           success: false,
           error:
-            'OpenAI API key is missing. Please configure OPENAI_API_KEY in your Supabase project secrets: run `npx supabase secrets set OPENAI_API_KEY=your_key` or set it in the Supabase Dashboard under Project Settings > Edge Functions.',
+            'OpenAI API key is missing. Please configure OPENAI_API_KEY in your Supabase project secrets or enter your API key in the app.',
           code: 'MISSING_OPENAI_API_KEY',
           requiresConfig: true,
         }),

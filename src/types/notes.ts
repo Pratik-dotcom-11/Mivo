@@ -44,6 +44,7 @@ export interface AudioRecordResult {
   blob: Blob;
   durationSeconds: number;
   mimeType: string;
+  liveTranscript?: string;
 }
 
 export interface VoiceNoteFilterOptions {

@@ -15,6 +15,8 @@ export function useAudioRecorder() {
   const analyserRef = useRef<AnalyserNode | null>(null);
   const animFrameRef = useRef<number | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
+  const speechRecognitionRef = useRef<any>(null);
+  const speechTranscriptRef = useRef<string>('');
 
   const cleanupAudioAnalyser = useCallback(() => {
     if (animFrameRef.current) {
@@ -45,16 +47,31 @@ export function useAudioRecorder() {
     }
   }, []);
 
+  const stopSpeechRecognition = useCallback(() => {
+    if (speechRecognitionRef.current) {
+      try {
+        speechRecognitionRef.current.onresult = null;
+        speechRecognitionRef.current.onerror = null;
+        speechRecognitionRef.current.onend = null;
+        speechRecognitionRef.current.stop();
+      } catch {
+        // Ignore errors during stop
+      }
+      speechRecognitionRef.current = null;
+    }
+  }, []);
+
   useEffect(() => {
     return () => {
       clearTimer();
       cleanupAudioAnalyser();
       stopMediaStream();
+      stopSpeechRecognition();
       if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
         mediaRecorderRef.current.stop();
       }
     };
-  }, [clearTimer, cleanupAudioAnalyser, stopMediaStream]);
+  }, [clearTimer, cleanupAudioAnalyser, stopMediaStream, stopSpeechRecognition]);
 
   /**
    * Request microphone permission and begin recording with live audio level visualization
@@ -147,6 +164,44 @@ export function useAudioRecorder() {
       recorder.start(250); // Collect data chunk every 250ms
       setState('recording');
 
+      // Initialize Web Speech API for real-time zero-config speech transcription
+      speechTranscriptRef.current = '';
+      stopSpeechRecognition();
+
+      if (typeof window !== 'undefined') {
+        const SpeechRecognition =
+          (window as any).SpeechRecognition ||
+          (window as any).webkitSpeechRecognition;
+
+        if (SpeechRecognition) {
+          try {
+            const recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = navigator.language || 'en-US';
+
+            recognition.onresult = (event: any) => {
+              let fullTranscript = '';
+              for (let i = 0; i < event.results.length; i++) {
+                fullTranscript += event.results[i][0].transcript;
+              }
+              if (fullTranscript.trim()) {
+                speechTranscriptRef.current = fullTranscript.trim();
+              }
+            };
+
+            recognition.onerror = (e: any) => {
+              console.warn('[Mivo] Web Speech recognition notice:', e?.error);
+            };
+
+            recognition.start();
+            speechRecognitionRef.current = recognition;
+          } catch (err) {
+            console.warn('[Mivo] Speech recognition start notice:', err);
+          }
+        }
+      }
+
       // Start duration ticker
       timerRef.current = window.setInterval(() => {
         setDuration((prev) => {
@@ -190,6 +245,13 @@ export function useAudioRecorder() {
       mediaRecorderRef.current.pause();
       setState('paused');
       clearTimer();
+      if (speechRecognitionRef.current) {
+        try {
+          speechRecognitionRef.current.stop();
+        } catch {
+          // Ignore
+        }
+      }
     }
   }, [clearTimer]);
 
@@ -197,6 +259,13 @@ export function useAudioRecorder() {
     if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'paused') {
       mediaRecorderRef.current.resume();
       setState('recording');
+      if (speechRecognitionRef.current) {
+        try {
+          speechRecognitionRef.current.start();
+        } catch {
+          // Ignore
+        }
+      }
       timerRef.current = window.setInterval(() => {
         setDuration((prev) => prev + 1);
       }, 1000);
@@ -210,6 +279,7 @@ export function useAudioRecorder() {
     return new Promise((resolve) => {
       clearTimer();
       cleanupAudioAnalyser();
+      stopSpeechRecognition();
 
       const recorder = mediaRecorderRef.current;
       if (!recorder || recorder.state === 'inactive') {
@@ -240,12 +310,13 @@ export function useAudioRecorder() {
           blob,
           durationSeconds: Math.max(1, finalDuration),
           mimeType,
+          liveTranscript: speechTranscriptRef.current.trim(),
         });
       };
 
       recorder.stop();
     });
-  }, [clearTimer, cleanupAudioAnalyser, duration, stopMediaStream]);
+  }, [clearTimer, cleanupAudioAnalyser, duration, stopMediaStream, stopSpeechRecognition]);
 
   /**
    * Cancel and discard recording
@@ -254,15 +325,17 @@ export function useAudioRecorder() {
     clearTimer();
     cleanupAudioAnalyser();
     stopMediaStream();
+    stopSpeechRecognition();
 
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
       mediaRecorderRef.current.stop();
     }
     audioChunksRef.current = [];
+    speechTranscriptRef.current = '';
     setDuration(0);
     setError(null);
     setState('inactive');
-  }, [clearTimer, cleanupAudioAnalyser, stopMediaStream]);
+  }, [clearTimer, cleanupAudioAnalyser, stopMediaStream, stopSpeechRecognition]);
 
   return {
     state,
