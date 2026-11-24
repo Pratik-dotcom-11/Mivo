@@ -177,109 +177,214 @@ export const VoiceRecorderModal: React.FC<VoiceRecorderModalProps> = ({
 
         {/* Phase 1: Recording Interface (Idle or Live Recording) */}
         {!recordedAudio ? (
-          <div className="flex flex-col items-center justify-center py-6 text-center space-y-6">
-            {/* Central Microphone Button with animated ripple and glowing ring */}
-            <div className="relative flex items-center justify-center">
-              {recordState === 'recording' && (
-                <>
-                  <div className="absolute w-40 h-40 rounded-full bg-red-500/15 animate-ping pointer-events-none" />
-                  <div className="absolute w-32 h-32 rounded-full bg-terracotta-500/25 animate-pulse pointer-events-none" />
-                </>
-              )}
+          <div className="flex flex-col items-center justify-center text-center">
+            {/* Cinematic dark atmospheric panel */}
+            <div
+              className="w-full rounded-3xl px-6 py-8 relative overflow-hidden"
+              style={{ background: 'linear-gradient(135deg, #0D0A1A 0%, #1A0D2E 35%, #0A1520 70%, #0D1A0A 100%)' }}
+            >
+              {/* Subtle ambient glow blobs in background */}
+              <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl">
+                <div
+                  className="absolute -top-10 -left-10 w-48 h-48 rounded-full opacity-30 animate-orb-float"
+                  style={{ background: 'radial-gradient(circle, rgba(249,115,22,0.6) 0%, transparent 70%)' }}
+                />
+                <div
+                  className="absolute -bottom-10 -right-10 w-40 h-40 rounded-full opacity-25 animate-orb-float-delay"
+                  style={{ background: 'radial-gradient(circle, rgba(20,184,166,0.5) 0%, transparent 70%)' }}
+                />
+                <div
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-32 rounded-full opacity-15"
+                  style={{ background: 'radial-gradient(ellipse, rgba(236,72,153,0.4) 0%, transparent 70%)' }}
+                />
+              </div>
 
-              {recordState === 'inactive' && (
-                <div className="absolute w-32 h-32 rounded-full bg-terracotta-500/10 dark:bg-terracotta-500/20 pointer-events-none" />
-              )}
-
-              <button
-                type="button"
-                onClick={recordState === 'recording' ? handleStop : handleStart}
-                className={`relative z-10 w-24 h-24 rounded-3xl flex items-center justify-center text-white transition-all transform active:scale-95 shadow-soft-xl ${
-                  recordState === 'recording'
-                    ? 'bg-gradient-to-tr from-red-500 to-rose-600 shadow-red-500/40'
-                    : 'bg-gradient-to-tr from-terracotta-600 to-glowOrange-500 hover:from-terracotta-500 hover:to-glowOrange-400 shadow-glow-orange'
-                }`}
-                title={recordState === 'recording' ? 'Stop and transcribe' : 'Start recording'}
-              >
-                {recordState === 'recording' ? (
-                  <Square className="w-8 h-8 fill-current" />
-                ) : (
-                  <Mic className="w-10 h-10" />
-                )}
-              </button>
-            </div>
-
-            {/* Live Timer & Recording Status Indicator */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-center gap-2 text-3xl font-mono font-bold tracking-tight text-charcoal-900 dark:text-white">
+              {/* Central 3D Holographic AI Orb */}
+              <div className="relative flex items-center justify-center mb-6">
+                {/* Sonar rings — always present, faster when recording */}
+                <div
+                  className="absolute rounded-full border border-orange-400/20 pointer-events-none animate-sonar-ring-1"
+                  style={{ width: '200px', height: '200px' }}
+                />
+                <div
+                  className="absolute rounded-full border border-pink-400/15 pointer-events-none animate-sonar-ring-2"
+                  style={{ width: '170px', height: '170px' }}
+                />
                 {recordState === 'recording' && (
-                  <span className="w-3 h-3 rounded-full bg-red-500 animate-ping" />
-                )}
-                <span>{formatDuration(duration)}</span>
-              </div>
-
-              <p className="text-xs font-semibold text-charcoal-500 dark:text-dark-muted">
-                {recordState === 'recording'
-                  ? 'Recording in progress... speak your thoughts.'
-                  : recordState === 'paused'
-                  ? 'Recording paused. Click Resume to continue.'
-                  : 'Tap the microphone button to start recording.'}
-              </p>
-            </div>
-
-            {/* Animated Audio Waveform Meter */}
-            <div className="w-full max-w-sm px-4">
-              <AudioWaveform
-                isRecording={recordState === 'recording'}
-                audioLevel={audioLevel}
-                barCount={32}
-                className="justify-center h-12"
-              />
-            </div>
-
-            {/* In-Recording Controls */}
-            {recordState !== 'inactive' && (
-              <div className="flex items-center gap-3 pt-1">
-                {recordState === 'recording' ? (
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    onClick={pauseRecording}
-                    leftIcon={<Pause className="w-3.5 h-3.5" />}
-                  >
-                    Pause
-                  </Button>
-                ) : (
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    onClick={resumeRecording}
-                    leftIcon={<Play className="w-3.5 h-3.5" />}
-                  >
-                    Resume
-                  </Button>
+                  <>
+                    <div
+                      className="absolute rounded-full border border-teal-400/20 pointer-events-none animate-sonar-ring-3"
+                      style={{ width: '140px', height: '140px' }}
+                    />
+                    <div
+                      className="absolute rounded-full border-2 border-orange-500/30 pointer-events-none animate-ping"
+                      style={{ width: '110px', height: '110px' }}
+                    />
+                  </>
                 )}
 
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={handleStop}
-                  leftIcon={<Check className="w-3.5 h-3.5" />}
-                  className="bg-glowOrange-500 hover:bg-glowOrange-600 text-white font-bold"
-                >
-                  Stop Recording
-                </Button>
+                {/* Outer glow aura */}
+                <div
+                  className="absolute w-28 h-28 rounded-full pointer-events-none animate-orb-pulse"
+                  style={{
+                    background: recordState === 'recording'
+                      ? 'radial-gradient(circle, rgba(249,115,22,0.5) 0%, rgba(236,72,153,0.3) 50%, transparent 70%)'
+                      : 'radial-gradient(circle, rgba(249,115,22,0.3) 0%, rgba(20,184,166,0.2) 50%, transparent 70%)',
+                    filter: 'blur(16px)',
+                  }}
+                />
 
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleCancel}
-                  className="text-charcoal-400 hover:text-red-500 dark:hover:text-red-400"
+                {/* The orb itself — glass sphere with radial gradient */}
+                <div
+                  className="relative w-24 h-24 rounded-full animate-orb-float flex items-center justify-center cursor-pointer select-none"
+                  style={{
+                    background: recordState === 'recording'
+                      ? 'radial-gradient(circle at 32% 28%, rgba(255,255,255,0.75) 0%, rgba(249,115,22,0.95) 18%, rgba(236,72,153,0.85) 48%, rgba(20,184,166,0.9) 78%, rgba(13,148,136,0.7) 100%)'
+                      : 'radial-gradient(circle at 32% 28%, rgba(255,255,255,0.65) 0%, rgba(249,115,22,0.75) 20%, rgba(236,72,153,0.70) 50%, rgba(20,184,166,0.80) 80%, rgba(13,148,136,0.60) 100%)',
+                    boxShadow: recordState === 'recording'
+                      ? '0 0 60px rgba(249,115,22,0.7), 0 0 120px rgba(236,72,153,0.3), inset 0 0 40px rgba(255,255,255,0.25)'
+                      : '0 0 40px rgba(249,115,22,0.4), 0 0 80px rgba(20,184,166,0.2), inset 0 0 30px rgba(255,255,255,0.18)',
+                  }}
+                  onClick={recordState === 'recording' ? handleStop : handleStart}
+                  title={recordState === 'recording' ? 'Stop and transcribe' : 'Tap to begin recording'}
                 >
-                  Cancel
-                </Button>
+                  {/* Specular highlight (top-left shine) */}
+                  <div
+                    className="absolute top-2.5 left-3 w-7 h-4 rounded-full opacity-80 pointer-events-none"
+                    style={{ background: 'radial-gradient(ellipse, rgba(255,255,255,0.9) 0%, transparent 100%)' }}
+                  />
+                  {/* Secondary smaller highlight */}
+                  <div
+                    className="absolute top-5 left-5 w-3 h-2 rounded-full opacity-50 pointer-events-none"
+                    style={{ background: 'radial-gradient(ellipse, rgba(255,255,255,0.7) 0%, transparent 100%)' }}
+                  />
+
+                  {/* Mic / Stop icon overlay — frosted glass */}
+                  <div
+                    className="relative z-10 w-12 h-12 rounded-full flex items-center justify-center transition-all"
+                    style={{
+                      background: 'rgba(255,255,255,0.18)',
+                      backdropFilter: 'blur(8px)',
+                      border: '1px solid rgba(255,255,255,0.4)',
+                      boxShadow: '0 2px 12px rgba(0,0,0,0.2)',
+                    }}
+                  >
+                    {recordState === 'recording' ? (
+                      <Square className="w-5 h-5 text-white fill-current drop-shadow" />
+                    ) : (
+                      <Mic className="w-6 h-6 text-white drop-shadow" />
+                    )}
+                  </div>
+                </div>
               </div>
-            )}
+
+              {/* Digital Timer — cinematic large mono */}
+              <div className="space-y-2 mb-5">
+                <div
+                  className="flex items-center justify-center gap-3 text-4xl font-mono font-black tracking-widest"
+                  style={{
+                    color: '#FFFFFF',
+                    textShadow: recordState === 'recording'
+                      ? '0 0 20px rgba(249,115,22,0.9), 0 0 40px rgba(249,115,22,0.5)'
+                      : '0 0 12px rgba(249,115,22,0.5)',
+                  }}
+                >
+                  {recordState === 'recording' && (
+                    <span
+                      className="w-2.5 h-2.5 rounded-full animate-pulse"
+                      style={{ background: '#f97316', boxShadow: '0 0 8px rgba(249,115,22,0.9)' }}
+                    />
+                  )}
+                  <span>{formatDuration(duration)}</span>
+                </div>
+
+                <p
+                  className="text-xs font-semibold tracking-wide"
+                  style={{ color: 'rgba(255,255,255,0.55)' }}
+                >
+                  {recordState === 'recording'
+                    ? '● REC · speak your thoughts freely'
+                    : recordState === 'paused'
+                    ? '⏸ Paused — tap Resume to continue'
+                    : recordState === 'inactive'
+                    ? 'Tap the orb to begin'
+                    : 'Processing…'}
+                </p>
+              </div>
+
+              {/* Audio Waveform — glowing bars on dark background */}
+              <div className="w-full px-4 mb-5">
+                <AudioWaveform
+                  isRecording={recordState === 'recording'}
+                  audioLevel={audioLevel}
+                  barCount={32}
+                  className="justify-center h-10"
+                />
+              </div>
+
+              {/* In-Recording Controls — frosted glass pills */}
+              {recordState !== 'inactive' && (
+                <div className="flex items-center justify-center gap-3">
+                  {recordState === 'recording' ? (
+                    <button
+                      type="button"
+                      onClick={pauseRecording}
+                      className="flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold text-white transition-all hover:scale-105 active:scale-95"
+                      style={{
+                        background: 'rgba(255,255,255,0.12)',
+                        backdropFilter: 'blur(12px)',
+                        border: '1px solid rgba(255,255,255,0.2)',
+                      }}
+                    >
+                      <Pause className="w-3.5 h-3.5" />
+                      Pause
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={resumeRecording}
+                      className="flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold text-white transition-all hover:scale-105 active:scale-95"
+                      style={{
+                        background: 'rgba(255,255,255,0.12)',
+                        backdropFilter: 'blur(12px)',
+                        border: '1px solid rgba(255,255,255,0.2)',
+                      }}
+                    >
+                      <Play className="w-3.5 h-3.5" />
+                      Resume
+                    </button>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={handleStop}
+                    className="flex items-center gap-1.5 px-5 py-2 rounded-full text-xs font-bold text-white transition-all hover:scale-105 active:scale-95"
+                    style={{
+                      background: 'linear-gradient(135deg, #f97316, #ea580c)',
+                      boxShadow: '0 0 20px rgba(249,115,22,0.5)',
+                      border: '1px solid rgba(255,255,255,0.2)',
+                    }}
+                  >
+                    <Check className="w-3.5 h-3.5" />
+                    Stop &amp; Save
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleCancel}
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold transition-all hover:scale-105 active:scale-95"
+                    style={{
+                      background: 'rgba(255,255,255,0.07)',
+                      backdropFilter: 'blur(12px)',
+                      border: '1px solid rgba(255,255,255,0.12)',
+                      color: 'rgba(255,255,255,0.5)',
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         ) : (
           /* Phase 2: Processing, Review, Speech-to-Text & Note Editing */
