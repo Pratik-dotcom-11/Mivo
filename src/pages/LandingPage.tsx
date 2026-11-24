@@ -321,44 +321,53 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         </section>
 
         {/* =========================================================================
-            SECTION 5: FOOTER
+            SECTION 5: FOOTER (Rich, colorful theme-aligned styling)
             ========================================================================= */}
-        <footer className="rounded-3xl bg-white/80 backdrop-blur-xl p-6 sm:p-8 border border-white/90 shadow-soft-lg space-y-6">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div className="space-y-1 text-center sm:text-left px-4 py-2.5 rounded-2xl bg-white/90 backdrop-blur-md border border-white/80 shadow-soft-sm">
+        <footer className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-white/95 via-orange-50/70 to-teal-50/60 backdrop-blur-2xl p-6 sm:p-10 border border-orange-200/60 shadow-soft-xl space-y-6">
+          {/* Ambient theme glow orbs */}
+          <div className="absolute -top-20 -left-20 w-72 h-72 rounded-full bg-gradient-to-br from-glowOrange-500/25 to-terracotta-500/20 blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-20 -right-20 w-72 h-72 rounded-full bg-gradient-to-br from-glowTeal-500/25 to-emerald-400/20 blur-3xl pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-32 rounded-full bg-mivoPink-500/15 blur-3xl pointer-events-none" />
+
+          {/* Top row: Brand + Nav */}
+          <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-6">
+            {/* Brand Card with theme gradient accent */}
+            <div className="relative group px-5 py-3 rounded-2xl bg-white/95 backdrop-blur-md border border-orange-200/80 shadow-soft-md hover:shadow-glow-orange transition-all">
+              <div className="absolute inset-x-0 -top-px h-1 rounded-t-2xl bg-gradient-to-r from-glowOrange-500 via-mivoPink-500 to-glowTeal-500" />
               <Logo size="md" showTagline />
             </div>
 
-            {/* Navigation Links with Luminous White Pill Highlight */}
-            <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-3 p-1.5 rounded-full bg-white/90 backdrop-blur-md border border-white/80 shadow-soft-sm text-xs font-bold text-charcoal-800">
+            {/* Navigation Links with Theme Accents */}
+            <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 p-2 rounded-full bg-white/95 backdrop-blur-md border border-orange-200/70 shadow-soft-md text-xs font-bold text-charcoal-800">
               <button
                 onClick={() => scrollToSection('hero')}
-                className="px-3 py-1.5 rounded-full hover:bg-warm-100 hover:text-charcoal-950 transition-all"
+                className="px-3.5 py-1.5 rounded-full hover:bg-orange-50 hover:text-glowOrange-600 transition-all font-bold"
               >
                 Home
               </button>
               <button
                 onClick={() => scrollToSection('features')}
-                className="px-3 py-1.5 rounded-full hover:bg-warm-100 hover:text-charcoal-950 transition-all"
+                className="px-3.5 py-1.5 rounded-full hover:bg-pink-50 hover:text-mivoPink-600 transition-all font-bold"
               >
                 Features
               </button>
               <button
                 onClick={() => scrollToSection('how-it-works')}
-                className="px-3 py-1.5 rounded-full hover:bg-warm-100 hover:text-charcoal-950 transition-all"
+                className="px-3.5 py-1.5 rounded-full hover:bg-teal-50 hover:text-glowTeal-700 transition-all font-bold"
               >
                 How It Works
               </button>
               <button
                 onClick={onNavigateToApp}
-                className="px-3.5 py-1.5 rounded-full bg-glowOrange-50 hover:bg-glowOrange-100 text-glowOrange-700 font-extrabold border border-glowOrange-200/80 transition-all"
+                className="px-4 py-1.5 rounded-full bg-gradient-to-r from-glowOrange-500 to-terracotta-600 hover:from-glowOrange-600 hover:to-terracotta-700 text-white font-black shadow-md shadow-glowOrange-500/25 hover:shadow-glowOrange-500/40 hover:scale-105 active:scale-95 transition-all flex items-center gap-1.5"
               >
-                {user ? 'My Dashboard' : 'Demo Dashboard'}
+                <Sparkles className="w-3.5 h-3.5 text-amber-200" />
+                <span>{user ? 'My Dashboard' : 'Demo Dashboard'}</span>
               </button>
               {!user && (
                 <button
                   onClick={onNavigateToAuth}
-                  className="px-3 py-1.5 rounded-full hover:bg-warm-100 hover:text-charcoal-950 transition-all"
+                  className="px-3.5 py-1.5 rounded-full bg-charcoal-900 hover:bg-charcoal-950 text-white hover:scale-105 active:scale-95 transition-all font-bold shadow-soft-xs"
                 >
                   Sign In
                 </button>
@@ -366,14 +375,23 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-5 border-t border-charcoal-200/70 text-xs text-charcoal-700">
-            <div className="px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-white/80 shadow-soft-sm font-semibold text-charcoal-800">
-              &copy; {new Date().getFullYear()} {APP_NAME}. All rights reserved. {APP_TAGLINE}
+          {/* Glowing colorful divider */}
+          <div className="relative z-10 h-px w-full bg-gradient-to-r from-transparent via-glowOrange-400/50 via-glowTeal-400/50 to-transparent" />
+
+          {/* Bottom row: Copyright & Security Badges */}
+          <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+            <div className="px-4 py-2 rounded-full bg-white/95 backdrop-blur-md border border-orange-200/70 shadow-soft-sm font-semibold text-charcoal-800 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-gradient-to-r from-glowOrange-500 to-terracotta-600 animate-pulse" />
+              <span>&copy; {new Date().getFullYear()} {APP_NAME}. All rights reserved.</span>
+              <span className="hidden md:inline text-charcoal-400">·</span>
+              <span className="hidden md:inline bg-gradient-to-r from-glowOrange-600 via-terracotta-600 to-glowTeal-600 bg-clip-text text-transparent font-bold">
+                {APP_TAGLINE}
+              </span>
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-white/80 shadow-soft-sm text-[11px] font-bold text-charcoal-700">
-              <span className="flex items-center gap-1.5 text-charcoal-800">
-                <ShieldCheck className="w-4 h-4 text-mivoGreen-600" />
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 px-4 py-2 rounded-full bg-white/95 backdrop-blur-md border border-teal-200/70 shadow-soft-sm text-[11px] font-bold text-charcoal-700">
+              <span className="flex items-center gap-1.5 text-glowTeal-800 font-extrabold bg-glowTeal-50 px-2.5 py-1 rounded-full border border-glowTeal-200">
+                <ShieldCheck className="w-3.5 h-3.5 text-glowTeal-600" />
                 End-to-End Encrypted Storage
               </span>
               <span className="text-charcoal-300">•</span>
@@ -383,7 +401,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                     'Mivo Privacy Policy: Your audio recordings and transcripts are private to your account and never used for public training.'
                   )
                 }
-                className="hover:text-charcoal-950 hover:underline transition-colors"
+                className="hover:text-glowOrange-600 hover:underline transition-colors font-semibold"
               >
                 Privacy Policy
               </button>
@@ -392,7 +410,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 onClick={() =>
                   alert('Mivo Terms of Service: Free to capture, organize, and export your voice notes anytime.')
                 }
-                className="hover:text-charcoal-950 hover:underline transition-colors"
+                className="hover:text-glowTeal-700 hover:underline transition-colors font-semibold"
               >
                 Terms of Service
               </button>
